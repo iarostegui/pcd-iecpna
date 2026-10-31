@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: PCD IECPNA — API de captura
-  version: 3.1.1
-  description: "Contrato PCD V3.1 con propuestas E2; decisiones E1-D01 y E2-D01/D02/D03 pendientes, sin migración SGSP."
+  version: 3.2.0
+  description: "Contrato PCD V3.1 con propuestas E2; E1-D01 y E1-D02 pendientes; E2-D01/D02/D03 ratificados, sin migración SGSP."
 servers:
   - url: https://pcd.unobdata.com/api/v1
 tags:
@@ -24,6 +24,11 @@ components:
       in: header
       name: X-CSRF-Token
   parameters:
+    ResourceId:
+      in: path
+      name: id
+      required: true
+      schema: { type: integer, minimum: 1 }
     PersonId:
       in: path
       name: id
@@ -35,12 +40,114 @@ components:
       required: true
       schema: { type: string, maxLength: 110 }
   schemas:
+
+    PersonaResumen:
+      type: object
+      properties:
+        persona_id: { type: integer, nullable: true, description: No revelar ID de coincidencia fuera del ámbito. }
+        nombres: { type: string, nullable: true }
+        documento_mascara: { type: string, nullable: true }
+        fichas_visibles: { type: integer }
+    FichaDetalle:
+      type: object
+      properties:
+        ficha_id: { type: integer }
+        tipo_ficha: { type: string, enum: [PERSONA, GC] }
+        presbiterio_id: { type: integer }
+        sede_id: { type: integer }
+        created_by: { type: integer }
+        version: { type: integer }
+        datos_fuente: { type: object, additionalProperties: true }
+        puede_editar: { type: boolean }
+    PersonaDetalle:
+      type: object
+      properties:
+        persona: { $ref: '#/components/schemas/PersonaResumen' }
+        fichas: { type: array, items: { $ref: '#/components/schemas/FichaDetalle' } }
+    PersonaGuardada:
+      type: object
+      required: [ficha_id, persona_reutilizada]
+      properties:
+        ficha_id: { type: integer }
+        persona_id: { type: integer, nullable: true, description: Omitir para ámbitos sin permiso. }
+        persona_reutilizada: { type: boolean }
+        advertencias: { type: array, items: { type: string } }
+    GrupoDetalle:
+      type: object
+      properties:
+        grupo_id: { type: integer }
+        ficha_id: { type: integer }
+        lider_persona_id: { type: integer, readOnly: true, description: Derivado de ficha.persona_id, NO columna GC. }
+        nombre: { type: string, nullable: true }
+        cantidad_integrantes_aprox: { type: integer, nullable: true }
+        version_ficha: { type: integer }
+    PaginaPersonas:
+      type: object
+      properties:
+        pagina: { type: integer }
+        tamano: { type: integer }
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/PersonaResumen' } }
+    PaginaGrupos:
+      type: object
+      properties:
+        pagina: { type: integer }
+        total: { type: integer }
+        items: { type: array, items: { $ref: '#/components/schemas/GrupoDetalle' } }
+    DuplicadoMinimizado:
+      type: object
+      properties:
+        hay_coincidencia: { type: boolean }
+        tipo: { type: string, enum: [NINGUNA, EXACTA, POSIBLE] }
+        personas_visibles: { type: array, items: { $ref: '#/components/schemas/PersonaResumen' } }
+        coincidencia_fuera_de_ambito: { type: boolean }
+    UsuarioPublico:
+      type: object
+      properties:
+        id: { type: integer }
+        codigo: { type: string }
+        nombre_display: { type: string }
+        perfil: { type: string, enum: [DIGITADOR, ADMIN, REPORTES] }
+        alcance_consulta: { type: string, enum: [GENERAL, PRESBITERIO] }
+        presbiterio_ids: { type: array, items: { type: integer } }
+        activo: { type: boolean }
+    UsuarioPatch:
+      type: object
+      properties:
+        nombre_display: { type: string }
+        activo: { type: boolean }
+        alcance_consulta: { type: string, enum: [GENERAL, PRESBITERIO] }
+        presbiterio_ids: { type: array, items: { type: integer } }
+    ReporteAvance:
+      type: object
+      properties:
+        filas: { type: array, items: { type: object, additionalProperties: true } }
+        fuente_ediciones: { type: string, description: auditoria_evento por actor. }
+    ReporteCalidad:
+      type: object
+      properties:
+        fichas_evaluadas: { type: integer }
+        incompletas: { type: integer }
+        posibles_duplicados: { type: integer }
+        faltantes_por_campo: { type: object, additionalProperties: { type: integer } }
+    PaginaAuditoria:
+      type: object
+      properties:
+        pagina: { type: integer }
+        total: { type: integer }
+        items: { type: array, items: { type: object, additionalProperties: true } }
+    RespuestaOperacion:
+      type: object
+      properties:
+        ok: { type: boolean }
+        request_id: { type: string }
     AuthMe:
       type: object
       description: 'Solo en sesión autorizada; token CSRF recuperable tras refresh; ámbito nacional por rol pendiente E2-D02.'
       properties:
         usuario_id: { type: integer }
         perfil: { type: string, enum: [DIGITADOR, ADMIN, REPORTES] }
+        alcance_consulta: { type: string, enum: [GENERAL, PRESBITERIO] }
         presbiterio_id: { type: integer }
         sede_id: { type: integer, nullable: true }
         alcance_nacional: { type: boolean }
@@ -162,6 +269,7 @@ components:
         codigo: { type: string }
         nombre_display: { type: string }
         perfil: { type: string, enum: [DIGITADOR, ADMIN, REPORTES] }
+        alcance_consulta: { type: string, enum: [GENERAL, PRESBITERIO], default: PRESBITERIO }
         presbiterio_ids: { type: array, items: { type: integer } }
         activo: { type: boolean }
 paths:
@@ -175,9 +283,9 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/Login' }
       responses:
-        '200': { description: 'Sesión iniciada, cookie HttpOnly, evento registrado; se requiere usuario tecleado, no listado público' }
-        '401': { description: 'Credenciales inválidas', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
-        '429': { description: 'Límite de intentos' }
+        '200': { description: 'Sesión iniciada, cookie HttpOnly, evento registrado; se requiere usuario tecleado, no listado público', content: { application/json: { schema: { $ref: '#/components/schemas/AuthMe' } } } }
+        '401': { description: 'Credenciales inválidas', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '429': { description: 'Límite de intentos', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /auth/me:
     get:
       tags: [auth]
@@ -188,7 +296,7 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/AuthMe' }
-        '401': { description: 'No autenticado' }
+        '401': { description: 'No autenticado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /auth/logout:
     post:
       tags: [auth]
@@ -206,8 +314,8 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/Location' }
       responses:
-        '200': { description: 'Ubicación de sesión original o recién guardada' }
-        '409': { description: 'Ubicación ya capturada (se devuelve la primera)' }
+        '200': { description: 'Ubicación de sesión original o recién guardada', content: { application/json: { schema: { $ref: '#/components/schemas/Location' } } } }
+        '409': { description: 'Ubicación ya capturada (se devuelve la primera)', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /presbiterios:
     get:
       tags: [catalogos]
@@ -238,7 +346,7 @@ paths:
               schema:
                 type: array
                 items: { $ref: '#/components/schemas/CatalogoValor' }
-        '401': { description: 'No autenticado' }
+        '401': { description: 'No autenticado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /sedes:
     get:
       tags: [catalogos]
@@ -248,7 +356,7 @@ paths:
           name: q
           schema: { type: string }
       responses:
-        '200': { description: 'Solo sedes del presbiterio autenticado' }
+        '200': { description: 'Solo sedes del presbiterio autenticado', content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Sede' } } } } }
     post:
       tags: [catalogos]
       security: [{ cookieAuth: [], csrf: [] }]
@@ -260,8 +368,8 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/NewSede' }
       responses:
-        '201': { description: 'Sede creada y disponible' }
-        '409': { description: 'Duplicado normalizado' }
+        '201': { description: 'Sede creada y disponible', content: { application/json: { schema: { $ref: '#/components/schemas/Sede' } } } }
+        '409': { description: 'Duplicado normalizado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /contexto/presbiterio:
     put:
       tags: [auth]
@@ -277,9 +385,9 @@ paths:
               properties:
                 presbiterio_id: { type: integer }
       responses:
-        '200': { description: 'Contexto actualizado; sede se vuelve a seleccionar' }
-        '403': { description: 'Solo ADMIN; digitador no cambia presbiterio' }
-        '422': { description: 'Presbiterio inactivo o inválido' }
+        '200': { description: 'Contexto actualizado; sede se vuelve a seleccionar', content: { application/json: { schema: { $ref: '#/components/schemas/AuthMe' } } } }
+        '403': { description: 'Solo ADMIN; digitador no cambia presbiterio', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '422': { description: 'Presbiterio inactivo o inválido', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /contexto/sede:
     put:
       tags: [auth]
@@ -294,8 +402,8 @@ paths:
               properties:
                 sede_id: { type: integer }
       responses:
-        '200': { description: 'Sede contextual consistente' }
-        '403': { description: 'Sede fuera de ámbito' }
+        '200': { description: 'Sede contextual consistente', content: { application/json: { schema: { $ref: '#/components/schemas/AuthMe' } } } }
+        '403': { description: 'Sede fuera de ámbito', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /personas/duplicados:
     get:
       tags: [personas]
@@ -311,12 +419,34 @@ paths:
           name: numero_documento
           schema: { type: string }
       responses:
-        '200': { description: 'Existencia de coincidencia minimizada: no revelar datos/ID globales ajenos, especialmente entre presbiterios' }
+        '200': { description: 'Existencia de coincidencia minimizada: no revelar datos/ID globales ajenos, especialmente entre presbiterios', content: { application/json: { schema: { $ref: '#/components/schemas/DuplicadoMinimizado' } } } }
   /personas:
     get:
       tags: [personas]
       security: [{ cookieAuth: [] }]
       parameters:
+        - in: query
+          name: presbiterio_id
+          schema: { type: integer }
+          description: Validar GENERAL/PRESBITERIO en backend.
+        - in: query
+          name: sede_id
+          schema: { type: integer }
+        - in: query
+          name: digitador_id
+          schema: { type: integer }
+        - in: query
+          name: desde
+          schema: { type: string, format: date }
+        - in: query
+          name: hasta
+          schema: { type: string, format: date }
+        - in: query
+          name: incompleta
+          schema: { type: boolean }
+        - in: query
+          name: posible_duplicado
+          schema: { type: boolean }
         - in: query
           name: q
           schema: { type: string }
@@ -327,7 +457,7 @@ paths:
           name: tamano
           schema: { type: integer, minimum: 1, maximum: 50, default: 25 }
       responses:
-        '200': { description: 'Datos de fichas del presbiterio autorizado; edición solo propias, no divulgar consolidado originado en otro ámbito (E2-D01 propuesta)' }
+        '200': { description: 'Consultas filtradas por permiso GENERAL/PRESBITERIO; edición digitador solo propia', content: { application/json: { schema: { $ref: '#/components/schemas/PaginaPersonas' } } } }
     post:
       tags: [personas]
       security: [{ cookieAuth: [], csrf: [] }]
@@ -339,9 +469,9 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/PersonaInput' }
       responses:
-        '201': { description: 'Persona y ficha guardadas; muestra IDs persistidos' }
-        '409': { description: 'Conflicto de identidad o idempotencia' }
-        '422': { description: 'Datos estructuralmente inválidos' }
+        '201': { description: 'Persona y ficha guardadas; muestra IDs persistidos', content: { application/json: { schema: { $ref: '#/components/schemas/PersonaGuardada' } } } }
+        '409': { description: 'Conflicto de identidad o idempotencia', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '422': { description: 'Datos estructuralmente inválidos', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /personas/{id}:
     get:
       tags: [personas]
@@ -349,8 +479,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/PersonId'
       responses:
-        '200': { description: 'Persona y fichas visibles autorizadas' }
-        '403': { description: 'Fuera de ámbito' }
+        '200': { description: 'Persona y fichas visibles autorizadas', content: { application/json: { schema: { $ref: '#/components/schemas/PersonaDetalle' } } } }
+        '403': { description: 'Fuera de ámbito', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
     patch:
       tags: [personas]
       security: [{ cookieAuth: [], csrf: [] }]
@@ -368,9 +498,9 @@ paths:
                   properties:
                     version: { type: integer, minimum: 1 }
       responses:
-        '200': { description: 'Modificación auditada, autor original conservado' }
-        '403': { description: 'Edición no autorizada' }
-        '409': { description: 'Versión conflictiva' }
+        '200': { description: 'Modificación auditada, autor original conservado', content: { application/json: { schema: { $ref: '#/components/schemas/PersonaDetalle' } } } }
+        '403': { description: 'Edición no autorizada', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '409': { description: 'Versión conflictiva', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /personas/{id}/fichas:
     post:
       tags: [personas]
@@ -385,8 +515,8 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/PersonaInput' }
       responses:
-        '201': { description: 'Ficha fuente adicional creada' }
-        '403': { description: 'Fuera de ámbito' }
+        '201': { description: 'Ficha fuente adicional creada', content: { application/json: { schema: { $ref: '#/components/schemas/FichaDetalle' } } } }
+        '403': { description: 'Fuera de ámbito', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /personas/{id}/grupos:
     post:
       tags: [gc]
@@ -400,15 +530,23 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/GCInput' }
       responses:
-        '201': { description: 'GC vinculado a ficha tipo GC; líder = ficha.persona_id, sin segundo lider_persona_id ni integrantes nominales' }
-        '409': { description: 'Conflicto: grupo existente o nuevo líder' }
+        '201': { description: 'GC vinculado a ficha tipo GC; líder = ficha.persona_id, sin segundo lider_persona_id ni integrantes nominales', content: { application/json: { schema: { $ref: '#/components/schemas/GrupoDetalle' } } } }
+        '409': { description: 'Conflicto: grupo existente o nuevo líder', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /grupos:
     get:
       tags: [gc]
       security: [{ cookieAuth: [] }]
       responses:
-        '200': { description: 'Lista paginada GC autorizados' }
+        '200': { description: 'Lista paginada GC autorizados', content: { application/json: { schema: { $ref: '#/components/schemas/PaginaGrupos' } } } }
   /grupos/{id}:
+    get:
+      tags: [gc]
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/ResourceId'
+      responses:
+        '200': { description: 'GC consultado por ámbito; líder derivado de ficha', content: { application/json: { schema: { $ref: '#/components/schemas/GrupoDetalle' } } } }
+        '403': { description: 'Sin permiso de consulta', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
     patch:
       tags: [gc]
       security: [{ cookieAuth: [], csrf: [] }]
@@ -426,14 +564,14 @@ paths:
                   properties:
                     version: { type: integer }
       responses:
-        '200': { description: 'Actualización y auditoría sin sustitución de líder' }
+        '200': { description: 'Actualización y auditoría sin sustitución de líder', content: { application/json: { schema: { $ref: '#/components/schemas/GrupoDetalle' } } } }
   /admin/usuarios:
     get:
       tags: [admin]
       security: [{ cookieAuth: [] }]
       responses:
-        '200': { description: 'ADMIN lista usuarios' }
-        '403': { description: 'Sin permiso' }
+        '200': { description: 'ADMIN lista usuarios', content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/UsuarioPublico' } } } } }
+        '403': { description: 'Sin permiso', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
     post:
       tags: [admin]
       security: [{ cookieAuth: [], csrf: [] }]
@@ -443,23 +581,38 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/UsuarioInput' }
       responses:
-        '201': { description: 'Cuenta creada / secretos fuera de respuesta' }
-        '403': { description: 'Sin permiso' }
+        '201': { description: 'Cuenta creada / secretos fuera de respuesta', content: { application/json: { schema: { $ref: '#/components/schemas/UsuarioPublico' } } } }
+        '403': { description: 'Sin permiso', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /admin/usuarios/{id}/reiniciar-acceso:
+    post:
+      tags: [admin]
+      security: [{ cookieAuth: [], csrf: [] }]
+      description: Reiniciar acceso y revocar sesiones; provisión de contraseña por canal seguro separado, nunca en respuesta.
+      parameters:
+        - $ref: '#/components/parameters/ResourceId'
+      responses:
+        '200': { description: 'Acceso reiniciado y sesiones revocadas', content: { application/json: { schema: { $ref: '#/components/schemas/RespuestaOperacion' } } } }
+        '403': { description: 'Solo ADMIN', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /admin/usuarios/{id}:
     patch:
       tags: [admin]
       security: [{ cookieAuth: [], csrf: [] }]
       parameters:
-        - $ref: '#/components/parameters/PersonId'
+        - $ref: '#/components/parameters/ResourceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UsuarioPatch' }
       responses:
-        '200': { description: 'Cuenta activada/desactivada / permisos ajustados' }
-        '403': { description: 'No autorizado' }
+        '200': { description: 'Cuenta activada/desactivada / permisos ajustados', content: { application/json: { schema: { $ref: '#/components/schemas/UsuarioPublico' } } } }
+        '403': { description: 'No autorizado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /config/campos-criticos:
     get:
       tags: [admin]
       security: [{ cookieAuth: [] }]
       responses:
-        '200': { description: 'Configuración de calidad vigente' }
+        '200': { description: 'Configuración de calidad vigente', content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Criticidad' } } } } }
     put:
       tags: [admin]
       security: [{ cookieAuth: [], csrf: [] }]
@@ -471,28 +624,74 @@ paths:
               type: array
               items: { $ref: '#/components/schemas/Criticidad' }
       responses:
-        '200': { description: 'Parámetros auditados; desactivable=false nunca se desactiva; informes se recalculan al consultar' }
-        '422': { description: 'Intento de desactivar relación estructural obligatoria' }
-        '403': { description: 'Solo ADMIN' }
+        '200': { description: 'Parámetros auditados; desactivable=false nunca se desactiva; informes se recalculan al consultar', content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Criticidad' } } } } }
+        '422': { description: 'Intento de desactivar relación estructural obligatoria', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '403': { description: 'Solo ADMIN', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /reportes/avance:
     get:
       tags: [reportes]
       security: [{ cookieAuth: [] }]
+      parameters:
+        - in: query
+          name: presbiterio_id
+          schema: { type: integer }
+          description: Validar GENERAL/PRESBITERIO en backend.
+        - in: query
+          name: sede_id
+          schema: { type: integer }
+        - in: query
+          name: digitador_id
+          schema: { type: integer }
+        - in: query
+          name: desde
+          schema: { type: string, format: date }
+        - in: query
+          name: hasta
+          schema: { type: string, format: date }
+        - in: query
+          name: incompleta
+          schema: { type: boolean }
+        - in: query
+          name: posible_duplicado
+          schema: { type: boolean }
       responses:
-        '200': { description: 'Presbiterio, sede, último guardado, conteos, productividad' }
+        '200': { description: 'Presbiterio, sede, último guardado, conteos, productividad', content: { application/json: { schema: { $ref: '#/components/schemas/ReporteAvance' } } } }
   /reportes/calidad:
     get:
       tags: [reportes]
       security: [{ cookieAuth: [] }]
+      parameters:
+        - in: query
+          name: presbiterio_id
+          schema: { type: integer }
+          description: Validar GENERAL/PRESBITERIO en backend.
+        - in: query
+          name: sede_id
+          schema: { type: integer }
+        - in: query
+          name: digitador_id
+          schema: { type: integer }
+        - in: query
+          name: desde
+          schema: { type: string, format: date }
+        - in: query
+          name: hasta
+          schema: { type: string, format: date }
+        - in: query
+          name: incompleta
+          schema: { type: boolean }
+        - in: query
+          name: posible_duplicado
+          schema: { type: boolean }
       responses:
-        '200': { description: 'Calidad calculada usando campos críticos vigentes, sin marca_calidad persistida; no verifica fidelidad al papel' }
+        '200': { description: 'Calidad calculada usando campos críticos vigentes, sin marca_calidad persistida; no verifica fidelidad al papel', content: { application/json: { schema: { $ref: '#/components/schemas/ReporteCalidad' } } } }
   /auditoria:
     get:
       tags: [auditoria]
       security: [{ cookieAuth: [] }]
       responses:
-        '200': { description: 'Solo ADMIN; acciones paginadas y control de GPS' }
-        '403': { description: 'Sin permiso' }
+        '200': { description: 'Solo ADMIN; acciones paginadas y control de GPS', content: { application/json: { schema: { $ref: '#/components/schemas/PaginaAuditoria' } } } }
+        '403': { description: 'Sin permiso', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
 
 
   /fichas/{id}:
@@ -500,10 +699,10 @@ paths:
       tags: [personas]
       security: [{ cookieAuth: [] }]
       parameters:
-        - $ref: '#/components/parameters/PersonId'
+        - $ref: '#/components/parameters/ResourceId'
       responses:
-        '200': { description: 'Ficha fuente según permisos' }
-        '403': { description: 'No autorizado' }
+        '200': { description: 'Ficha fuente según permisos', content: { application/json: { schema: { $ref: '#/components/schemas/FichaDetalle' } } } }
+        '403': { description: 'No autorizado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
     patch:
       tags: [personas]
       security: [{ cookieAuth: [], csrf: [] }]
@@ -521,6 +720,6 @@ paths:
                 datos_fuente: { type: object, additionalProperties: true }
                 observaciones: { type: string, nullable: true }
       responses:
-        '200': { description: 'Ficha fuente editada con auditoría, creador intacto' }
-        '403': { description: 'Ficha ajena' }
-        '409': { description: 'Versión en conflicto' }
+        '200': { description: 'Ficha fuente editada con auditoría, creador intacto', content: { application/json: { schema: { $ref: '#/components/schemas/FichaDetalle' } } } }
+        '403': { description: 'Ficha ajena', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '409': { description: 'Versión en conflicto', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
