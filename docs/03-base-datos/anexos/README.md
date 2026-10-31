@@ -1,9 +1,7 @@
-# Anexos físicos de PCD
+# Anexos físicos PCD
 
-[↑ Diseño de datos](../README.md)
+- [Anexo 01 — Diagrama físico](anexo-01-diagrama-fisico.md): 17 tablas, 165 campos, relaciones FK.
+- [Anexo 02 — Diccionario físico](anexo-02-diccionario-fisico.md): tipos de todas las columnas, nulos, defaults, claves, índices y CHECK.
+- [Fuente Mermaid editable](../diagramas/er-pcd-fisico.mmd).
 
-- [**01 — Diagrama físico**](anexo-01-diagrama-fisico.md): mapa ER y esquema completo con columnas, generado del SQL.
-- [**02 — Diccionario físico**](anexo-02-diccionario-fisico.md): 17 tablas, 109 columnas, 28 FK, defaults y CHECK derivados del SQL.
-- [Mermaid editable](../diagramas/er-pcd-fisico.mmd).
-
-Fuente de verdad: [001_initial.sql](../../../database/migrations/001_initial.sql). Regenerar anexos después de cada cambio físico; las pruebas en MySQL son pendientes.
+Derivados del [SQL inicial propuesto](../../../database/migrations/001_initial.sql), pendiente de prueba.
