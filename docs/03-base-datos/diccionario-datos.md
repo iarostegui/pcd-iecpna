@@ -36,3 +36,6 @@ Columna JSON opcional que guarda el conjunto de campos transcritos de cada ficha
 - `ficha_tipo` en auxiliares/GC protege consistencia de tipo por CHECK y FK compuesta (a validar en hosting).
 - `campo_critico` define rutas evaluables y no desactivables; reporte se recalcula según parámetros.
 - `sesion_captura` asocia version de autenticación, revocación y último uso; controles por PHP.
+
+## Catálogos y fuente de verdad E2
+Los códigos/etiquetas iniciales residen en `catalogo_valor`, no solo en una whitelist textual hard-coded. PHP consulta los valores activos, valida que sean dominios permitidos, y mantiene caché corta no sensible si resulta necesario. **Ubigeo INEI sigue pendiente** y no se debe inventar. `persona_captura.clave_identidad` es UNIQUE solo si la documentación proporciona clave completa confiable; `grupo_crecer_captura` no tiene `lider_persona_id` redundante.

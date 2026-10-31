@@ -83,3 +83,13 @@ No implementar IAM corporativo, SSO, directorios externos, roles pastorales, sis
 **E2-D03:** reconocer riesgo residual de **contraseña compartida entre digitadores**, pese a medidas compensatorias; ADMIN y REPORTES con secretos independientes.
 
 **Estado honesto:** documentación de decisiones técnicas actualizada; implementación no iniciada y pruebas SQL/API no ejecutadas. No declarar hallazgos cerrados sin validación y autorización de los puntos E2-Dxx.
+
+## 10. Verificación documental efectuada (sin ejecución de código)
+Se comprobaron estáticamente, sobre el último contenido de GitHub:
+- **23 rutas** diferentes definidas en OpenAPI, sin ruta duplicada; referencias locales a esquemas declarados.
+- **17 tablas** en `001_initial.sql`, sin referencias de FK hacia tablas inexistentes por nombre; la tabla catálogo es nueva.
+- Restricción de tipo GC y líder derivado declarados; semilla de `campo_critico` y valores del papel existente.
+- Enlaces internos de los seis documentos E2 principales: no se detectaron rutas inexistentes.
+- El archivo prototipo `prototypes/PCD_v2.2.html` conserva el mismo SHA Git anterior.
+
+**Esta es validación ESTÁTICA limitada**: **NO** se ha ejecutado YAML lint con parser externo, SQL en MySQL/MariaDB real, API PHP, pruebas funcionales ni ensayos de concurrencia. No dar GO técnico final por la inspección estática.

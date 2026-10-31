@@ -5,11 +5,11 @@
 | E2-T02 | Definir controles mínimos H-03/32 y riesgos de clave compartida | **DISEÑO PROPUESTO** |
 | E2-T03 | Definir catálogo inicial/normalización/criticidad desde papel y prototipo | **DISEÑO PROPUESTO** |
 | E2-T04 | Definir ámbito nacional, digitador y consulta | **E2-D01/D02 PENDIENTES** |
-| E2-T05 | Actualizar SQL, API/OpenAPI, modelos, SDD y pruebas | **EN PROGRESO** |
+| E2-T05 | Actualizar SQL, API/OpenAPI, modelos, SDD y pruebas | **DOCUMENTACIÓN SINCRONIZADA COMO PROPUESTA; requiere aceptación y pruebas reales** |
 | E2-T06 | Ejecutar SQL en versión real de MySQL/MariaDB del hosting | **NO EJECUTADO** |
 | E2-T07 | Verificar OpenAPI con herramienta de lint y pruebas de seguridad | **NO EJECUTADO** |
 | E2-T08 | Obtener conformidad de riesgo de clave común E2-D03 | **PENDIENTE** |
-| E2-T09 | Ajustar reporte de respuesta al auditor (sin presentarlo como final) | **EN PROGRESO** |
-| E2-T10 | Preparar I01 en tareas SDD con contratos listos y pruebas previstas | **PENDIENTE CIERRE** |
+| E2-T09 | Ajustar reporte de respuesta al auditor (sin presentarlo como final) | **ACTUALIZADO CON MATRIZ E2, aún borrador** |
+| E2-T10 | Preparar I01 en tareas SDD con contratos listos y pruebas previstas | **ESPECIFICADO PARA PLANIFICACIÓN; E2-D02 y ensayos bloquean GO** |
 
 No modificar el prototipo HTML V2.2 ni implementar código productivo hasta completar planificación correspondiente.
