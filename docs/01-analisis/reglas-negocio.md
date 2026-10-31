@@ -29,6 +29,7 @@
 | RN-26 | Un digitador modifica solo su ficha fuente; el autor original o ADMIN puede modificar la Persona consolidada; conservar trazabilidad y no sobrescribir por otra ficha. | Crítica |
 | RN-27 | PCD valida tipos, formatos, integridad y faltantes; no verifica automáticamente si la captura reproduce literalmente el papel. La revisión de fidelidad es **manual por cada presbiterio, fuera del sistema**, sin aprobaciones ni circuito de conciliación. | Alta |
 | RN-28 | GC registra solo la Persona **líder** y los datos generales del grupo. La cantidad aproximada de integrantes es resumen, no existen integrantes nominales registrados ni vínculos miembro–GC. | Crítica |
+| RN-29 | El ámbito de **consulta** de cada usuario se configura como GENERAL o PRESBITERIO; GENERAL habilita lectura nacional autorizada y PRESBITERIO limita a asociaciones de usuario. **La edición no cambia:** DIGITADOR solo fichas propias, ADMIN todas, REPORTES solo lectura. La autorización se aplica en PHP. | Crítica |
 
 ## Reglas de coincidencia — decisión derivada a validar en UAT
 1. Clave de identidad documental confiable coincidente: identidad existente; marcar coincidencia y conservar ficha fuente sin duplicar Persona (E1-D01 aún por ratificar para otro presbiterio).

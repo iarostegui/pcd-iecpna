@@ -46,3 +46,6 @@ Se generan [Anexo 01](../03-base-datos/anexos/anexo-01-diagrama-fisico.md) y [An
 
 ## Etapa 3 registrada
 [Informe E3](../07-auditorias/etapa-3-contratos-pruebas.md), [OpenAPI 3.2](../04-integracion/openapi.yaml), [trazabilidad RN→CU→UI→API→SQL→CA](matriz-trazabilidad.md) y [asignación de pruebas](../05-pruebas/asignacion-iteraciones.md). I01 se planifica con contratos más completos; I02/I03 dependen de E1-D01/E1-D02 y decisiones H-23/H-24. **No desarrollar módulos extra por observaciones fuera de ALC-PCD.**
+
+## Ajuste RN-29 aprobado
+La consulta `GENERAL/PRESBITERIO` es un atributo explícito de cuenta (`usuario.alcance_consulta`), independiente de la edición. [Spec REP-09](../../openspec/specs/reportes/spec.md) y [ADM-06](../../openspec/specs/administracion/spec.md). I04 debe probar CA-77/78; I05 cambia permisos de lectura, audita y revalida sesiones.

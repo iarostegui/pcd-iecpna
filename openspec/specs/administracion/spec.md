@@ -12,3 +12,6 @@ MUST rechazar escrituras de perfil REPORTES y DIGITADOR en administración; regi
 
 ## Requirement ADM-05 — sesiones y rol nacional (E2)
 ADMIN puede desactivar usuarios; **desactivar o cambiar credencial debe revocar todas sus sesiones** (versión/autorización y registro). ADMIN y REPORTES tienen claves distintas de digitadores y ámbitos nacionales por perfil (E2-D02 a ratificar). No se muestran nombres de usuarios en endpoints públicos.
+
+## Requirement ADM-06: Configurar ámbito de consulta (APROBADO E2-D01)
+Solo ADMIN MUST poder asignar `GENERAL` / `PRESBITERIO` a una cuenta; aplicar cambios desde PHP, auditar antes/después y revocar/revalidar sesiones en cambios de permisos. No modificar rol ni permisos de **edición** implícitamente. `GET /admin/usuarios` y `PATCH /admin/usuarios/{id}` mantienen este campo.

@@ -3,7 +3,7 @@ Script: `database/migrations/001_initial.sql`. Motor InnoDB, UTF8MB4; PK `BIGINT
 
 ## Normas
 - SQL parametrizado con PDO y prepared statements; clave foránea para todas las referencias esenciales.
-- Índice compuesto `(tipo_documento,numero_documento_norm)` UNIQUE (se permiten NULL).
+- **Identidad exacta:** `clave_identidad` UNIQUE nullable; `(tipo_documento,numero_documento_norm)` es **índice NO UNIQUE** para búsquedas/posibles coincidencias. Ceros conservados, subtipo OTRO en clave cuando corresponde.
 - Sede UNIQUE `(presbiterio_id,nombre_norm)`; `nombre_norm` se calcula en la aplicación y se revalida en transacción.
 - Índices búsquedas: `persona(apellidos,nombres)`, `ficha(sede_id,created_at)`, `ficha(created_by,created_at)`, `auditoria(recurso,id)`, `login_evento(fecha)`.
 - Concurrencia: `version` en fichas y entidades editables; PATCH exige versión y devuelve 409 si antigua.

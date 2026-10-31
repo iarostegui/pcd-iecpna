@@ -32,5 +32,6 @@
 | RN-26 | PER-07 | CU-07 | UI-06 | PATCH /fichas/{id} | ficha_captura; persona_captura | CA-53/54/55 |
 | RN-27 | PER-09; REP-06 | CU-04/10 | UI-04/09 | POST /personas; GET /reportes/calidad | ficha_captura; campo_critico | CA-18; E1-CA-12 |
 | RN-28 | GC-06 | CU-05 | UI-05 | POST /personas/{id}/grupos | grupo_crecer_captura | CA-30/89 |
+| RN-29 | REP-09; ADM-06 | CU-06/08/10 | UI-06/07/09 | GET /personas; PATCH /admin/usuarios/{id} | usuario.alcance_consulta; usuario_presbiterio | CA-77/78/79/85/90 |
 
 **Puerta SDD:** un cambio de regla obliga a actualizar spec, endpoint, SQL/índices y caso de prueba correspondiente. La columna «Pruebas» enumera **diseños**, no evidencia de ejecución. Consultar [asignación](../05-pruebas/asignacion-iteraciones.md), [OpenAPI](../04-integracion/openapi.yaml) y [anexos SQL](../03-base-datos/anexos/README.md).

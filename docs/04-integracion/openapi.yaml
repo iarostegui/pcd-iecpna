@@ -575,6 +575,8 @@ paths:
     post:
       tags: [admin]
       security: [{ cookieAuth: [], csrf: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Idempotency'
       requestBody:
         required: true
         content:
