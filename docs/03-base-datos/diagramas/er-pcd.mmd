@@ -1,0 +1,19 @@
+erDiagram
+  PRESBITERIO ||--o{ SEDE : incluye
+  USUARIO ||--o{ USUARIO_PRESBITERIO : tiene
+  PRESBITERIO ||--o{ USUARIO_PRESBITERIO : autoriza
+  USUARIO ||--o{ SESION_CAPTURA : inicia
+  SESION_CAPTURA ||--o| GEO_SESION : captura_una_vez
+  USUARIO ||--o{ LOGIN_EVENTO : intenta
+  PRESBITERIO ||--o{ FICHA_CAPTURA : contexto
+  SEDE ||--o{ FICHA_CAPTURA : origen
+  PERSONA_CAPTURA ||--o{ FICHA_CAPTURA : sustenta
+  PERSONA_CAPTURA ||--o{ CONYUGE_PENDIENTE : relaciona
+  PERSONA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : participa
+  FICHA_CAPTURA ||--o| GRUPO_CRECER_CAPTURA : registra_gc
+  PERSONA_CAPTURA ||--o{ GRUPO_CRECER_CAPTURA : lidera
+  USUARIO ||--o{ FICHA_CAPTURA : digita
+  SESION_CAPTURA ||--o{ AUDITORIA_EVENTO : registra
+  GEO_SESION ||--o{ AUDITORIA_EVENTO : referencia
+  USUARIO ||--o{ CAMPO_CRITICO : configura
+
