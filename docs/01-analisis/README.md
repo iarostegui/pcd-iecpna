@@ -1,0 +1,19 @@
+# 01 — Análisis funcional de PCD
+
+[↑ docs](../README.md) · [↑ Índice principal](../../README.md)
+
+Define **qué necesidad resuelve PCD**, qué datos se transcriben de los formularios impresos, quién opera y con qué reglas. No contiene la lógica física de programación.
+
+| Archivo | Contenido y finalidad |
+|---|---|
+| [alcance-funcional.md](alcance-funcional.md) | Objetivos, actores, funcionalidades incluidas y exclusiones. |
+| [procesos-negocio.md](procesos-negocio.md) | Pasos operativos: preparación, login, sede, Persona, GC, corrección, reportes y cierre. Distingue negocio de automatización. |
+| [reglas-negocio.md](reglas-negocio.md) | Reglas funcionales aprobadas; identidad, duplicados, sedes, auditoría, geolocalización y permisos. |
+| [casos-uso.md](casos-uso.md) | Actores, precondiciones, acciones y excepciones de los flujos principales. |
+| [diccionario-captura.md](diccionario-captura.md) | Mapeo de campos de las dos fichas impresas a atributos PCD y sus criterios de captura. |
+| [reportes-consultas.md](reportes-consultas.md) | Consultas, filtros, avance por sede, productividad y calidad de datos. |
+| [decisiones-pendientes.md](decisiones-pendientes.md) | Datos o criterios que todavía no están confirmados y que la IA **no debe inventar**. |
+
+**Fuente externa aún no versionada:** el Excel original de fichas Persona y Líder GC con sus ejemplos. El diccionario es la transcripción de trabajo; no sustituye una validación final contra el Excel. El diseño visual se encuentra en [PCD V2.2](../../prototypes/PCD_v2.2.html).
+
+**Para cambios:** revisar primero las reglas; actualizar la especificación por capacidad en [OpenSpec](../../openspec/README.md).

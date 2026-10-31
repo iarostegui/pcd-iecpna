@@ -1,0 +1,11 @@
+# Diagramas del modelo de datos de PCD
+
+[↑ Diseño de datos](../README.md) · [↑ Índice principal](../../../README.md)
+
+Almacena diagramas fuente **editables** del modelo PCD y, en el futuro, sus exportaciones gráficas versionadas.
+
+| Archivo | Uso |
+|---|---|
+| [er-pcd.mmd](er-pcd.mmd) | Diagrama entidad–relación en Mermaid para visualizar las relaciones principales de PCD. |
+
+La referencia de atributos y claves es el [modelo lógico](../modelo-logico.md) y el [SQL inicial](../../../database/migrations/001_initial.sql). Si cambian cardinalidades, actualizar estos tres elementos conjuntamente; no sustituir el modelo de PCD por el del SGSP.

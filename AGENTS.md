@@ -37,3 +37,5 @@ Por capacidad: `proposal.md` (cambio) → `design.md` → `spec.md` Given/When/T
 ## Definición de terminado
 Contrato API y frontend/backend coherentes; permisos y SQL enforce; pruebas válidas y sin regresiones; auditoría transaccional; despliegue reproducible sin Node en hosting; datos de prueba ficticios; métricas verificadas en hosting antes de aceptar umbrales.
 
+## Mantenimiento del índice y READMEs
+Al crear, mover, renombrar o eliminar archivos o carpetas, actualizar el `README.md` de la carpeta afectada y el índice del `README.md` raíz cuando cambie una ruta principal. Cada README describe finalidad, estado (propuesto/vigente/ejecutado) y enlaces reales a su contenido. Evitar enlaces rotos y no inventar pruebas realizadas.
