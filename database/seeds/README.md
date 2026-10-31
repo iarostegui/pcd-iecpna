@@ -7,3 +7,7 @@
 - Catálogo inicial: solo presbiterios y sedes verificados; los 48 nombres no están disponibles. Las ocho sedes de Lima del documento de Consejo Directivo son indicios por homologar, no semillas definitivas.
 - Registrar campaña activa con código estable; semillas idempotentes, sin tocar registros existentes.
 
+## E2: SQL de inicialización confirmado con prototipo
+[002_catalogos_calidad.sql](002_catalogos_calidad.sql) define SOLO dominios y parámetros de criticidad de campos comprobados en fichas y en el JS de PCD V2.2. No contiene catálogo oficial de sedes/ubigeo ni usuarios reales. Se ejecuta **después** de `database/migrations/001_initial.sql` en BD **de prueba**.
+
+**No sobrescribir** decisiones ADMIN: utiliza `INSERT IGNORE` para no restablecer `campo_critico.es_critico` al re-ejecutar semillas. Los códigos ubigeo siguen pendientes DP-06 y no se inventan. Ninguna contraseña se versiona.

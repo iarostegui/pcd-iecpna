@@ -10,3 +10,5 @@ Aquí vivirán las **migraciones y los datos de inicialización** de la base **i
 | [seeds/](seeds/README.md) | Reglas y futuros scripts de provisión de usuarios, parámetros y catálogos confirmados; **sin contraseñas ni datos ficticios productivos**. |
 
 **Advertencia:** `001_initial.sql` es un **diseño propuesto**, no prueba de instalación. Ejecutar primero en base de pruebas y validar contra versión efectiva de cPanel, índices y reglas. No almacenar volcados con datos personales.
+
+**Inicialización E2:** [database/seeds/002_catalogos_calidad.sql](seeds/002_catalogos_calidad.sql) precarga catálogos y criticidad verificados; no contiene credenciales ni sedes. No ejecutar en BD productiva sin validar primero el esquema y las decisiones pendientes.

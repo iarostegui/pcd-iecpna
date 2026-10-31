@@ -56,7 +56,6 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-51 | Scripts SQL se ejecutan sin error en MySQL/MariaDB real | P0 |
 | CA-52 | Ninguna API ofrece migración/exportación SGSP | P0 |
 
-
 | CA-53 | Persona existente de DIG-A, nueva ficha de DIG-B → dos fichas con snapshots independientes | P0 |
 | CA-54 | DIG-B edita su ficha → permitido, no afecta identidad Persona de DIG-A | P0 |
 | CA-55 | DIG-B intenta PATCH Persona creada por DIG-A → 403; ADMIN autorizado | P0 |
@@ -81,3 +80,30 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 - **E1-CA-12:** no existe indicador falso «transcripción textual verificada» para `JUANA`/Juan o `JU4N4`; la revisión del papel es manual y externa.
 - **E1-CA-13:** API rechaza directamente una fecha calendario imposible (422); permite fecha ausente/NULL.
 **No se ha ejecutado ninguna prueba aquí.**
+
+## Etapa 2 — casos complementarios de diseño (NO EJECUTADOS)
+| ID | Criterio verificable / escenario | Iteración | Dependencia |
+|---|---|---|---|
+| **CA-56** | GET /presbiterios anónimo devuelve solo ID/código/nombre activos; sin PII ni usuarios | I01 | H-04 |
+| **CA-57** | Login productivo pide usuario tecleado y no permite enumerar cuentas | I01 | H-03 |
+| **CA-58** | ADMIN/REPORTES tienen secretos distintos de contraseña común de digitadores | I01 | H-03 / E2-D03 |
+| **CA-59** | 5 fallos por cuenta en 15 min provocan mitigación temporal sin revelar existencia | I01 | H-03 |
+| **CA-60** | 20 fallos por IP en 15 min provocan mitigación y no bloquean permanentemente una IP compartida | I01 | H-03 |
+| **CA-61** | Sesión con inactividad >45 min rechaza request y requiere login | I01 | H-32 |
+| **CA-62** | Sesión con vida absoluta >12 h no se extiende por uso continuo | I01 | H-32 |
+| **CA-63** | Refresh + GET /auth/me entrega nuevo contexto/CSRF; POST con CSRF inválido rechaza | I01 | H-32 |
+| **CA-64** | ADMIN desactiva usuario → todas sus sesiones dejan de autorizar inmediatamente | I01/I05 | H-32 |
+| **CA-65** | Cambio/reset credencial incrementa auth_version y revoca sesiones antiguas | I01/I05 | H-32 |
+| **CA-66** | ADMIN puede cambiar explícitamente presbiterio; invalida sede del contexto previo | I01 | **E2-D02 pendiente** |
+| **CA-67** | REPORTES consulta nacional sin sede y nunca crea ni edita registros | I01/I05 | **E2-D02 pendiente** |
+| **CA-68** | DIGITADOR consulta fichas de su presbiterio y edita solo las propias | I04 | **E2-D01 pendiente** |
+| **CA-69** | Persona en dos presbiterios → usuario A no ve la ficha ni PII de B | I02/I04 | H-12 / E1-D01 |
+| **CA-70** | GET /catalogos lista dominios/códigos confirmados, sin valores inventados de ubigeo | I01/I02 | H-07 |
+| **CA-71** | DNI con ceros no pierde ceros; DNI incompleto no se deduplica como válido | I02 | H-13 |
+| **CA-72** | Dos documentos OTRO con igual número y distinto subtipo NO colisionan; OTRO sin subtipo no genera clave exacta | I02 | H-13 |
+| **CA-73** | Cambiar campo crítico desactivable recalcula reporte sin reescribir fichas; relación estructural no desactivable | I05 | H-18 |
+| **CA-74** | GC en ficha PERSONA → error y sin inserción; líder derivado de ficha.persona_id | I03 | H-35 |
+| **CA-75** | Cónyuge/responsabilidad en ficha GC o de persona equivocada → FK/CHECK rechaza | I02/I03 | H-35 |
+| **CA-76** | Revocación no causa segunda captura GPS al reabrir sesión existente; nuevo login inicia sesión GPS nueva opcional | I01 | H-32 |
+
+**Estado E2:** 21 casos adicionales **diseñados, 0 ejecutados**; los umbrales de autenticación son parámetros iniciales propuestos, no garantías comprobadas.

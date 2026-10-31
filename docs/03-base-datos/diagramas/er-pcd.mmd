@@ -11,9 +11,9 @@ erDiagram
   PERSONA_CAPTURA ||--o{ CONYUGE_PENDIENTE : relaciona
   PERSONA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : participa
   FICHA_CAPTURA ||--o| GRUPO_CRECER_CAPTURA : registra_gc
-  PERSONA_CAPTURA ||--o{ GRUPO_CRECER_CAPTURA : lidera
+  PERSONA_CAPTURA ||--o{ FICHA_CAPTURA : lider_si_gc
+  FICHA_CAPTURA ||--o| GRUPO_CRECER_CAPTURA : contiene_gc_con_lider_derivado
   USUARIO ||--o{ FICHA_CAPTURA : digita
   SESION_CAPTURA ||--o{ AUDITORIA_EVENTO : registra
   GEO_SESION ||--o{ AUDITORIA_EVENTO : referencia
   USUARIO ||--o{ CAMPO_CRITICO : configura
-

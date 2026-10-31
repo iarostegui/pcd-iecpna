@@ -16,3 +16,9 @@ Contiene el **diseño de la base propia de PCD**, distinta de la base futura del
 **Puntos críticos:** número de ficha opcional; documento único solo cuando es válido/presente; fichas múltiples por Persona; registros incompletos; calidad parametrizable; auditoría con autor original y ubicación de sesión; integridad sede–presbiterio.
 
 **Flujo de revisión:** [diccionario de captura](../01-analisis/diccionario-captura.md) → modelo conceptual → modelo lógico → ER → modelo físico → SQL → pruebas. No asumir compatibilidad total con el esquema SGSP.
+
+## Artefactos E2
+- [catalogos-e-identidad.md](catalogos-e-identidad.md): códigos del papel, `tipo_documento_detalle`, normalización segura, clave identidad opcional y ubigeo pendiente.
+- [campos-criticos.md](campos-criticos.md): matriz inicial del prototipo, campos desactivables y cálculo de reportes según configuración vigente.
+- [001_initial.sql](../../database/migrations/001_initial.sql): propuesta física revisada. **NO ejecutada**, requiere prueba de CHECK y FK compuestas en hosting.
+- [002_catalogos_calidad.sql](../../database/seeds/002_catalogos_calidad.sql): semillas técnicas basadas en fuente, sin datos personales.

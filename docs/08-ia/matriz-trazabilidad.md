@@ -26,3 +26,17 @@
 | PER-09 / REP-06 | Sin validación automática de texto contra papel; correcciones por interfaz existente | Auditoría de ediciones, sin tabla/tickets de conciliación | E1-CA-05, E1-CA-08, E1-CA-12 |
 | GC-06 | Solo ficha de líder y campos generales GC; conteo aproximado | GC con lider_persona_id; no miembros nominales | CA-30, E1-CA-11 |
 **Estado:** requisitos funcionales aprobados, codificación y ejecución de pruebas **pendientes**. Los deltas E1-D01/E1-D02 siguen sin aprobar, no se consolidan aquí.
+
+## Trazabilidad E2 (propuesta, sin ejecución)
+| Hallazgo | Requisito/Sistema | Interfaz / API | Modelo | Casos |
+|---|---|---|---|---|
+| H-03 | AUTH-06/07 | Login usuario escrito, POST /auth/login | usuario.hash/auth_version, login_evento | CA-57..60 |
+| H-04 | AUTH-05 | GET /presbiterios público limitado | presbiterio | CA-56 |
+| H-07 | CAT-05 | GET /catalogos | catalogo_valor + semillas fuente | CA-70 |
+| H-12 | REP-07 (E2-D01) | GET /personas/fichas filtrado en backend | ficha.presbiterio_id/created_by | CA-68/69 |
+| H-13 | CAT-06 | PersonaInput(tipo_documento_detalle) | persona.clave_identidad UNIQUE nullable | CA-71/72 |
+| H-18 | REP-08 | GET/PUT /config/campos-criticos, reporte calidad | campo_critico sin marca_calidad fija | CA-73 |
+| H-28 | AUTH-09 (E2-D02) | PUT /contexto/presbiterio, reportes nacionales | usuario.perfil, sesion_captura | CA-66/67 |
+| H-32 | AUTH-08 | GET /auth/me CSRF, revocación/expiración | sesion.revocada_en, auth_version | CA-61..65/76 |
+| H-35 | GC-08/09 | POST /personas/{id}/grupos | ficha_tipo FK/CHECK, líder desde ficha.persona_id | CA-74/75 |
+**Nota:** no elevar E2-D01/D02/D03 a regla aprobada sin conformidad. Los códigos ALC-PCD se encuentran en [alcance](../01-analisis/alcance-funcional.md).
