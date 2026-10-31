@@ -22,3 +22,6 @@ Aquí se guardan **especificaciones explicativas** y decisiones técnicas de **P
 - **Fuentes:** reglas aprobadas de PCD, formularios originales y prototipo V2.2; no confundir con SGSP.
 - **Estados:** distinguir definido, propuesto, pendiente y verificado; los modelos aún no representan ejecución productiva.
 - **Cambios:** cuando una decisión funcional cambie, actualizar la especificación OpenSpec y los documentos afectados, además de las pruebas. Registrar temas no resueltos en [decisiones-pendientes.md](01-analisis/decisiones-pendientes.md).
+
+## Etapa 3
+[Contratos y pruebas](07-auditorias/etapa-3-contratos-pruebas.md) documenta H-10/11/15/16/17/20…25/33/34/37/38/39/45 sin ampliar el alcance; la siguiente etapa tratará riesgos/operación productiva H-40 y pendientes.

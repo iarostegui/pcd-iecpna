@@ -69,3 +69,5 @@ Hosting actual con cPanel, sin Node.js residente en producción, Docker, microse
 
 ## Estado de auditoría — Etapa 2
 [Levantamiento E2](docs/07-auditorias/etapa-2-arquitectura-seguridad-datos.md) examina H-03/04/07/12/13/18/28/32/35 con evidencias del auditor y define **propuestas** para seguridad, catálogos, identidad, sesiones, autorización y líder GC. Los modelos [SQL](database/migrations/001_initial.sql), [API](docs/04-integracion/openapi.yaml), [catálogos](docs/03-base-datos/catalogos-e-identidad.md), [criticidad](docs/03-base-datos/campos-criticos.md) y [pruebas](docs/05-pruebas/casos-prueba.md) se actualizaron. **Sin pruebas ejecutadas ni aprobación de E2-D01/D02/D03**. El prototipo HTML V2.2 permanece inalterado.
+
+**Etapa 3 documentada:** [Informe E3](docs/07-auditorias/etapa-3-contratos-pruebas.md), [OpenAPI 3.2](docs/04-integracion/openapi.yaml), [matriz integral](docs/08-ia/matriz-trazabilidad.md) y [pruebas por iteración](docs/05-pruebas/asignacion-iteraciones.md). El prototipo 2.2 sigue igual. No se han ejecutado pruebas del backend.

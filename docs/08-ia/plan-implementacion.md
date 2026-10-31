@@ -43,3 +43,6 @@ H-12 se construirá con `alcance_consulta` por usuario (GENERAL/PRESBITERIO), **
 
 ## Entregables del diseño físico I00
 Se generan [Anexo 01](../03-base-datos/anexos/anexo-01-diagrama-fisico.md) y [Anexo 02](../03-base-datos/anexos/anexo-02-diccionario-fisico.md) directamente desde el SQL; no se ha ejecutado aún el SQL en un servidor real.
+
+## Etapa 3 registrada
+[Informe E3](../07-auditorias/etapa-3-contratos-pruebas.md), [OpenAPI 3.2](../04-integracion/openapi.yaml), [trazabilidad RN→CU→UI→API→SQL→CA](matriz-trazabilidad.md) y [asignación de pruebas](../05-pruebas/asignacion-iteraciones.md). I01 se planifica con contratos más completos; I02/I03 dependen de E1-D01/E1-D02 y decisiones H-23/H-24. **No desarrollar módulos extra por observaciones fuera de ALC-PCD.**

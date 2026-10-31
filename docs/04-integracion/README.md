@@ -16,3 +16,6 @@ Define la frontera **React ↔ PHP** dentro de PCD y documenta la eventual migra
 - [OpenAPI V3.1.1](openapi.yaml) contiene los endpoints públicos restringidos y contratos de sesión/contexto de la etapa 2.
 - [Identidad y catálogos](../03-base-datos/catalogos-e-identidad.md) y [criticidad](../03-base-datos/campos-criticos.md) sustentan esquema y valores iniciales.
 - Las reglas E2-D01/D02/D03 no están ratificadas. El archivo YAML es **diseño propuesto**, no servicio ejecutado.
+
+## Etapa 3
+La [especificación OpenAPI 3.2](openapi.yaml) y el [levantamiento E3](../07-auditorias/etapa-3-contratos-pruebas.md) contienen los esquemas de respuesta/filtros. La conformidad formal de YAML y las pruebas reales siguen pendientes.

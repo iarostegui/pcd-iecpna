@@ -38,3 +38,11 @@ El prototipo bloquea un documento duplicado y no representa fichas fuente múlti
 **H-12:** como base del prototipo se propone que DIGITADOR consulte fichas de su presbiterio pero edite solo sus registros. La Persona compartida entre presbiterios solo revela fuente de su ámbito, sin PII de otros. E2-D01 pendiente de ratificación.
 
 **H-18:** críticos iniciales se toman del prototipo, pero relaciones técnicas no desactivables; no se guardan estados fijos de completitud. Ver [Matriz](../03-base-datos/campos-criticos.md). **HTML V2.2 no modificado**.
+
+## Exclusiones del prototipo que no se implementan en producción (E3)
+- **H-03:** listado de usuarios en login; los códigos se escriben, sin enumeración pública.
+- **H-20:** coordenadas GPS completas en vista Persona/consulta; solo ADMIN accede a auditoría sensible.
+- **H-21:** etiquetas/acciones de Supervisor, aprobación de fichas y exportación hacia SGSP: **fuera de ALC-PCD**.
+- **H-22:** reintento manual GPS en la misma sesión tras denegación: **no replicar**; una única captura/estado de ubicación por sesión.
+- **H-25:** bloqueo de nombre GC repetido en demostración: no imponer UNIQUE sin cerrar E1-D02.
+**No se modifica el HTML V2.2**, que permanece como referencia visual y de flujo, no autoridad de políticas.

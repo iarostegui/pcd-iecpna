@@ -26,4 +26,4 @@ Contiene el **diseño de la base propia de PCD**, distinta de la base futura del
 ## Entregables físicos obligatorios I00
 - [Anexo 01 — Diagrama físico completo](anexos/anexo-01-diagrama-fisico.md), con fuente [Mermaid editable](diagramas/er-pcd-fisico.mmd).
 - [Anexo 02 — Diccionario físico por columna](anexos/anexo-02-diccionario-fisico.md).
-Ambos derivados del SQL vigente (17 tablas, 109 columnas). Actualizar con cada cambio. **No ejecutado todavía en motor MySQL/MariaDB.**
+Ambos derivados del SQL vigente (17 tablas, 165 columnas). Actualizar con cada cambio. **No ejecutado todavía en motor MySQL/MariaDB.**

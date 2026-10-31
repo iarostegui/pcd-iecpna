@@ -53,3 +53,7 @@ HTTP: 400 formato, 401 no autenticado, 403 sin ámbito, 404 no revelable, 409 co
 - **Seguridad:** consultas con 403/404/401 apropiados según exposición; mutaciones CSRF obligatorias, auditar siempre. **No afirmar implementación ni pruebas**.
 
 **H-03/E2-D03:** la clave común operativa se limita a digitadores, no a cuentas nacionales. La autenticación no puede mostrar listado de cuentas. **H-13:** documento OTRO sin subtipo no genera clave de identidad única. **H-35:** GC obtiene líder solo de ficha.persona_id. Estas decisiones están en SQL/seguridad y requieren pruebas reales.
+
+## Actualización Etapa 3 — API V3.2
+[OpenAPI](openapi.yaml) es la referencia: incluye **modelos de respuesta de éxito y error**, lectura con GENERAL/PRESBITERIO, filtros de consulta y reportes, `GET /grupos/{id}`, administración de usuarios con ámbito de consulta y reinicio de acceso seguro. El líder GC y su versión provienen de la **ficha GC**. Controles de seguridad/idempotencia se verifican en PHP, no se confía en filtros React. El reporte de modificaciones atribuye actores reales mediante `auditoria_evento`.
+**Pendiente de decisión:** E1-D01, E1-D02, H-23, H-24. **No implementar** conciliación pastoral, supervisor, exportación SGSP ni miembros nominales GC.

@@ -55,3 +55,12 @@ Al redactar la respuesta individual a cada observación, distinguir entre **corr
 - **H-28/H-32/H-35**: decisiones funcionales de Etapa 2 aprobadas; su implementación y pruebas siguen pendientes.
 - **Anexos del físico:** se requieren diagramas + diccionario completos y reproducibles a partir del SQL; no basta una tabla-resumen.
 - **Riesgo H-03**: aceptación funcional del esquema de clave común con controles compensatorios; riesgos de seguridad/privacidad deben verificarse antes de producción.
+
+## Etapa 3 — respuesta en elaboración
+- **H-10/15/16/17/33/37/38/39/45:** atender con DTO, filtros, matriz completa, control de versión GC por ficha, pruebas de fallos, administración y corrección de parámetros.
+- **H-11:** atender operaciones de consulta/administración dentro de alcance; no crear servicios de gestión pastoral ni conciliación.
+- **H-20:** impedir exposición de GPS y PII en consultas no autorizadas aunque HTML de demostración lo muestre.
+- **H-21:** **NO ATENDER** módulos de supervisor, exportación SGSP y aprobaciones: EXC-03/06 y carácter temporal de PCD; mantener bitácora y permisos.
+- **H-22:** un estado GPS por sesión, sin reintento dentro de la misma sesión, incluso tras denegación.
+- **H-23/H-24/H-25:** documentar incertidumbres sin hacer suposiciones del negocio; no bloquear integración con estados arbitrarios, no imponer UNIQUE por nombre GC sin aprobación.
+**Nota:** documentos y contratos corregidos ≠ pruebas ejecutadas. [Informe E3](etapa-3-contratos-pruebas.md).

@@ -20,3 +20,5 @@ Cuando una modificación se apruebe, crear una carpeta `YYYY-MM-DD-descripcion/`
 
 ## Cambio E2 abierto
 - [2026-10-31-levantamiento-etapa-2/](2026-10-31-levantamiento-etapa-2/README.md) — H-03/04/07/12/13/18/28/32/35. Diseño y tareas preliminares, pendientes E2-D01/D02/D03 y validación de API/SQL reales. **No implementar mejoras fuera de ALC-PCD.**
+
+- [2026-10-31-levantamiento-etapa-3/](2026-10-31-levantamiento-etapa-3/README.md) — DTO y filtros API, trazabilidad integral y casos de prueba; sin implementación productiva.

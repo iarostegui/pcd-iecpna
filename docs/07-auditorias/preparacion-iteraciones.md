@@ -39,3 +39,11 @@ La **revisión de fidelidad del texto con el papel** corresponde a cada presbite
 - **I02:** **ubigeo INEI como entrada de construcción obligatoria**, con fuente y versión verificadas; H-13 aprobado, persistencia tipo/subtipo/número sin ceros perdidos.
 - **I04:** probar que GENERAL muestra todos los presbiterios autorizados para consulta, PRESBITERIO solo los asociados, ambos con edición DIGITADOR restringida a propias fichas.
 - **I06:** la aceptación funcional de clave compartida no elimina la revisión de privacidad y pruebas de controles antes de operar con datos reales.
+
+## Etapa 3 — puertas de entrada
+- I01: los contratos de login, permisos nacionales y scope configurable están definidos, pero faltan lint formal y pruebas PHP/MySQL.
+- I02: DTO de Persona/ficha y filtros preparados; E1-D01 y H-24 requieren decisión, además del Excel binario y ubigeo en la construcción.
+- I03: el control 409 usa la versión de ficha GC; E1-D02/H-23 y pruebas FK bloquean GO.
+- I04: ámbito GENERAL/PRESBITERIO **aprobado**; falta implementar API y tests de edición solo propia.
+- I05: reportes por actor de auditoría, filtros y parametrización aprobados, sin resultados probados.
+- I06: H-40 protección de datos/retención y validación de hosting son parte de la siguiente etapa.

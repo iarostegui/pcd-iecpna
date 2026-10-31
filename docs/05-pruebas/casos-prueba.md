@@ -107,3 +107,23 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | **CA-76** | Revocación no causa segunda captura GPS al reabrir sesión existente; nuevo login inicia sesión GPS nueva opcional | I01 | H-32 |
 
 **Estado E2:** 21 casos adicionales **diseñados, 0 ejecutados**; los umbrales de autenticación son parámetros iniciales propuestos, no garantías comprobadas.
+
+## Etapa 3 — casos adicionales diseñados, NO ejecutados
+| ID | Caso de prueba | Iteración |
+|---|---|---|
+| CA-77 | GET /personas con GENERAL devuelve registros nacionales autorizados, DIGITADOR no edita ajenos | I04 |
+| CA-78 | GET /personas con PRESBITERIO filtra solo asociaciones usuario_presbiterio, evita IDOR | I04 |
+| CA-79 | Cambio de alcance por ADMIN revoca sesiones y audita actor/antes/después | I05 |
+| CA-80 | GET /grupos/{id} entrega grupo, líder derivado y version_ficha sin GPS | I03 |
+| CA-81 | PATCH grupo con versión obsoleta de ficha GC → 409, sin modificación parcial | I03 |
+| CA-82 | Idempotency-Key repetida con mismo payload → resultado original; distinta carga → 409 | I02 |
+| CA-83 | GET /reportes/avance filtros presbiterio/sede/digitador/fecha y ediciones atribuidas al actor | I05 |
+| CA-84 | Error 401/403/409/422 utiliza mismo DTO Error con request_id, sin revelar PII | I01–I05 |
+| CA-85 | ADMIN cambia ámbito de consulta de usuario vía PATCH; REPORTES no puede hacerlo | I05 |
+| CA-86 | Prototipo muestra GPS/usuarios, pero producción omite GPS en consulta y no enumera cuentas en login | I01/I04 |
+| CA-87 | Tras GPS denegado, refrescar/cambiar sede no vuelve a solicitar geolocalización | I01 |
+| CA-88 | Reporte calidad recalcula faltantes al cambiar parámetros; sin aprobación de supervisor | I05 |
+| CA-89 | Nuevo registro GC no crea miembros nominales aunque tenga cantidad aproximada | I03 |
+| CA-90 | GET/personas y /reportes con filtros fuera de permisos: 403 o sin resultados según política explícita | I04/I05 |
+
+**Estado:** 14 pruebas diseñadas, **ninguna ejecutada**. H-23/H-24 requieren casos adicionales tras decisión funcional.

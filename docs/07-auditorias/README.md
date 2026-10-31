@@ -15,3 +15,5 @@ Se conservan **los hallazgos, decisiones y respuestas** a auditorías de documen
 **Antes de clasificar hallazgos:** leer [ALC-PCD-3.1](../01-analisis/alcance-funcional.md). Un auditor puede **cuestionar el alcance** y proponer ampliación, pero no exigir funcionalidad fuera de él ni declararla bloqueante automáticamente; no desatender por ello riesgos de seguridad, integridad o privacidad.
 
 | [etapa-2-arquitectura-seguridad-datos.md](etapa-2-arquitectura-seguridad-datos.md) | H-03/H-04/H-07/H-12/H-13/H-18/H-28/H-32/H-35; seguridad, catálogo, contexto, calidad e integridad GC con decisiones E2 abiertas. | **Diseño técnico en GitHub, pruebas reales y conformidad pendientes**. |
+
+- [Etapa 3 — Contratos y pruebas](etapa-3-contratos-pruebas.md): H-10/11/15/16/17/20…25/33/34/37/38/39/45; criterios de atención y exclusiones dentro de alcance. **Sin pruebas ejecutadas**.
