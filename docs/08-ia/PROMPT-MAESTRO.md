@@ -1,0 +1,14 @@
+# Prompt maestro para ejecutar en Codex / IA desarrolladora
+Actúa como arquitecto y desarrollador senior de PCD (Plataforma de Captura de Datos IECPNA), **aplicación temporal independiente del SGSP**.
+
+1. Lee en orden `README.md`, `AGENTS.md`, `docs/01-analisis/`, `docs/02-diseno/`, `docs/03-base-datos/`, `docs/04-integracion/`, `openspec/specs/`, `docs/05-pruebas/`, `docs/08-ia/plan-implementacion.md`.
+2. Inspecciona `prototypes/PCD_v2.2.html` y replica el diseño y los flujos aprobados con React/TypeScript/Vite. NO copias su almacenamiento local ni su autenticación simulada.
+3. Implementa backend PHP 8.x modular usando PDO y MySQL InnoDB sobre hosting existente con cPanel y subdominio `pcd.unobdata.com`. Sin servicios residentes adicionales.
+4. Preserva decisiones: seis digitadores por presbiterio, clave común provisionada fuera de Git sin cambio forzado, ADMIN/REPORTES nacionales, sede consistente con presbiterio, crear sede sin aprobación, guardar incompletos, número ficha opcional, GC después de Persona, duplicados, auditoría y GPS una sola vez por sesión.
+5. Antes de codificar cada módulo, crea/actualiza `openspec/changes/<id>/proposal.md`, `design.md`, `specs/<capacidad>/spec.md`, `tasks.md`; luego implementa, prueba y reporta. No programes fases siguientes sin verificar las anteriores.
+6. No inventes catálogo faltante ni campos de SGSP; registra decisiones pendientes. No implementes migración ahora.
+7. Prueba rutas API, SQL, permisos, rendimiento y UX; adjunta comandos/resultados reales. No afirmes pruebas no ejecutadas.
+8. Produce al cierre de iteración: archivos cambiados, trazabilidad RF/API/SQL/CA, comandos de prueba, resultados, bloqueos y plan inmediato.
+
+Comienza con **I00** de `plan-implementacion.md`; implementa únicamente ese alcance en la primera iteración.
+

@@ -1,0 +1,58 @@
+# PCD V3.1 — Matriz de casos de prueba
+Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia real, comando, fecha, usuario de prueba y entorno. **No dar por ejecutado sin hacerlo.**
+
+| ID | Prueba GIVEN / WHEN / THEN | Prioridad |
+|---|---|---|
+| CA-01 | Login sin presbiterio → rechaza | P0 |
+| CA-02 | Digitador intenta ingresar con presbiterio ajeno → rechaza sin revelar cuenta | P0 |
+| CA-03 | Seis digitadores por presbiterio configurado → existen activos | P0 |
+| CA-04 | ADMIN y REPORTES → cobertura nacional según rol | P0 |
+| CA-05 | Usuario inactivo → login rechazado | P0 |
+| CA-06 | Contraseña inicial común hash en BD → sin texto claro ni cambio forzado | P0 |
+| CA-07 | Exceso intentos login → throttling y auditoría | P0 |
+| CA-08 | Selección de sede → solo sedes de presbiterio | P0 |
+| CA-09 | Intentar sede fuera del presbiterio vía API → 403 | P0 |
+| CA-10 | Sede nueva no duplicada → se crea y selecciona sin aprobación | P0 |
+| CA-11 | Nombre normalizado igual (IECPNA/acento/espacios) → 409 | P0 |
+| CA-12 | Nombre solo similar → advertencia, puede crear sede legítima | P1 |
+| CA-13 | Dos creaciones simultáneas misma sede → solo una | P0 |
+| CA-14 | Cambiar sede conserva presbiterio, nunca reautoriza GPS | P0 |
+| CA-15 | Nueva Persona → foco inicial N.º ficha | P0 |
+| CA-16 | Enter/Tab avanza, Shift+Tab retrocede, Enter no guarda | P0 |
+| CA-17 | Fecha válida DD/MM/AAAA → ISO en API | P0 |
+| CA-18 | 29/02 en año no bisiesto → validación sin pérdida de texto | P0 |
+| CA-19 | Persona sin número de ficha → guardar correctamente | P0 |
+| CA-20 | Persona con críticos incompletos → guardar y reportar faltantes | P0 |
+| CA-21 | Configurar criticidad vía ADMIN → cambia reporte no validez del guardado | P0 |
+| CA-22 | Documento existente → alerta, no segunda Persona | P0 |
+| CA-23 | Dos POST simultáneos documento → UNIQUE impide segundo registro | P0 |
+| CA-24 | Persona sin documento y nombre parecido → avisar posible duplicado, permitir | P1 |
+| CA-25 | Duplicado entre presbiterios → no exponer datos fuera de ámbito | P0 |
+| CA-26 | Doble clic guardar / timeout reintento misma clave → una sola ficha | P0 |
+| CA-27 | Persona marcada líder GC antes de guardarla → no crea GC | P0 |
+| CA-28 | Persona guardada → abrir GC ya vinculado | P0 |
+| CA-29 | Persona existente en Consulta → registrar GC después | P0 |
+| CA-30 | Capacidad GC vs integrantes estimados → persistir separados | P0 |
+| CA-31 | Cambio de líder en GC existente → no sustituye destructivamente | P0 |
+| CA-32 | Digitador edita su ficha → permitido, creador se mantiene | P0 |
+| CA-33 | Digitador edita ficha ajena → 403 | P0 |
+| CA-34 | ADMIN edita ficha ajena → permitido, actor ADMIN, creador inalterado | P0 |
+| CA-35 | REPORTES intenta POST/PATCH → 403 | P0 |
+| CA-36 | Iniciar sesión → 1 solicitud GPS, 1 fila geo_sesion | P0 |
+| CA-37 | Guardar 10 Personas+GC → misma ubicación de sesión sin nuevos prompts | P0 |
+| CA-38 | Refrescar página → misma ubicación almacenada, no nuevo prompt | P0 |
+| CA-39 | Denegar GPS → guardar, auditoría indica DENEGADA | P0 |
+| CA-40 | Cada alta/edición → auditoría con sesión, IP, actor y geo/estado | P0 |
+| CA-41 | Login exitoso/fallido → log separado, sin contraseña | P0 |
+| CA-42 | Falla auditoría durante escritura → rollback transacción | P0 |
+| CA-43 | Consulta con 5.000 fichas → paginación, filtros y permiso | P1 |
+| CA-44 | Reporte avance sede incluye último día digitado y autor | P0 |
+| CA-45 | Reporte calidad identifica campos críticos faltantes y duplicidad | P0 |
+| CA-46 | React DOM XSS/SQL injection/CSRF/IDOR → no vulnerabilidades básicas | P0 |
+| CA-47 | localStorage/URL/logs → no documentos, credenciales ni coordenadas | P0 |
+| CA-48 | HTML V2.2 y React en 320/390/768/1440px → sin pérdida de controles | P1 |
+| CA-49 | Backup y restauración a BD aislada → datos íntegros | P0 |
+| CA-50 | Prueba carga y baseline web actual → informe p95 sin degradación no aceptable | P0 |
+| CA-51 | Scripts SQL se ejecutan sin error en MySQL/MariaDB real | P0 |
+| CA-52 | Ninguna API ofrece migración/exportación SGSP | P0 |
+
