@@ -200,6 +200,12 @@ components:
         presbiterio_id: { type: integer }
         nombre_oficial: { type: string }
         ubicacion_referencia: { type: string, nullable: true }
+    BusquedaSedes:
+      type: object
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Sede' } }
+        similares: { type: array, items: { $ref: '#/components/schemas/Sede' } }
+        advertencia: { type: string, nullable: true, description: Similitud no bloquea un nombre legitimamente distinto. }
     NewSede:
       type: object
       required: [nombre_oficial]
@@ -368,7 +374,7 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/NewSede' }
       responses:
-        '201': { description: 'Sede creada y disponible', content: { application/json: { schema: { $ref: '#/components/schemas/Sede' } } } }
+        '201': { description: 'Sede creada y disponible', content: { application/json: { schema: { $ref: '#/components/schemas/BusquedaSedes' } } } }
         '409': { description: 'Duplicado normalizado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /contexto/presbiterio:
     put:
@@ -536,6 +542,22 @@ paths:
     get:
       tags: [gc]
       security: [{ cookieAuth: [] }]
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: presbiterio_id
+          schema: { type: integer }
+        - in: query
+          name: sede_id
+          schema: { type: integer }
+        - in: query
+          name: pagina
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: tamano
+          schema: { type: integer, minimum: 1, maximum: 50, default: 25 }
       responses:
         '200': { description: 'Lista paginada GC autorizados', content: { application/json: { schema: { $ref: '#/components/schemas/PaginaGrupos' } } } }
   /grupos/{id}:
