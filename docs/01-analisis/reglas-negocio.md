@@ -11,8 +11,8 @@
 | RN-08 | Las fechas se ingresan DD/MM/AAAA; valores inexistentes como 31/02/1998 son rechazados como fecha. El digitador los corrige consultando la ficha o deja el campo vacío para guardar incompleto. Solo fechas reales pasan a SQL DATE. Validación en frontend y backend. | Alta |
 | RN-09 | N.º ficha impresa Persona/GC es opcional y no es clave de identidad ni bloquea guardado. | Alta |
 | RN-10 | Falta de datos críticos NO impide guardar; reportes detectan incompletitud; configuración editable por ADMIN durante la campaña. | Crítica |
-| RN-11 | Identidad documental válida coincidente (Tipo+Número) no crea segunda Persona; conservar nueva ficha como fuente vinculada o abrir conciliación; sin documento, no deducir duplicado solo por nombre. | Crítica |
-| RN-12 | Posibles coincidencias por nombres/apellidos/nacimiento generan advertencia y marca de conciliación, no bloqueo automático. | Alta |
+| RN-11 | Coincidencia por **clave de identidad documental confiable** (Tipo+Subtipo cuando corresponde+Número normalizado) no crea segunda Persona. Conservar nueva ficha de origen sin duplicar la identidad; detalle cross-presbiterio E1-D01 pendiente. Sin clave válida, no fusionar solo por nombre. | Crítica |
+| RN-12 | Posibles coincidencias por nombres/apellidos/nacimiento generan **advertencia o indicador de calidad**, no fusión ni bloqueo automático; no crear circuito de conciliación dentro de PCD. | Alta |
 | RN-13 | La opción de líder GC es a demanda; abrir solo después de persistir Persona, o desde Consulta posteriormente. | Crítica |
 | RN-14 | GC vinculado al ID Persona; presbiterio y sede heredados de contexto, sin segunda digitación de líder. | Crítica |
 | RN-15 | Un líder nuevo NO sustituye al de GC vigente en el mismo grupo; registrar nuevo GC o incidencia, sin borrar historia. | Crítica |
@@ -31,7 +31,7 @@
 | RN-28 | GC registra solo la Persona **líder** y los datos generales del grupo. La cantidad aproximada de integrantes es resumen, no existen integrantes nominales registrados ni vínculos miembro–GC. | Crítica |
 
 ## Reglas de coincidencia — decisión derivada a validar en UAT
-1. Documento completo normalizado coincidente: identidad existente; mostrar conflicto y registrar ficha como aporte / conciliación sin duplicar Persona.
+1. Clave de identidad documental confiable coincidente: identidad existente; marcar coincidencia y conservar ficha fuente sin duplicar Persona (E1-D01 aún por ratificar para otro presbiterio).
 2. Sin documento, nombres+apellidos+fecha nacimiento coincidentes: señal de posible duplicado; el digitador puede continuar.
 3. Solo parecido fonético/textual: advertir, no prohibir. Evitar revelar registros fuera del ámbito del usuario.
 

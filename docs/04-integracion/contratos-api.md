@@ -51,3 +51,5 @@ HTTP: 400 formato, 401 no autenticado, 403 sin ámbito, 404 no revelable, 409 co
 - **Calidad:** `campo_critico` incluye etiqueta, ruta y desactivable; las relaciones técnicas no se desactivan; informe recalculado con parámetros vigentes. [Matriz](../03-base-datos/campos-criticos.md).
 - **GC:** no existe segundo `lider_persona_id`; el líder se obtiene de `ficha_captura.persona_id`. Prohibida ficha tipo PERSONA en operación GC. No integrantes nominales.
 - **Seguridad:** consultas con 403/404/401 apropiados según exposición; mutaciones CSRF obligatorias, auditar siempre. **No afirmar implementación ni pruebas**.
+
+**H-03/E2-D03:** la clave común operativa se limita a digitadores, no a cuentas nacionales. La autenticación no puede mostrar listado de cuentas. **H-13:** documento OTRO sin subtipo no genera clave de identidad única. **H-35:** GC obtiene líder solo de ficha.persona_id. Estas decisiones están en SQL/seguridad y requieren pruebas reales.

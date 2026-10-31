@@ -19,7 +19,7 @@ Ningún DP autoriza al agente a crear datos falsos ni a cambiar funcionalidades 
 ## E1 — Puntos para conformidad del responsable funcional
 - E1-D01: adjuntar automáticamente la ficha cuando el documento pertenece a Persona registrada incluso en otro presbiterio, sin exponer PII ni autorizar edición del consolidado.
 - E1-D02: «grupo ya existe» se captura como Sí/No del papel; no construir identidad maestra permanente de GC dentro de PCD.
-- E1-D03: incidencias de calidad simples, sin workflow de supervisor ni módulo de conciliación.
+- E1-D03: **CERRADA FUNCIONALMENTE**; revisión manual fuera de PCD por presbiterio, sin workflow de supervisor, sistema de tickets ni conciliación.
 - E1-D04: agregar el Excel binario exacto a GitHub; inventario y SHA ya documentados.
 Ver [resolución E1](../07-auditorias/etapa-1-resolucion.md).
 

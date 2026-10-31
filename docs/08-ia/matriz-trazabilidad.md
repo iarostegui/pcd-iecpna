@@ -24,7 +24,7 @@
 |---|---|---|---|
 | PER-08 | Fecha DD/MM/AAAA, impedir día inexistente, permitir vacío | Validar fecha real en PHP; DATE o NULL | CA-18, E1-CA-04 y E1-CA-13 |
 | PER-09 / REP-06 | Sin validación automática de texto contra papel; correcciones por interfaz existente | Auditoría de ediciones, sin tabla/tickets de conciliación | E1-CA-05, E1-CA-08, E1-CA-12 |
-| GC-06 | Solo ficha de líder y campos generales GC; conteo aproximado | GC con lider_persona_id; no miembros nominales | CA-30, E1-CA-11 |
+| GC-06 | Solo ficha de líder y campos generales GC; conteo aproximado | Grupo GC → ficha GC → ficha.persona_id (sin duplicar líder); no miembros nominales | CA-30, E1-CA-11 |
 **Estado:** requisitos funcionales aprobados, codificación y ejecución de pruebas **pendientes**. Los deltas E1-D01/E1-D02 siguen sin aprobar, no se consolidan aquí.
 
 ## Trazabilidad E2 (propuesta, sin ejecución)

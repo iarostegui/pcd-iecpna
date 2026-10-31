@@ -37,7 +37,7 @@
 | ID | Campo papel | Campo propuesto | Regla |
 |---|---|---|---|
 | G01 | N.º ficha GC | ficha_captura.numero_ficha | Independiente y opcional, no único |
-| G02–G03 | Documento/nombre líder | grupo_crecer_captura.lider_persona_id | Se obtiene de Persona guardada; no duplicar líder |
+| G02–G03 | Documento/nombre líder | ficha_captura.persona_id (para ficha tipo GC) | Se obtiene de Persona guardada; la tabla GC NO duplica líder |
 | G04 | ¿Grupo existe? | grupo_crecer_captura.grupo_ya_existe | Sí/No; buscar asociación si Sí |
 | G05 | Estado actual | grupo_crecer_captura.estado_gc | Activo/En baja/Dado de baja |
 | G06 | Nombre grupo | grupo_crecer_captura.nombre | Texto |
@@ -69,7 +69,7 @@ La fuente física se contrastó con [inventario-excel-original.md](fuentes/inven
 - GC, fila 11: «¿El grupo ya existe?» es un dato de la hoja, **no** un ID de grupo PCD.
 - GC, fila 33: firma solo en papel, no digitalizar.
 - Marcas `*`: calidad del formulario en papel, **nunca** bloqueo a un guardado PCD incompleto.
-- Campos y fechas inválidos deben conservar literal en el snapshot de ficha; la representación tipada debe ser válida o NULL.
+- **Aclaración aprobada H-05:** el sistema NO acepta fechas calendario imposibles como fecha. El digitador las corrige con el origen o deja el campo vacío (NULL) para guardar ficha incompleta; **no** exigir un mecanismo para persistir 31/02/1998. Otros campos siguen sus validaciones de tipo/formato y decisiones particulares.
 **H-14:** contraste documental realizado; falta agregar el original XLSX en el repositorio.
 
 ## Aclaración de auditoría E1 — validación y revisión manual
