@@ -1,5 +1,7 @@
 -- PCD V3.1 · modelo propio; propuesta inicial MySQL 8/MariaDB reciente, ejecutar primero en BD de prueba.
 -- NO incluye datos reales ni contraseñas. Antes de ejecutar: validar versión real cPanel.
+-- Controles CHECK y FK compuestas deben probarse en MySQL/MariaDB reales; NO se han ejecutado.
+-- Las reglas de autenticación/ámbito nacional requieren aceptación E2-D01/D02/D03 antes de producción.
 SET NAMES utf8mb4;
 CREATE TABLE IF NOT EXISTS presbiterio (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -13,6 +15,7 @@ CREATE TABLE IF NOT EXISTS usuario (
  codigo VARCHAR(80) NOT NULL, nombre_display VARCHAR(180) NOT NULL,
  perfil ENUM('DIGITADOR','ADMIN','REPORTES') NOT NULL,
  password_hash VARCHAR(255) NOT NULL, activo TINYINT(1) NOT NULL DEFAULT 1,
+ auth_version INT UNSIGNED NOT NULL DEFAULT 1, -- incremento en reset, cambio credencial o desactivación
  created_at DATETIME(6) NOT NULL, updated_at DATETIME(6) NULL,
  UNIQUE KEY uq_usuario_codigo(codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -47,13 +50,23 @@ CREATE TABLE IF NOT EXISTS campana (
  UNIQUE KEY uq_campana_codigo(codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Dominios de las fichas físicas; catálogo pequeño y versionado, independiente de sede/presbiterio.
+CREATE TABLE IF NOT EXISTS catalogo_valor (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ dominio VARCHAR(45) NOT NULL, codigo VARCHAR(65) NOT NULL,
+ etiqueta VARCHAR(130) NOT NULL, orden SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+ activo TINYINT(1) NOT NULL DEFAULT 1,
+ UNIQUE KEY uq_catalogo_dominio_codigo(dominio,codigo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS sesion_captura (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  usuario_id BIGINT UNSIGNED NOT NULL, presbiterio_id BIGINT UNSIGNED NOT NULL,
  sede_id BIGINT UNSIGNED NULL, session_ref_hash CHAR(64) NOT NULL,
  ip_login VARBINARY(16) NULL, user_agent VARCHAR(255) NULL,
  fecha_login DATETIME(6) NOT NULL, fecha_logout DATETIME(6) NULL,
- last_seen DATETIME(6) NULL,
+ last_seen DATETIME(6) NULL, revocada_en DATETIME(6) NULL,
+ auth_version_al_ingreso INT UNSIGNED NOT NULL, -- comparar con usuario.auth_version al autorizar
  UNIQUE KEY uq_sesion_ref(session_ref_hash),
  KEY ix_sesion_usuario_fecha(usuario_id,fecha_login),
  CONSTRAINT fk_sc_user FOREIGN KEY(usuario_id) REFERENCES usuario(id),
@@ -78,14 +91,16 @@ CREATE TABLE IF NOT EXISTS login_evento (
  created_at DATETIME(6) NOT NULL,
  KEY ix_login_fecha(created_at),
  KEY ix_login_codigo_fecha(codigo_intentado,created_at),
+ KEY ix_login_ip_fecha(ip,created_at),
  CONSTRAINT fk_le_usuario FOREIGN KEY(usuario_id) REFERENCES usuario(id),
  CONSTRAINT fk_le_pres FOREIGN KEY(presbiterio_id) REFERENCES presbiterio(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS persona_captura (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
- tipo_documento VARCHAR(24) NULL, numero_documento VARCHAR(60) NULL,
- numero_documento_norm VARCHAR(60) NULL,
+ tipo_documento VARCHAR(24) NULL, tipo_documento_detalle VARCHAR(100) NULL,
+ numero_documento VARCHAR(60) NULL, numero_documento_norm VARCHAR(60) NULL,
+ clave_identidad VARCHAR(220) NULL, -- UNIQUE solo si tipo+subtipo+numero normalizados son confiables
  nombres VARCHAR(150) NULL, apellido_paterno VARCHAR(100) NULL,
  apellido_materno VARCHAR(100) NULL, fecha_nacimiento DATE NULL,
  sexo_codigo VARCHAR(24) NULL, estado_civil_codigo VARCHAR(24) NULL,
@@ -97,7 +112,8 @@ CREATE TABLE IF NOT EXISTS persona_captura (
  created_by BIGINT UNSIGNED NOT NULL, updated_by BIGINT UNSIGNED NULL,
  created_at DATETIME(6) NOT NULL, updated_at DATETIME(6) NULL,
  version INT UNSIGNED NOT NULL DEFAULT 1,
- UNIQUE KEY uq_persona_documento(tipo_documento,numero_documento_norm),
+ UNIQUE KEY uq_persona_clave_identidad(clave_identidad),
+ KEY ix_persona_doc_candidato(tipo_documento,numero_documento_norm),
  KEY ix_persona_apellidos(apellido_paterno,apellido_materno,nombres),
  KEY ix_persona_nombres(nombres),
  CONSTRAINT fk_pc_creador FOREIGN KEY(created_by) REFERENCES usuario(id),
@@ -114,8 +130,8 @@ CREATE TABLE IF NOT EXISTS ficha_captura (
  numero_ficha VARCHAR(50) NULL,
  fecha_papel DATE NULL, responsable_papel VARCHAR(180) NULL,
  observaciones TEXT NULL, control_papel TEXT NULL,
- datos_fuente_json JSON NULL, -- snapshot original por ficha
- marca_calidad VARCHAR(30) NOT NULL DEFAULT 'INCOMPLETA',
+ datos_fuente_json JSON NULL, -- snapshot del valor aceptado por ficha; revisar fidelidad contra papel fuera de PCD
+ -- La completitud se calcula en lectura usando campo_critico; NO almacenar marca_calidad fija.
  posible_duplicado TINYINT(1) NOT NULL DEFAULT 0,
  created_by BIGINT UNSIGNED NOT NULL, updated_by BIGINT UNSIGNED NULL,
  created_at DATETIME(6) NOT NULL, updated_at DATETIME(6) NULL,
@@ -124,6 +140,8 @@ CREATE TABLE IF NOT EXISTS ficha_captura (
  KEY ix_ficha_autor_fecha(created_by,created_at),
  KEY ix_ficha_pres_tipo(presbiterio_id,tipo_ficha,created_at),
  KEY ix_ficha_persona(persona_id),
+ UNIQUE KEY uq_ficha_id_tipo(id,tipo_ficha),
+ UNIQUE KEY uq_ficha_id_persona_tipo(id,persona_id,tipo_ficha),
  CONSTRAINT fk_fc_campana FOREIGN KEY(campana_id) REFERENCES campana(id),
  CONSTRAINT fk_fc_persona FOREIGN KEY(persona_id) REFERENCES persona_captura(id),
  CONSTRAINT fk_fc_sede FOREIGN KEY(presbiterio_id,sede_id) REFERENCES sede(presbiterio_id,id),
@@ -134,28 +152,33 @@ CREATE TABLE IF NOT EXISTS ficha_captura (
 CREATE TABLE IF NOT EXISTS conyuge_pendiente (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  persona_id BIGINT UNSIGNED NOT NULL, ficha_id BIGINT UNSIGNED NOT NULL,
+ ficha_tipo ENUM('PERSONA','GC') NOT NULL DEFAULT 'PERSONA',
  tipo_documento VARCHAR(24) NULL, numero_documento VARCHAR(60) NULL,
  nombre_libre VARCHAR(240) NULL,
  CONSTRAINT fk_con_persona FOREIGN KEY(persona_id) REFERENCES persona_captura(id),
- CONSTRAINT fk_con_ficha FOREIGN KEY(ficha_id) REFERENCES ficha_captura(id)
+ CONSTRAINT fk_con_ficha_persona FOREIGN KEY(ficha_id,persona_id,ficha_tipo) REFERENCES ficha_captura(id,persona_id,tipo_ficha),
+ CONSTRAINT chk_con_tipo CHECK (ficha_tipo='PERSONA')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS persona_responsabilidad_captura (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  persona_id BIGINT UNSIGNED NOT NULL, ficha_id BIGINT UNSIGNED NOT NULL,
+ ficha_tipo ENUM('PERSONA','GC') NOT NULL DEFAULT 'PERSONA',
  tipo_codigo VARCHAR(50) NOT NULL, sede_id BIGINT UNSIGNED NULL,
  region_libre VARCHAR(180) NULL,
  descripcion VARCHAR(280) NULL, fecha_desde DATE NULL,
  KEY ix_resp_persona(persona_id),
  CONSTRAINT fk_pr_persona FOREIGN KEY(persona_id) REFERENCES persona_captura(id),
- CONSTRAINT fk_pr_ficha FOREIGN KEY(ficha_id) REFERENCES ficha_captura(id),
+ CONSTRAINT fk_pr_ficha_persona FOREIGN KEY(ficha_id,persona_id,ficha_tipo) REFERENCES ficha_captura(id,persona_id,tipo_ficha),
+ CONSTRAINT chk_pr_tipo CHECK (ficha_tipo='PERSONA'),
  CONSTRAINT fk_pr_sede FOREIGN KEY(sede_id) REFERENCES sede(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS grupo_crecer_captura (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  ficha_id BIGINT UNSIGNED NOT NULL,
- lider_persona_id BIGINT UNSIGNED NOT NULL,
+ ficha_tipo ENUM('PERSONA','GC') NOT NULL DEFAULT 'GC',
+ -- Líder único = ficha_captura.persona_id; NO duplicar con lider_persona_id.
  grupo_ya_existe TINYINT(1) NULL,
  nombre VARCHAR(220) NULL, tipo_gc VARCHAR(60) NULL,
  estado_gc VARCHAR(45) NULL, fecha_inicio DATE NULL,
@@ -164,16 +187,18 @@ CREATE TABLE IF NOT EXISTS grupo_crecer_captura (
  es_matrimonios TINYINT(1) NULL,
  created_at DATETIME(6) NOT NULL, updated_at DATETIME(6) NULL,
  UNIQUE KEY uq_gc_ficha(ficha_id),
- KEY ix_gc_lider(lider_persona_id),
- CONSTRAINT fk_gc_ficha FOREIGN KEY(ficha_id) REFERENCES ficha_captura(id),
- CONSTRAINT fk_gc_lider FOREIGN KEY(lider_persona_id) REFERENCES persona_captura(id)
+ CONSTRAINT fk_gc_ficha_tipo FOREIGN KEY(ficha_id,ficha_tipo) REFERENCES ficha_captura(id,tipo_ficha),
+ CONSTRAINT chk_gc_tipo CHECK (ficha_tipo='GC')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS campo_critico (
  entidad ENUM('PERSONA','GC') NOT NULL,
- campo_codigo VARCHAR(80) NOT NULL, es_critico TINYINT(1) NOT NULL DEFAULT 1,
+ campo_codigo VARCHAR(80) NOT NULL, etiqueta VARCHAR(150) NOT NULL,
+ ruta_dato VARCHAR(110) NOT NULL, desactivable TINYINT(1) NOT NULL DEFAULT 1,
+ es_critico TINYINT(1) NOT NULL DEFAULT 1,
  updated_by BIGINT UNSIGNED NULL, updated_at DATETIME(6) NULL,
  PRIMARY KEY(entidad,campo_codigo),
+ CONSTRAINT chk_cc_no_desactivar CHECK (desactivable=1 OR es_critico=1),
  CONSTRAINT fk_cc_user FOREIGN KEY(updated_by) REFERENCES usuario(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -200,4 +225,3 @@ CREATE TABLE IF NOT EXISTS idempotencia (
  UNIQUE KEY uq_idem_user_clave(usuario_id,clave),
  CONSTRAINT fk_idem_user FOREIGN KEY(usuario_id) REFERENCES usuario(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-

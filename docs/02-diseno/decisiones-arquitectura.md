@@ -17,3 +17,11 @@
 ## ADR-006 — Prototipo como contrato de UX
 **Aprobado:** PCD V2.2 (última identidad visual) sirve como fuente de estilo/flujo, no como código de producción. **Razón:** evita retrabajo y mantiene validaciones backend.
 
+## ADR-007 — Seguridad mínima de una clave operativa común
+Mantener decisión de clave común **solo para digitadores**; usuarios se escriben, nacionales con contraseñas independientes, bloqueo temporal, sesiones con expiración/revocación y auditoría; no cambiar automáticamente la contraseña inicial. Riesgo residual de suplantación necesita aceptación E2-D03 antes de producción. [Detalle](seguridad-auditoria.md).
+
+## ADR-008 — Ámbito nacional por perfil (propuesta E2-D02)
+ADMIN/REPORTES nacionales sin filas por todos los presbiterios; ADMIN cambia contexto explícitamente, REPORTES informes nacionales sin sede. Consultas de digitador dentro de presbiterio (E2-D01 pendiente). No implementar aprobación de supervisores.
+
+## ADR-009 — Integridad GC y calidad derivada
+Líder GC a través de ficha.persona_id (referencia única), FK/CHECK compuestas, no integrantes nominales. Criticidad modificable; calidad calculada bajo configuración vigente, sin estado fijo en ficha. [SQL](../../database/migrations/001_initial.sql).
