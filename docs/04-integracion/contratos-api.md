@@ -40,3 +40,14 @@ HTTP: 400 formato, 401 no autenticado, 403 sin ámbito, 404 no revelable, 409 co
 
 ## Corrección de ficha individual
 `GET /fichas/{id}` y `PATCH /fichas/{id}` operan sobre ficha fuente (`datos_fuente_json`, observaciones). `PATCH` exige `version` y autor/ADMIN; no reemplaza silenciosamente Persona consolidada.
+
+## Contratos y riesgos de Etapa 2 (H-03/04/07/12/13/18/28/32/35)
+- **Público previo a login:** `GET /presbiterios` responde exclusivamente id/código/nombre activos. **Nunca** lista de cuentas; usuario se escribe.
+- **Credenciales:** digitadores con clave operativa común inicial (decisión conservada), cuentas ADMIN/REPORTES con claves distintas; 5 fallos/usuario o 20/IP en 15 min → control temporal configurable. **Aceptación del riesgo residual E2-D03 pendiente**.
+- **Sesión:** `GET /auth/me` autenticado devuelve usuario/perfil/contexto y **token CSRF** para permitir refresh; inactividad 45 min, vida absoluta 12 h (configurables); desactivación/reset de usuario revoca sesiones.
+- **Ámbito:** digitador consulta fichas de su presbiterio y edita las propias; no expone PII de otros presbiterios aunque Persona esté enlazada. ADMIN cambia contexto mediante `PUT /contexto/presbiterio` explícito; REPORTES informes nacionales sin sede. **E2-D01/D02 requieren ratificación.**
+- **Catálogos:** `GET /catalogos?dominio=` entrega código/etiqueta de opciones verificadas; ubigeo oficial pendiente, no inventar.
+- **Identidad:** `tipo_documento_detalle` para OTRO; **clave_identidad** nullable y única solo cuando el documento normalizado es confiable, ceros preservados. [Reglas](../03-base-datos/catalogos-e-identidad.md).
+- **Calidad:** `campo_critico` incluye etiqueta, ruta y desactivable; las relaciones técnicas no se desactivan; informe recalculado con parámetros vigentes. [Matriz](../03-base-datos/campos-criticos.md).
+- **GC:** no existe segundo `lider_persona_id`; el líder se obtiene de `ficha_captura.persona_id`. Prohibida ficha tipo PERSONA en operación GC. No integrantes nominales.
+- **Seguridad:** consultas con 403/404/401 apropiados según exposición; mutaciones CSRF obligatorias, auditar siempre. **No afirmar implementación ni pruebas**.

@@ -16,3 +16,6 @@ MUST heredar presbiterio/sede y verificar ámbito en backend; guardar actor, aut
 MUST registrar únicamente el líder **previamente capturado como Persona** y datos generales del grupo, como nombre, estado, capacidad y número aproximado de integrantes. MUST NOT crear ni relacionar **integrantes nominales** porque su información no figura en las fichas del levantamiento.
 ### Scenario — Grupo de 12 integrantes aproximados
 GIVEN ficha GC indica 12 integrantes aproximados WHEN se registra THEN se guarda el conteo 12 y el líder, sin crear 12 Personas ni relaciones de miembro.
+
+## Requirement GC-08/09 — integridad E2
+GC debe vincular a ficha `tipo_ficha='GC'`. El líder es exclusivamente `ficha_captura.persona_id`: no guardar `grupo_crecer_captura.lider_persona_id` redundante. Responsabilidades/cónyuge solo se asocian a fichas PERSONA. Probar FK/CHECK compuestas en MySQL/MariaDB real; backend valida siempre. No crear miembros nominales.

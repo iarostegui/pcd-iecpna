@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: PCD IECPNA — API de captura
-  version: 3.1.0
-  description: "Contrato inicial para IA; independiente de SGSP, sin migración en línea."
+  version: 3.1.1
+  description: "Contrato PCD V3.1 con propuestas E2; decisiones E1-D01 y E2-D01/D02/D03 pendientes, sin migración SGSP."
 servers:
   - url: https://pcd.unobdata.com/api/v1
 tags:
@@ -35,6 +35,31 @@ components:
       required: true
       schema: { type: string, maxLength: 110 }
   schemas:
+    AuthMe:
+      type: object
+      description: 'Solo en sesión autorizada; token CSRF recuperable tras refresh; ámbito nacional por rol pendiente E2-D02.'
+      properties:
+        usuario_id: { type: integer }
+        perfil: { type: string, enum: [DIGITADOR, ADMIN, REPORTES] }
+        presbiterio_id: { type: integer }
+        sede_id: { type: integer, nullable: true }
+        alcance_nacional: { type: boolean }
+        csrf_token: { type: string, description: 'Solo sesión autenticada, nunca secreto localStorage.' }
+        vence_inactividad_en: { type: string, format: date-time }
+        vence_absoluta_en: { type: string, format: date-time }
+    PresbiterioPublico:
+      type: object
+      properties:
+        id: { type: integer }
+        codigo: { type: string }
+        nombre: { type: string }
+    CatalogoValor:
+      type: object
+      properties:
+        dominio: { type: string }
+        codigo: { type: string }
+        etiqueta: { type: string }
+        orden: { type: integer }
     Error:
       type: object
       properties:
@@ -79,7 +104,8 @@ components:
       description: "El número de ficha y los campos críticos son opcionales al guardar; solo contexto autenticado es obligatorio."
       properties:
         numero_ficha: { type: string, nullable: true }
-        tipo_documento: { type: string, nullable: true }
+        tipo_documento: { type: string, nullable: true, enum: [DNI, CE, OTRO] }
+        tipo_documento_detalle: { type: string, nullable: true, description: 'Si OTRO, el subtipo es necesario para deduplicar exactamente.' }
         numero_documento: { type: string, nullable: true }
         nombres: { type: string, nullable: true }
         apellido_paterno: { type: string, nullable: true }
@@ -125,6 +151,9 @@ components:
       properties:
         entidad: { type: string, enum: [PERSONA, GC] }
         campo_codigo: { type: string }
+        etiqueta: { type: string, readOnly: true }
+        ruta_dato: { type: string, readOnly: true }
+        desactivable: { type: boolean, readOnly: true }
         es_critico: { type: boolean }
     UsuarioInput:
       type: object
@@ -146,7 +175,7 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/Login' }
       responses:
-        '200': { description: 'Sesión iniciada y evento registrado' }
+        '200': { description: 'Sesión iniciada, cookie HttpOnly, evento registrado; se requiere usuario tecleado, no listado público' }
         '401': { description: 'Credenciales inválidas', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
         '429': { description: 'Límite de intentos' }
   /auth/me:
@@ -154,7 +183,11 @@ paths:
       tags: [auth]
       security: [{ cookieAuth: [] }]
       responses:
-        '200': { description: 'Usuario, ámbitos y sede activa' }
+        '200':
+          description: 'Usuario, ámbito y token CSRF válido recuperables tras recarga; sesión inactividad 45 min, absoluta 12 h (configurable).'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthMe' }
         '401': { description: 'No autenticado' }
   /auth/logout:
     post:
@@ -178,9 +211,34 @@ paths:
   /presbiterios:
     get:
       tags: [catalogos]
-      security: [{ cookieAuth: [] }]
+      security: []
+      description: 'PÚBLICO: solo id, código y nombre de presbiterios activos para mostrar login; nunca listar usuarios.'
       responses:
-        '200': { description: 'Catálogo permitido' }
+        '200':
+          description: 'Lista limitada de presbiterios activos'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/PresbiterioPublico' }
+  /catalogos:
+    get:
+      tags: [catalogos]
+      security: [{ cookieAuth: [] }]
+      description: 'Valores de dominios autorizados según fichas; sin inventar ubigeo INEI.'
+      parameters:
+        - in: query
+          name: dominio
+          schema: { type: string }
+      responses:
+        '200':
+          description: 'Lista vigente de valores de catálogos confirmados'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/CatalogoValor' }
+        '401': { description: 'No autenticado' }
   /sedes:
     get:
       tags: [catalogos]
@@ -204,6 +262,24 @@ paths:
       responses:
         '201': { description: 'Sede creada y disponible' }
         '409': { description: 'Duplicado normalizado' }
+  /contexto/presbiterio:
+    put:
+      tags: [auth]
+      security: [{ cookieAuth: [], csrf: [] }]
+      description: 'SOLO ADMIN, cambio explícito de presbiterio activo nacional (E2-D02 pendiente); invalida sede anterior.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [presbiterio_id]
+              properties:
+                presbiterio_id: { type: integer }
+      responses:
+        '200': { description: 'Contexto actualizado; sede se vuelve a seleccionar' }
+        '403': { description: 'Solo ADMIN; digitador no cambia presbiterio' }
+        '422': { description: 'Presbiterio inactivo o inválido' }
   /contexto/sede:
     put:
       tags: [auth]
@@ -229,10 +305,13 @@ paths:
           name: tipo_documento
           schema: { type: string }
         - in: query
+          name: tipo_documento_detalle
+          schema: { type: string }
+        - in: query
           name: numero_documento
           schema: { type: string }
       responses:
-        '200': { description: 'Coincidencias minimizadas por ámbito' }
+        '200': { description: 'Existencia de coincidencia minimizada: no revelar datos/ID globales ajenos, especialmente entre presbiterios' }
   /personas:
     get:
       tags: [personas]
@@ -248,7 +327,7 @@ paths:
           name: tamano
           schema: { type: integer, minimum: 1, maximum: 50, default: 25 }
       responses:
-        '200': { description: 'Lista paginada autorizada' }
+        '200': { description: 'Datos de fichas del presbiterio autorizado; edición solo propias, no divulgar consolidado originado en otro ámbito (E2-D01 propuesta)' }
     post:
       tags: [personas]
       security: [{ cookieAuth: [], csrf: [] }]
@@ -321,7 +400,7 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/GCInput' }
       responses:
-        '201': { description: 'GC y ficha vinculados a líder persistido' }
+        '201': { description: 'GC vinculado a ficha tipo GC; líder = ficha.persona_id, sin segundo lider_persona_id ni integrantes nominales' }
         '409': { description: 'Conflicto: grupo existente o nuevo líder' }
   /grupos:
     get:
@@ -392,7 +471,8 @@ paths:
               type: array
               items: { $ref: '#/components/schemas/Criticidad' }
       responses:
-        '200': { description: 'Configuración aplicada y auditada' }
+        '200': { description: 'Parámetros auditados; desactivable=false nunca se desactiva; informes se recalculan al consultar' }
+        '422': { description: 'Intento de desactivar relación estructural obligatoria' }
         '403': { description: 'Solo ADMIN' }
   /reportes/avance:
     get:
@@ -405,7 +485,7 @@ paths:
       tags: [reportes]
       security: [{ cookieAuth: [] }]
       responses:
-        '200': { description: 'Faltantes críticos, posibles duplicados, autor' }
+        '200': { description: 'Calidad calculada usando campos críticos vigentes, sin marca_calidad persistida; no verifica fidelidad al papel' }
   /auditoria:
     get:
       tags: [auditoria]

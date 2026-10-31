@@ -12,3 +12,7 @@ MUST conservar sede seleccionada mientras esté autorizada; siguientes personas 
 ## Requirement CAT-04: Datos catalogados
 MUST representar tipo documento, sexo, estado civil, condición pastoral, tipo/estado GC y ubigeo como listas parametrizables o referencia validada, no inventadas. Si información oficial falta, registrarla como pendiente, no falsear datos.
 
+## Requisitos E2 — H-07/H-13
+**CAT-05:** `GET /catalogos` ofrece únicamente código/etiqueta de opciones del Excel verificadas, no catálogos inventados.
+**CAT-06:** normalización de documentos [documentada](../../docs/03-base-datos/catalogos-e-identidad.md): DNI 8 dígitos con ceros, OTRO con subtipo, C.E. sin adivinar validez oficial; clave de identidad única solo si confiable, NULL si incompleta/ambigua.
+**CAT-07:** ubigeo INEI **pendiente de fuente oficial**; no construir códigos falsos ni bloquear ficha incompleta.

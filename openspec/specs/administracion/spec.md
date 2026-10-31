@@ -10,3 +10,5 @@ GIVEN campo nacimiento crítico WHEN ADMIN lo desmarca THEN el reporte deja de c
 ## Requirement ADM-04: Restricciones
 MUST rechazar escrituras de perfil REPORTES y DIGITADOR en administración; registrar cambios en auditoría.
 
+## Requirement ADM-05 — sesiones y rol nacional (E2)
+ADMIN puede desactivar usuarios; **desactivar o cambiar credencial debe revocar todas sus sesiones** (versión/autorización y registro). ADMIN y REPORTES tienen claves distintas de digitadores y ámbitos nacionales por perfil (E2-D02 a ratificar). No se muestran nombres de usuarios en endpoints públicos.
