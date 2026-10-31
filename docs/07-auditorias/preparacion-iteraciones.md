@@ -16,3 +16,7 @@ Se puede autorizar a una IA a iniciar **I00** desde este repositorio. **No** sig
 
 ## Calidad manual (decisión aprobada)
 La **revisión de fidelidad del texto con el papel** corresponde a cada presbiterio, **fuera de PCD**. No condicionar ninguna iteración a construir motor de detección de errores de transcripción, colas, supervisores o conciliación. Sí exigir validación de tipos, autorización, guardado incompleto y auditoría. **H-05 y H-09 tienen definición funcional cerrada, pero implementación y pruebas aún pendientes.**
+
+## Puerta transversal de alcance (aplicable I00–I06)
+
+**Cada iteración debe trazarse a una capacidad ALC-01…ALC-12** del [documento oficial](../01-analisis/alcance-funcional.md). Una observación que pida implementar EXC-01…EXC-10 debe figurar como **propuesta de ampliación**, no como bloqueo de la iteración, salvo que denuncie una deficiencia esencial de seguridad/privacidad/integridad en las funciones autorizadas. Auditoría y agente no pueden aprobar unilateralmente un nuevo módulo. Ver [protocolo](protocolo-auditoria-alcance.md).

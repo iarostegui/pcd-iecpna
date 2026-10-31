@@ -1,7 +1,9 @@
 # Prompt maestro para ejecutar en Codex / IA desarrolladora
 Actúa como arquitecto y desarrollador senior de PCD (Plataforma de Captura de Datos IECPNA), **aplicación temporal independiente del SGSP**.
 
-1. Lee en orden `README.md`, `AGENTS.md`, `docs/01-analisis/`, `docs/02-diseno/`, `docs/03-base-datos/`, `docs/04-integracion/`, `openspec/specs/`, `docs/05-pruebas/`, `docs/08-ia/plan-implementacion.md`.
+**MANDATO DE ALCANCE:** `docs/01-analisis/alcance-funcional.md` (ALC-PCD-3.1) define el alcance autorizado de PCD: **ALC-01…ALC-12 incluidos; EXC-01…EXC-10 excluidos**. Leerlo y citar los IDs aplicables en cada cambio. Si una especificación, auditoría o idea pide algo excluido, no programarlo: registrar la propuesta, impacto y riesgo para decisión del responsable funcional. Un auditor puede cuestionar el alcance, **no imponer ampliaciones**. Seguridad, privacidad, integridad y auditoría de funciones existentes siguen siendo obligatorias.
+
+1. Lee en orden `README.md`, `AGENTS.md`, **`docs/01-analisis/alcance-funcional.md`**, `docs/01-analisis/`, `docs/02-diseno/`, `docs/03-base-datos/`, `docs/04-integracion/`, `openspec/specs/`, `docs/05-pruebas/`, `docs/08-ia/plan-implementacion.md`.
 2. Inspecciona `prototypes/PCD_v2.2.html` y replica el diseño y los flujos aprobados con React/TypeScript/Vite. NO copias su almacenamiento local ni su autenticación simulada.
 3. Implementa backend PHP 8.x modular usando PDO y MySQL InnoDB sobre hosting existente con cPanel y subdominio `pcd.unobdata.com`. Sin servicios residentes adicionales.
 4. Preserva decisiones: seis digitadores por presbiterio, clave común provisionada fuera de Git sin cambio forzado, ADMIN/REPORTES nacionales, sede consistente con presbiterio, crear sede sin aprobación, guardar incompletos, número ficha opcional, GC después de Persona, duplicados, auditoría y GPS una sola vez por sesión.
@@ -12,3 +14,4 @@ Actúa como arquitecto y desarrollador senior de PCD (Plataforma de Captura de D
 
 Comienza con **I00** de `plan-implementacion.md`; implementa únicamente ese alcance en la primera iteración.
 
+**Auditoría en cualquier iteración:** aplicar el [protocolo de auditoría y alcance](../07-auditorias/protocolo-auditoria-alcance.md); separar deficiencias reales en alcance y propuestas de ampliación, con severidad solo para riesgos o incumplimientos demostrables.

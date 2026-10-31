@@ -60,3 +60,7 @@
 - **I06:** seguridad, respaldos, privacidad y despliegue mantienen su relevancia.
 
 **Aprobado en esta conversación:** H-05, H-09 y alcance GC sin integrantes. **Pendiente:** E1-D01, E1-D02, H-14 XLSX en GitHub, sincronización completa de SQL/OpenAPI/tests. HTML V2.2 sin cambios.
+
+## Control del alcance aplicado a la Etapa 1
+
+Los seis hallazgos se contrastan **contra [ALC-PCD-3.1](../01-analisis/alcance-funcional.md)** y el [protocolo](protocolo-auditoria-alcance.md), no contra funcionalidades hipotéticas de un CRM/SGSP. H-01/H-02 permanecen como brechas de integridad/autoría **dentro del alcance**; H-05 es control de tipos **en alcance**; H-08 limita el GC a **líderes y datos agregados**; H-09 **excluye** automatizar revisión de fidelidad al papel; H-14 exige contrastar y conservar la fuente de campos. Se pueden cuestionar exclusiones, pero no exigir nuevos módulos hasta aceptación. La implementación de los ajustes pendientes aún no se declara terminada.

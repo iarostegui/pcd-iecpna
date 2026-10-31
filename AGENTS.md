@@ -1,8 +1,17 @@
 # AGENTS — contrato para cualquier IA desarrolladora de PCD
 **Regla central:** trabajar SOLO en PCD, NO en SGSP. La migración a SGSP es futura y queda fuera del desarrollo actual.
 
+## Límite de producto — cumplimiento obligatorio
+**Documento normativo de alcance:** [`docs/01-analisis/alcance-funcional.md`](docs/01-analisis/alcance-funcional.md) (ALC-PCD-3.1). Contiene **objetivos, inclusiones ALC-01…ALC-12, exclusiones EXC-01…EXC-10, roles, calidad manual y frontera con SGSP**.
+
+Toda IA —desarrolladora o auditora— debe **leerlo antes** de interpretar requisitos y evaluar hallazgos. El prototipo V2.2 muestra UX demostrativa, pero **no autoriza funcionalidades fuera del alcance oficial**.
+
+**Al auditar:** utilizar el [protocolo de control de alcance](docs/07-auditorias/protocolo-auditoria-alcance.md). Es legítimo cuestionar el alcance y proponer mejoras; no lo es registrar la ausencia de funciones excluidas como incumplimiento ni alterar la planificación sin aprobación. Los riesgos esenciales de seguridad, protección de datos e integridad dentro de PCD sí requieren evaluación y control proporcional.
+
+**Al programar:** cada cambio debe trazarse a ALC y al requisito OpenSpec aprobado. Una propuesta fuera de alcance se registra para decisión, **no** se implementa automáticamente. Si hay contradicción, reportarla antes de codificar; no inventar una nueva decisión.
+
 ## Lectura obligatoria antes de codificar
-1. `README.md`;
+1. `README.md` y **`docs/01-analisis/alcance-funcional.md` (obligatorio primero)**;
 2. `docs/01-analisis/alcance-funcional.md`, `reglas-negocio.md`, `procesos-negocio.md`, `casos-uso.md`;
 3. `docs/02-diseno/`, `docs/03-base-datos/`, `docs/04-integracion/`;
 4. `openspec/specs/<capacidad>/spec.md`;

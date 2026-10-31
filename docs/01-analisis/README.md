@@ -6,7 +6,7 @@ Define **qué necesidad resuelve PCD**, qué datos se transcriben de los formula
 
 | Archivo | Contenido y finalidad |
 |---|---|
-| [alcance-funcional.md](alcance-funcional.md) | Objetivos, actores, funcionalidades incluidas y exclusiones. |
+| **[alcance-funcional.md](alcance-funcional.md)** | **Documento normativo ALC-PCD-3.1**: objetivos, funcionalidades ALC-01…12, exclusiones EXC-01…10, responsabilidades, control de calidad y límites obligatorios para IA/auditoría. |
 | [procesos-negocio.md](procesos-negocio.md) | Pasos operativos: preparación, login, sede, Persona, GC, corrección, reportes y cierre. Distingue negocio de automatización. |
 | [reglas-negocio.md](reglas-negocio.md) | Reglas funcionales aprobadas; identidad, duplicados, sedes, auditoría, geolocalización y permisos. |
 | [casos-uso.md](casos-uso.md) | Actores, precondiciones, acciones y excepciones de los flujos principales. |
@@ -20,3 +20,5 @@ Define **qué necesidad resuelve PCD**, qué datos se transcriben de los formula
 
 ## Fuentes contrastadas
 La transcripción de las fichas impresas y los datos del Excel verificado están en [fuentes/](fuentes/README.md). **El XLSX binario aún no se ha añadido a GitHub**.
+
+**Para cualquier auditoría:** aplicar primero el [alcance oficial](alcance-funcional.md) y el [protocolo de auditoría](../07-auditorias/protocolo-auditoria-alcance.md). Proponer ampliaciones es válido, pero no son incumplimientos hasta que el responsable funcional apruebe el cambio.

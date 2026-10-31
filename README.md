@@ -16,7 +16,7 @@
 | ↳ [04 — Integración](docs/04-integracion/README.md) | API REST/OpenAPI y estrategia **futura** de migración hacia SGSP. | Alinear frontend y backend, sin construir SGSP. |
 | ↳ [05 — Pruebas](docs/05-pruebas/README.md) | Matriz de aceptación y pruebas de capacidad. | Verificar cada implementación. |
 | ↳ [06 — Despliegue](docs/06-despliegue/README.md) | Instalación y operación en cPanel. | Publicar en el hosting existente. |
-| ↳ [07 — Auditorías](docs/07-auditorias/README.md) | Hallazgos, levantamiento y respuesta al auditor. | Revisar estado de preparación y decisiones. |
+| ↳ [07 — Auditorías](docs/07-auditorias/README.md) | Hallazgos, levantamiento, **protocolo obligatorio de alcance** y respuesta al auditor. | Auditar **sin ampliar unilateralmente el alcance**. |
 | ↳ [08 — IA](docs/08-ia/README.md) | Prompt maestro, plan iterativo, matriz de trazabilidad y definición de terminado. | Encargar el desarrollo a la IA. |
 | **[openspec/](openspec/README.md)** | Especificaciones SDD vigentes por capacidad y registro de cambios futuros. | Implementar según requisitos verificables. |
 | **[database/](database/README.md)** | Migraciones SQL y notas de aprovisionamiento/catálogos. | Crear y evolucionar la BD **propia de PCD**. |
@@ -27,13 +27,17 @@
 
 ### Accesos rápidos
 
-- **Reglas aprobadas:** [Reglas de negocio](docs/01-analisis/reglas-negocio.md) · [Decisiones pendientes](docs/01-analisis/decisiones-pendientes.md).
+- **Alcance oficial y obligatorio:** **[ALC-PCD-3.1 — Qué incluye y qué excluye PCD](docs/01-analisis/alcance-funcional.md)** · [Reglas de negocio](docs/01-analisis/reglas-negocio.md) · [Decisiones pendientes](docs/01-analisis/decisiones-pendientes.md).
 - **Fichas de origen:** [Diccionario de captura](docs/01-analisis/diccionario-captura.md). El **Excel original y sus ejemplos no están versionados aquí todavía**; no inventar campos o sedes para reemplazar la fuente.
 - **Arquitectura y riesgos:** [Arquitectura](docs/02-diseno/arquitectura.md) · [Seguridad y auditoría](docs/02-diseno/seguridad-auditoria.md) · [RNF](docs/02-diseno/requerimientos-no-funcionales.md).
 - **Diseño de datos:** [Modelo lógico](docs/03-base-datos/modelo-logico.md) · [Diagrama ER](docs/03-base-datos/diagramas/er-pcd.mmd) · [SQL inicial](database/migrations/001_initial.sql).
 - **Interfaz y servicios:** [HTML V2.2](prototypes/PCD_v2.2.html) · [OpenAPI](docs/04-integracion/openapi.yaml).
 - **Inicio de desarrollo IA:** [Prompt maestro](docs/08-ia/PROMPT-MAESTRO.md) · [Plan de implementación](docs/08-ia/plan-implementacion.md) · [Trazabilidad](docs/08-ia/matriz-trazabilidad.md).
 - **Control de entrega:** [Casos de prueba](docs/05-pruebas/casos-prueba.md) · [Definición de terminado](docs/08-ia/definicion-terminado.md).
+
+## Regla obligatoria para IA desarrolladora y auditoría
+
+**El [alcance oficial ALC-PCD-3.1](docs/01-analisis/alcance-funcional.md) es el límite de evaluación y construcción.** Las auditorías pueden señalar riesgos, contradicciones o **cuestionar expresamente el alcance**, pero una funcionalidad no solicitada debe clasificarse como **propuesta de ampliación**, no como defecto de PCD ni requisito bloqueante automático. Solo el responsable funcional puede aprobar cambios de alcance. Ver [protocolo de auditoría](docs/07-auditorias/protocolo-auditoria-alcance.md).
 
 ## Descripción y alcance
 
@@ -55,7 +59,7 @@ Hosting actual con cPanel, sin Node.js residente en producción, Docker, microse
 ## Orden de lectura obligatorio para una IA desarrolladora
 
 1. [AGENTS.md](AGENTS.md) y este índice.
-2. [Análisis](docs/01-analisis/README.md), empezando por reglas y diccionario de captura.
+2. **[Alcance oficial de PCD](docs/01-analisis/alcance-funcional.md)** y después [Análisis](docs/01-analisis/README.md), reglas y diccionario de captura.
 3. [Diseño](docs/02-diseno/README.md) y [base de datos](docs/03-base-datos/README.md).
 4. [API](docs/04-integracion/README.md) y [especificaciones OpenSpec](openspec/README.md).
 5. [Prototipo V2.2](prototypes/PCD_v2.2.html), como referencia **visual y de flujo, no código de autenticación ni almacenamiento para producción**.

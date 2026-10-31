@@ -26,3 +26,9 @@ H-03, H-07, H-10…H-13, H-18, H-20, H-28, H-32, H-35, H-40 y restantes se decid
 
 ## Aclaración de H-09 del responsable funcional (31/10/2026)
 **Dos problemas diferentes:** (1) un dato imposible para el control —por ejemplo, `31/02/1998` en fecha— es **rechazado** y el digitador corrige con el origen o deja el valor vacío para guardar una ficha incompleta; (2) un texto plausible pero mal copiado —`JUANA` en vez de `Juan`, o `JU4N4`— no se verifica automáticamente en PCD. **Cada presbiterio es responsable de revisión manual externa**. Esta última verificación de calidad **no es alcance de desarrollo de PCD** por proporcionalidad y vida temporal. Se mantienen controles técnicos, seguridad e integridad.
+
+## Criterio formal de alcance para elaborar la respuesta definitiva
+
+El [alcance oficial ALC-PCD-3.1](../01-analisis/alcance-funcional.md) y el [protocolo de auditoría](protocolo-auditoria-alcance.md) constituyen el marco de evaluación. **Toda recomendación fuera de EXC-01…EXC-10 se analizará sin transformarla automáticamente en obligación de desarrollo**. Cuando sea razonable cuestionar el alcance, el auditor debe describir el valor y los riesgos de cambiarlo y solicitar decisión del responsable funcional, sin considerar como defecto la exclusión aprobada.
+
+Al redactar la respuesta individual a cada observación, distinguir entre **corrección de una brecha en alcance**, **control esencial de seguridad/integridad**, **sugerencia fuera de alcance** y **dependencia futura**. La temporalidad justifica descartar estructuras permanentes que no añaden valor proporcional, pero **no** omitir controles esenciales de PCD. En particular, la revisión manual de fidelidad al papel (H-09) y la ausencia de miembros nominales GC (H-08) son decisiones de alcance **ya aprobadas**, no brechas técnicas a resolver con nuevos módulos.
