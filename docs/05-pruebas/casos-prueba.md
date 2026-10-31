@@ -20,7 +20,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-15 | Nueva Persona → foco inicial N.º ficha | P0 |
 | CA-16 | Enter/Tab avanza, Shift+Tab retrocede, Enter no guarda | P0 |
 | CA-17 | Fecha válida DD/MM/AAAA → ISO en API | P0 |
-| CA-18 | 29/02 en año no bisiesto → validación sin pérdida de texto | P0 |
+| CA-18 | Fecha imposible (31/02/1998; 29/02 en año no bisiesto) → rechazar valor como fecha, permitir corregir o dejar vacío y guardar incompleto | P0 |
 | CA-19 | Persona sin número de ficha → guardar correctamente | P0 |
 | CA-20 | Persona con críticos incompletos → guardar y reportar faltantes | P0 |
 | CA-21 | Configurar criticidad vía ADMIN → cambia reporte no validez del guardado | P0 |
@@ -67,11 +67,17 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | E1-CA-01 | Documento existente de otra sede: crear ficha nueva, no segunda Persona y no mostrar PII ajena | I02 |
 | E1-CA-02 | Crear primera ficha genera fuente y Persona; segunda ficha divergente no sobrescribe Persona | I02 |
 | E1-CA-03 | Autores distintos editan solo sus fichas; ADMIN conserva autoría | I02/I04 |
-| E1-CA-04 | Fecha inválida se preserva literalmente y columna DATE queda NULL sin bloquear | I02 |
-| E1-CA-05 | Correo inválido se preserva y observa sin bloquear | I02 |
+| E1-CA-04 | Fecha imposible no se admite; digitador corrige o deja fecha vacía; PHP vuelve a comprobar y DATE solo tiene fecha válida o NULL | I02 |
+| E1-CA-05 | Diferencia JUANA/Juan o JU4N4 no se considera detección automática de transcripción; revisión manual presbiterial externa | I02/I04 |
 | E1-CA-06 | GC ya existe=Sí sin referencia previa → nueva ficha registrada | I03 |
 | E1-CA-07 | GC nombre parecido / líder diferente: advertencia sin fusión | I03 |
-| E1-CA-08 | Reportar incidencia simple y subsanar con edición auditada | I04/I05 |
+| E1-CA-08 | Reporte de faltantes/duplicados objetivos sin cola de conciliación, aprobación ni revisión textual; edición posterior auditada | I04/I05 |
 | E1-CA-09 | Inventario de campos coincide con las hojas del Excel, sin inventar dato | I02/I03 |
 | E1-CA-10 | Doble clic y concurrencia al adjuntar ficha no producen doble alta | I02 |
 **Estado: 10 pruebas diseñadas, ninguna ejecutada.**
+
+## Casos derivados de aclaración funcional (NO EJECUTADOS)
+- **E1-CA-11:** formulario GC con 12 integrantes aproximados registra el líder y conteo, **no** 12 Personas/relaciones de miembros.
+- **E1-CA-12:** no existe indicador falso «transcripción textual verificada» para `JUANA`/Juan o `JU4N4`; la revisión del papel es manual y externa.
+- **E1-CA-13:** API rechaza directamente una fecha calendario imposible (422); permite fecha ausente/NULL.
+**No se ha ejecutado ninguna prueba aquí.**

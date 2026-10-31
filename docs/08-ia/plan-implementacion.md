@@ -25,3 +25,6 @@ Cada iteración: actualizar specs y código → ejecutar pruebas unitarias/API/E
 
 ## Auditoría E1: puertas de entrada
 La [matriz de preparación](../07-auditorias/preparacion-iteraciones.md) precisa estados. **I00 está habilitada solo para comenzar tareas técnicas**; I01 requiere cierre de seguridad/sesiones, I02/I03/I04 requieren aprobar deltas E1 y sincronizar API, SQL, casos de prueba. Las propuestas de diseño no equivalen a GO productivo.
+
+## Aclaraciones funcionales aprobadas de la auditoría E1
+En I02, validar fechas reales en React y PHP; si valor imposible, exigir corregir o vaciar el campo, pudiendo guardar incompleto. No persistir fechas imposibles con tipo fecha ni crear mecanismo de excepción. La revisión de fidelidad `JUANA`/Juan o `JU4N4` se hará **manualmente por presbiterio, fuera de PCD**, no existe motor/flujo de conciliación. I03 **solo registra líderes de GC y datos generales**, nunca integrantes nominales. E1-D01/E1-D02 y sincronización SQL/API/test siguen pendientes para I02/I03.

@@ -1,12 +1,12 @@
 # Diseño mínimo propuesto — PCD E1
 ## H-01/H-02: ficha fuente y Persona
 Una hoja de papel da origen a `ficha_captura` con `datos_fuente_json`, `created_by`, presbiterio y sede de la sesión. La primera ficha puede originar `persona_captura` consolidada. En fichas posteriores con documento normalizado coincidente, el backend crea otra **ficha**, sin crear Persona ni exponer datos ajenos. Transacción/idempotencia; respetar UNIQUE documental. `ficha.created_by` es autor fuente, `persona.created_by` editor autorizado del consolidado; ADMIN conserva facultad global. Cónyuge/responsabilidades proceden de la ficha con `ficha_id`, no se mezclan con otra fuente.
-## H-05: inviernos del papel
-La transcripción **literal** se preserva por campo en snapshot (incluso fecha, correo y número que no se pueda interpretar). Columnas tipadas reciben valores validados o NULL; alerta de calidad asociada a la ficha y sin rechazo por incompletitud.
-## H-08: Grupo Crecer
-Cada ficha GC conserva nombre, tipo, líder y sede y recibe identificador propio. «Grupo ya existe» es Sí/No del papel, no enlace forzoso a registro PCD. Coincidencia por nombre/sede/líder sirve para advertir, no fusionar; cambio de líder no sobrescribe historial.
-## H-09: calidad temporal
-Observaciones derivadas de campos críticos, inválidos y posibles duplicados, visibles en reportes y subsanables con edición auditada. **No módulo de tickets/conciliación, no aprobaciones obligatorias.**
+## H-05: validación por tipo — criterio aprobado
+La fecha se captura con control calendario DD/MM/AAAA y solo **fechas reales** pueden guardarse. Una fecha imposible (`31/02/1998`) se rechaza; el digitador la resuelve revisando el formulario o deja el campo **vacío** para guardar una ficha incompleta. PHP revalida y SQL guarda DATE válida o NULL. No crear almacenamiento especial de fecha imposible ni obligar a una revisión interna.
+## H-08: solo líderes y resumen GC — alcance aprobado
+Solo se captura el **líder registrado como Persona** y los datos generales del grupo, incluido número **aproximado** de integrantes. No hay datos nominales ni relaciones de miembros GC. Cada ficha conserva nombre, tipo, líder y sede, con ID propio. «Grupo ya existe» se captura tal como aparece en papel; su vínculo con registros previos de PCD sigue sujeto a E1-D02. No fusionar automáticamente.
+## H-09: revisión de calidad de transcripción — manual por presbiterio
+PCD valida **tipos, formatos, seguridad, integridad, faltantes y coincidencias documentales**, no la fidelidad al papel. Nombres como `JUANA` en vez de `Juan` o `JU4N4` pueden pasar la validación de texto sin que PCD conozca el original. **Cada presbiterio realiza una revisión manual externa**; si detecta errores, se corrigen usando edición existente autorizada y auditada. **No** inventar detección semántica, tickets, bandejas de revisión, supervisores ni aprobaciones.
 ## H-14: fuente
 [Inventario contrastado](../../../docs/01-analisis/fuentes/inventario-excel-original.md) con hash y filas del Excel; pendiente cargar binario XLSX al repositorio.
-**Pendiente técnico:** DTOs específicos, normalización documental H-13, estructura versionada JSON y SQL/API/ER coherentes. No declarar código listo.
+**Pendiente técnico:** DTOs y contratos, normalización documental H-13, SQL/API/ER coherentes. No declarar código listo. H-05 y H-09 son decisiones funcionales, no implementación ejecutada.

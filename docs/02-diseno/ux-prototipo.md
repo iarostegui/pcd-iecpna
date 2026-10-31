@@ -23,3 +23,9 @@ UI-10 Auditoría: consulta limitada a ADMIN.
 
 ## Diferencias reconocidas del HTML V2.2 (E1)
 El prototipo bloquea un documento duplicado y no representa fichas fuente múltiples. **No replicar esas limitaciones** en producción. La [propuesta E1](../07-auditorias/etapa-1-resolucion.md) permite guardar una ficha adicional sin duplicar Persona ni mostrar datos de otro presbiterio. No se cambia el HTML V2.2.
+
+## Decisión E1 aprobada sobre controles y calidad
+- **Fechas:** DD/MM/AAAA debe corresponder a un día real. `31/02/1998` no se acepta; el digitador corrige consultando el origen o deja fecha vacía (permite ficha incompleta). El backend verifica lo mismo.
+- **Nombres:** `JUANA` frente a `Juan` o `JU4N4` puede superar una validación de texto. **PCD no verifica fidelidad al papel**. Cada presbiterio hace revisión manual fuera de la aplicación, con correcciones por funciones existentes y auditoría.
+- **Grupo Crecer:** solo Persona líder y datos generales (incluido conteo aproximado); no interfaz nominal de integrantes.
+- No modificar el HTML V2.2 por estas reglas: el código productivo debe respetarlas sin agregar pantalla de conciliación.
