@@ -22,3 +22,9 @@ Ningún DP autoriza al agente a crear datos falsos ni a cambiar funcionalidades 
 - E1-D03: incidencias de calidad simples, sin workflow de supervisor ni módulo de conciliación.
 - E1-D04: agregar el Excel binario exacto a GitHub; inventario y SHA ya documentados.
 Ver [resolución E1](../07-auditorias/etapa-1-resolucion.md).
+
+## Decisiones confirmadas sobre H-05, H-08 y H-09
+- **H-05 — APROBADA:** no ingresar ni persistir fechas imposibles; el digitador corrige con el origen o deja fecha vacía para guardar incompleto. No se implementa persistencia especial de fechas erróneas como si fueran fechas válidas.
+- **H-08 — ALCANCE APROBADO:** solo Personas líderes y datos generales de los Grupos Crecer; no integrantes nominales. Sigue pendiente **E1-D02**, interpretación exacta de «grupo ya existe».
+- **H-09 / E1-D03 — APROBADA:** cada presbiterio hace **revisión manual de fidelidad al papel fuera de PCD**. No detector automático de errores en nombres, revisiones asignadas, supervisores ni conciliación dentro de PCD.
+- **E1-D01 — PENDIENTE:** falta conformidad explícita para vinculación automática de fichas duplicadas entre presbiterios.

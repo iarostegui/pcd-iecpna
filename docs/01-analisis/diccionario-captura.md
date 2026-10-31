@@ -71,3 +71,9 @@ La fuente física se contrastó con [inventario-excel-original.md](fuentes/inven
 - Marcas `*`: calidad del formulario en papel, **nunca** bloqueo a un guardado PCD incompleto.
 - Campos y fechas inválidos deben conservar literal en el snapshot de ficha; la representación tipada debe ser válida o NULL.
 **H-14:** contraste documental realizado; falta agregar el original XLSX en el repositorio.
+
+## Aclaración de auditoría E1 — validación y revisión manual
+- **Fecha real requerida cuando se llena:** un valor como 31/02/1998 no puede aceptarse como fecha ni enviarse al backend. El digitador consulta el origen y corrige o deja ese campo vacío (los registros incompletos sí pueden guardarse). El backend debe revalidar; SQL guarda DATE válido o NULL.
+- **Texto:** un nombre ingresado con letras o caracteres admitidos puede estar mal copiado de la hoja (JUANA/Juan; JU4N4). Sin una comparación humana contra el documento físico, **PCD no puede certificar esa fidelidad**.
+- La calidad de transcripción es responsabilidad de la **revisión manual externa de cada presbiterio**; la calidad calculada por PCD se limita a hechos verificables como faltantes, integridad y coincidencias documentales.
+- GC **no** incluye registro nominal de integrantes ni su pertenencia; solo el líder y datos agregados del grupo. Véase [levantamiento E1](../07-auditorias/etapa-1-resolucion.md).
