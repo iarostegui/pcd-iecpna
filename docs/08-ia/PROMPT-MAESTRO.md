@@ -15,3 +15,6 @@ Actúa como arquitecto y desarrollador senior de PCD (Plataforma de Captura de D
 Comienza con **I00** de `plan-implementacion.md`; implementa únicamente ese alcance en la primera iteración.
 
 **Auditoría en cualquier iteración:** aplicar el [protocolo de auditoría y alcance](../07-auditorias/protocolo-auditoria-alcance.md); separar deficiencias reales en alcance y propuestas de ampliación, con severidad solo para riesgos o incumplimientos demostrables.
+
+## Gate E2
+Antes de ejecutar I01, lee [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md), [Catálogos/identidad](../03-base-datos/catalogos-e-identidad.md), [Calidad](../03-base-datos/campos-criticos.md), [Seguridad](../02-diseno/seguridad-auditoria.md) y [Preparación de iteraciones](../07-auditorias/preparacion-iteraciones.md). No suponer que E2-D01/D02/D03 ya están aprobadas. Controlar el dato de entrada, evitar listar usuarios, y **no replicar contraseñas de demo**. Mantener IA/hosting dentro del alcance temporal PCD.

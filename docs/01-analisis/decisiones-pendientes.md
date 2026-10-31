@@ -28,3 +28,11 @@ Ver [resolución E1](../07-auditorias/etapa-1-resolucion.md).
 - **H-08 — ALCANCE APROBADO:** solo Personas líderes y datos generales de los Grupos Crecer; no integrantes nominales. Sigue pendiente **E1-D02**, interpretación exacta de «grupo ya existe».
 - **H-09 / E1-D03 — APROBADA:** cada presbiterio hace **revisión manual de fidelidad al papel fuera de PCD**. No detector automático de errores en nombres, revisiones asignadas, supervisores ni conciliación dentro de PCD.
 - **E1-D01 — PENDIENTE:** falta conformidad explícita para vinculación automática de fichas duplicadas entre presbiterios.
+
+## Etapa 2 — decisiones y riesgos pendientes (31/10/2026)
+- **E2-D01 — PENDIENTE DE CONFORMIDAD FUNCIONAL:** se propone que el DIGITADOR consulte fichas del propio presbiterio (como prototipo V2.2), pero solo edite sus fichas. En Personas con fuentes transversales, nunca exponer datos personales de otros presbiterios. Evitar inventar restricciones mayores o menores sin aprobación.
+- **E2-D02 — PENDIENTE DE CONFORMIDAD FUNCIONAL:** ADMIN/REPORTES nacionales por rol sin filas por todos los presbiterios; ambos ingresan con presbiterio inicial, ADMIN puede cambiar **explícitamente** presbiterio/sede y REPORTES consulta nacional sin sede.
+- **E2-D03 — PENDIENTE DE ACEPTACIÓN DE RIESGO:** contraseña común inicial **solo entre digitadores**, cuentas nacionales con claves distintas, usuario no enumerado, límites de intentos y revocación. La auditoría por nombre de cuenta no demuestra identidad física si la clave es compartida.
+- **E2-T04 — PENDIENTE DE ENSAYO:** `CHECK` y FK compuestas en MySQL/MariaDB real de cPanel, versión del servidor, expiración/cookies, carga y rendimiento. No declarar SQL validado.
+- **DP-06 continúa PENDIENTE:** fuentes oficiales de ubigeo y formato documental C.E.; código INEI nunca inventado.
+Referencias: [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md), [catálogos e identidad](../03-base-datos/catalogos-e-identidad.md) y [calidad](../03-base-datos/campos-criticos.md).

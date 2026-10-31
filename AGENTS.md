@@ -48,3 +48,6 @@ Contrato API y frontend/backend coherentes; permisos y SQL enforce; pruebas vál
 
 ## Mantenimiento del índice y READMEs
 Al crear, mover, renombrar o eliminar archivos o carpetas, actualizar el `README.md` de la carpeta afectada y el índice del `README.md` raíz cuando cambie una ruta principal. Cada README describe finalidad, estado (propuesto/vigente/ejecutado) y enlaces reales a su contenido. Evitar enlaces rotos y no inventar pruebas realizadas.
+
+## Controles E2 y límite para programación
+Antes de I01/I02 leer [levantamiento E2](docs/07-auditorias/etapa-2-arquitectura-seguridad-datos.md) y [reglas de seguridad](docs/02-diseno/seguridad-auditoria.md). No replicar del HTML demostrativo el desplegable que enumera usuarios; en producción se escribe usuario. `GET /presbiterios` puede ser anónimo **solo** para id/código/nombre activos. ADMIN/REPORTES usan credenciales distintas de digitadores. Sesiones con CSRF recuperable, expiración y revocación; registrar intentos con límites. **E2-D01 (visibilidad por presbiterio), E2-D02 (contexto nacional) y E2-D03 (riesgo de contraseña común) requieren conformidad**; no declararlas aprobadas. El SQL, semillas y OpenAPI todavía no están probados en el hosting. No crear miembros GC nominales.

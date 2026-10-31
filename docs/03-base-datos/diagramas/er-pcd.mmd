@@ -10,10 +10,10 @@ erDiagram
   PERSONA_CAPTURA ||--o{ FICHA_CAPTURA : sustenta
   PERSONA_CAPTURA ||--o{ CONYUGE_PENDIENTE : relaciona
   PERSONA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : participa
-  FICHA_CAPTURA ||--o| GRUPO_CRECER_CAPTURA : registra_gc
-  PERSONA_CAPTURA ||--o{ FICHA_CAPTURA : lider_si_gc
-  FICHA_CAPTURA ||--o| GRUPO_CRECER_CAPTURA : contiene_gc_con_lider_derivado
+  FICHA_CAPTURA ||--o| GRUPO_CRECER_CAPTURA : registra_gc_tipo_GC
   USUARIO ||--o{ FICHA_CAPTURA : digita
   SESION_CAPTURA ||--o{ AUDITORIA_EVENTO : registra
   GEO_SESION ||--o{ AUDITORIA_EVENTO : referencia
   USUARIO ||--o{ CAMPO_CRITICO : configura
+  %% Lider GC = ficha_captura.persona_id; NO existe segundo lider_persona_id.
+  %% catalogo_valor es independiente; no FK entre cada lista y tablas del negocio.

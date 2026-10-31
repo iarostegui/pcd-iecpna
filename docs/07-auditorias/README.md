@@ -13,3 +13,5 @@ Se conservan **los hallazgos, decisiones y respuestas** a auditorías de documen
 **Fuente del informe de auditoría:** archivo aportado `auditoria-pcd-sdd-v3.1.zip` con 7 documentos, conservado en la conversación de trabajo; el ZIP no ha sido añadido a GitHub. Para rastreabilidad, cada decisión referencia el ID H-xx.
 
 **Antes de clasificar hallazgos:** leer [ALC-PCD-3.1](../01-analisis/alcance-funcional.md). Un auditor puede **cuestionar el alcance** y proponer ampliación, pero no exigir funcionalidad fuera de él ni declararla bloqueante automáticamente; no desatender por ello riesgos de seguridad, integridad o privacidad.
+
+| [etapa-2-arquitectura-seguridad-datos.md](etapa-2-arquitectura-seguridad-datos.md) | H-03/H-04/H-07/H-12/H-13/H-18/H-28/H-32/H-35; seguridad, catálogo, contexto, calidad e integridad GC con decisiones E2 abiertas. | **Diseño técnico en GitHub, pruebas reales y conformidad pendientes**. |

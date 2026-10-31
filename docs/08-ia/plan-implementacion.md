@@ -28,3 +28,12 @@ La [matriz de preparación](../07-auditorias/preparacion-iteraciones.md) precisa
 
 ## Aclaraciones funcionales aprobadas de la auditoría E1
 En I02, validar fechas reales en React y PHP; si valor imposible, exigir corregir o vaciar el campo, pudiendo guardar incompleto. No persistir fechas imposibles con tipo fecha ni crear mecanismo de excepción. La revisión de fidelidad `JUANA`/Juan o `JU4N4` se hará **manualmente por presbiterio, fuera de PCD**, no existe motor/flujo de conciliación. I03 **solo registra líderes de GC y datos generales**, nunca integrantes nominales. E1-D01/E1-D02 y sincronización SQL/API/test siguen pendientes para I02/I03.
+
+## E2 — plan de iteración I01 listo para preparar en modo Plan, no para publicarlo sin decisiones
+1. Crear cambio OpenSpec I01 con controles AUTH-05…AUTH-09 y CAT-01…03; especificar el comportamiento de E2-D02 o registrarlo expresamente pendiente.
+2. Confirmar mecanismo de sesión cookie/CSRF, login público de presbiterios y campo de usuario **escrito** (no desplegable). ADMIN/REPORTES con contraseñas individuales.
+3. Programar solo tras decisión: PHP login/logout/me, throttling, sesiones 45m/12h y revocación, `usuario_presbiterio` y contexto sede, geo_sesion única por sesión; React pantalla/selector siguiendo V2.2.
+4. **Pruebas obligatorias:** CA-01…14, CA-36…41, CA-56…67 y CA-76 (incluyendo 401, 403, 429, CSRF y sesiones revocadas).
+5. Antes de declarar I01 LISTA: ejecutar SQL inicial y semilla en versión real MySQL/MariaDB, lint OpenAPI y evidencia de pruebas API/E2E. No afirmar ejecución sin evidencias.
+6. E2-D01 de consulta nominal se reserva principalmente a I04, E2-D03 es aceptación de riesgo antes de producción, no obliga a implantar infraestructura fuera de alcance.
+Ver [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md) y [casos](../05-pruebas/casos-prueba.md).

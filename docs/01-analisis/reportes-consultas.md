@@ -21,3 +21,7 @@ Separar coincidencia documental exacta, coincidencia fuerte por nombre+fecha nac
 ## Seguridad y tiempos
 Filtrar por rol/ámbito antes de devolver datos; paginar. Índices por sede, autor, fecha, documento; medir p95 y planes EXPLAIN. Exportar reporte solo cuando esté expresamente habilitado y con minimización; no equivale a migrar al SGSP.
 
+## Etapa 2 — consulta y calidad mínima propuestas
+- **H-12/E2-D01 pendiente:** DIGITADOR podría consultar fichas del **propio presbiterio** (comportamiento del prototipo) y solo editar propias; nunca mostrar PII/GPS de otros presbiterios incluso si comparten Persona consolidada. Esta política debe ratificarse antes de I04.
+- **H-18:** indicadores de campos críticos se **recalculan al consultar** mediante [campos-criticos.md](../03-base-datos/campos-criticos.md); no confiar en `marca_calidad` fija ni añadir tareas de recomputación.
+- **H-28/E2-D02 pendiente:** ADMIN puede cambiar contexto explícito de presbiterio/sede; REPORTES nacional accede a agregados sin sede. No hacer accesible información nominal a REPORTES por simple rol nacional.

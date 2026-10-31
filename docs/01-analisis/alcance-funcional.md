@@ -103,3 +103,6 @@ La auditoría debe contrastar cada requisito **contra ALC-01…ALC-12**, las fue
 - **Documentación:** SDD V3.1 es diseño; **React/PHP/MySQL no están desplegados ni probados en producción**.
 
 **Regla final:** toda observación/auditoría/implementación debe partir de **este alcance oficial**. Si se considera insuficiente, se plantea una propuesta formal para decisión, sin alterar por iniciativa propia el alcance ni la versión del prototipo.
+
+## Etapa 2 — precisión técnica sin ampliación del alcance
+La [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md) define controles de contraseña/sesiones, ámbito, catálogo de campos e integridad de líder GC **dentro de ALC-01…12**. No crea roles nuevos, miembros nominales de GC ni procesos pastorales. Los comportamientos de **E2-D01/D02** (consulta/ámbito nacional) son propuestas sujetas a confirmación; **E2-D03** exige aceptación explícita del riesgo residual de la clave compartida antes de producción. SQL, OpenAPI y semillas son diseño, **no pruebas ejecutadas**.

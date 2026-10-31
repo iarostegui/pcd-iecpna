@@ -66,3 +66,6 @@ Hosting actual con cPanel, sin Node.js residente en producción, Docker, microse
 6. [Plan de implementación](docs/08-ia/plan-implementacion.md) y [pruebas](docs/05-pruebas/README.md).
 
 **Regla de mantenimiento:** cada carpeta documental incorpora su propio `README.md`; si se crea, mueve o retira un archivo, actualizar el índice de esa carpeta y este índice cuando corresponda. Mantener separadas las versiones **PCD HTML 2.2** y **documentación SDD 3.1**.
+
+## Estado de auditoría — Etapa 2
+[Levantamiento E2](docs/07-auditorias/etapa-2-arquitectura-seguridad-datos.md) examina H-03/04/07/12/13/18/28/32/35 con evidencias del auditor y define **propuestas** para seguridad, catálogos, identidad, sesiones, autorización y líder GC. Los modelos [SQL](database/migrations/001_initial.sql), [API](docs/04-integracion/openapi.yaml), [catálogos](docs/03-base-datos/catalogos-e-identidad.md), [criticidad](docs/03-base-datos/campos-criticos.md) y [pruebas](docs/05-pruebas/casos-prueba.md) se actualizaron. **Sin pruebas ejecutadas ni aprobación de E2-D01/D02/D03**. El prototipo HTML V2.2 permanece inalterado.

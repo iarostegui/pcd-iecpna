@@ -20,3 +20,15 @@ La **revisión de fidelidad del texto con el papel** corresponde a cada presbite
 ## Puerta transversal de alcance (aplicable I00–I06)
 
 **Cada iteración debe trazarse a una capacidad ALC-01…ALC-12** del [documento oficial](../01-analisis/alcance-funcional.md). Una observación que pida implementar EXC-01…EXC-10 debe figurar como **propuesta de ampliación**, no como bloqueo de la iteración, salvo que denuncie una deficiencia esencial de seguridad/privacidad/integridad en las funciones autorizadas. Auditoría y agente no pueden aprobar unilateralmente un nuevo módulo. Ver [protocolo](protocolo-auditoria-alcance.md).
+
+## Revisión de estado tras Etapa 2 (31/10/2026)
+| Iteración | Preparación lograda | Pendiente antes de GO / ejecución |
+|---|---|---|
+| I00 | SQL inicial E2, catálogos/semillas y OpenAPI documentados. | Verificar versión MySQL/MariaDB real, ejecutar `001_initial.sql` y semillas en BD **de prueba**, lint API y pruebas de CHECK/FK. |
+| I01 | Login/contexto/sesiones/roles/auditoría documentados con CA-56…65/66/67/76. | E2-D02 contexto nacional, mitigación clave compartida, pruebas de SQL/API; producción además requiere E2-D03. |
+| I02 | Normalización DNI/OTRO y catálogo, criticidad, esquema fuente. | E1-D01, E2-D01, ubigeo/CE si aplica, API de fichas y control de acceso; tests. |
+| I03 | Líder GC solo vía ficha; FK/CHECK propuestas. | E1-D02 y prueba física; contratos/test funcionales. |
+| I04 | Consulta por presbiterio como base del prototipo. | E2-D01 y pruebas de no exposición cross-scope. |
+| I05 | Matriz críticos y cálculo dinámico. | Prueba de informes con cambios ADMIN y control nacional. |
+| I06 | Sesiones/seguridad técnica previstas. | Privacidad H-40, hosting/backup/carga y pruebas de restauración. |
+**Estado global:** no existen pruebas productivas ejecutadas; propuestas no equivalen a decisiones aprobadas ni release.
