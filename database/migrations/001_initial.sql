@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS usuario (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  codigo VARCHAR(80) NOT NULL, nombre_display VARCHAR(180) NOT NULL,
  perfil ENUM('DIGITADOR','ADMIN','REPORTES') NOT NULL,
+ alcance_consulta ENUM('GENERAL','PRESBITERIO') NOT NULL DEFAULT 'PRESBITERIO',
  password_hash VARCHAR(255) NOT NULL, activo TINYINT(1) NOT NULL DEFAULT 1,
  auth_version INT UNSIGNED NOT NULL DEFAULT 1, -- incremento en reset, cambio credencial o desactivación
  created_at DATETIME(6) NOT NULL, updated_at DATETIME(6) NULL,
@@ -225,3 +226,9 @@ CREATE TABLE IF NOT EXISTS idempotencia (
  UNIQUE KEY uq_idem_user_clave(usuario_id,clave),
  CONSTRAINT fk_idem_user FOREIGN KEY(usuario_id) REFERENCES usuario(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Consultas: usuario.alcance_consulta aplica a lectura; no amplía permiso de escritura.
+-- PRESBITERIO usa usuario_presbiterio; GENERAL consulta nacional solo con cuenta autenticada y trazabilidad.
+-- DIGITADOR edita EXCLUSIVAMENTE fichas creadas por él, independientemente de alcance_consulta.
+-- ADMIN tiene privilegios nacionales por rol; REPORTES es de solo lectura (informes mínimos).
+-- Este script es base INICIAL; si existiera BD aplicada, generar ALTER independiente, no reejecutar como parche.

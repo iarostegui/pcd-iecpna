@@ -106,3 +106,6 @@ La auditoría debe contrastar cada requisito **contra ALC-01…ALC-12**, las fue
 
 ## Etapa 2 — precisión técnica sin ampliación del alcance
 La [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md) define controles de contraseña/sesiones, ámbito, catálogo de campos e integridad de líder GC **dentro de ALC-01…12**. No crea roles nuevos, miembros nominales de GC ni procesos pastorales. Los comportamientos de **E2-D01/D02** (consulta/ámbito nacional) son propuestas sujetas a confirmación; **E2-D03** exige aceptación explícita del riesgo residual de la clave compartida antes de producción. SQL, OpenAPI y semillas son diseño, **no pruebas ejecutadas**.
+
+## Precisión aprobada posterior: H-12
+La **consulta** se controla por el parámetro de usuario `GENERAL` o `PRESBITERIO`; no confundir el ámbito de lectura con el presbiterio de digitación ni con el permiso de **edición solo propia** del digitador. ADMIN nacional y REPORTES de solo lectura conservan su función. Se auditan operaciones y se restringe PII/GPS según finalidad, especialmente en el reporte nacional.

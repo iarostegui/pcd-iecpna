@@ -15,10 +15,10 @@ El formulario **productivo** muestra input libre para código de usuario, **nunc
 - `sesion_captura.session_ref_hash` conserva hash de identificador de sesión PHP (nunca ID claro); `auth_version_al_ingreso` se compara contra `usuario.auth_version` en cada operación. Desactivar/reset incrementa versión, revoca sesiones abiertas; `revocada_en` permite invalidar explícitamente. Logout cierra/rota cookie y audita.
 - `last_seen` actualizado con frecuencia moderada y control de tiempo inactivo en sesión PHP; no generar escrituras innecesarias por cada recurso.
 
-## Roles, presbiterio y sede (propuesta E2-D01/D02)
-- DIGITADOR: cuenta asignada a presbiterio; consulta fichas de ese presbiterio y **edita solo sus propias fichas**. PII proveniente de otro presbiterio no se revela aunque la Persona esté enlazada.
-- ADMIN y REPORTES: alcance nacional implícito por rol, sin entradas `usuario_presbiterio` de todas las sedes. Login mantiene presbiterio elegido; ADMIN cambia presbiterio mediante selector explícito y elige sede para capturas. REPORTES puede consultar agregados nacionales sin sede.
-- **E2-D01/D02 requieren ratificación**; al implementarse, PHP aplica ámbito en cada lectura y escritura. `GET /personas/duplicados` de digitador devuelve solo aviso minimizado de coincidencia externa.
+## Roles, presbiterio y sede (decisiones funcionales aprobadas E2-D01/D02)
+- DIGITADOR: inicia sesión en un presbiterio autorizado. La consulta depende de **usuario.alcance_consulta**: `PRESBITERIO` filtra por presbiterios de `usuario_presbiterio`; `GENERAL` permite consultar registros nacionales para controles autorizados. **En cualquier ámbito edita solo las fichas que creó**. El backend aplica el filtro; ninguna autorización se decide solo en React.
+- ADMIN y REPORTES: alcance nacional por rol; ADMIN edita conforme a sus facultades y cambia explícitamente contexto; REPORTES es de solo lectura para informes, con minimización de PII y GPS por defecto.
+- **Consulta `GENERAL` no autoriza actualizar fichas ajenas ni administrar usuarios**. Las consultas nominales permitidas se registran según controles de privacidad; no se revelan coordenadas de otras sesiones en búsquedas comunes. `GET /personas/duplicados` no es una vía de enumeración pública de documentos.
 
 ## Geolocalización (sin cambio funcional)
 Una solicitud opcional de `navigator.geolocation.getCurrentPosition` por sesión tras autenticación; persistir `geo_sesion` una vez, recuperarla tras refresh y reutilizar en auditorías. No bloquear si denegada, no usar GPS como prueba de presencia ni autorización.
@@ -28,3 +28,6 @@ Una solicitud opcional de `navigator.geolocation.getCurrentPosition` por sesión
 
 ## Privacidad / puesta en producción
 No PII en `localStorage`, URLs ni errores. Acceso con HTTPS; logs de aplicación minimizados. Retención de GPS, backups, aviso/información al titular y responsabilidades de tratamiento **siguen pendientes H-40**, condiciones previas a operar con datos reales. **Una app temporal no puede omitir protección de datos.**
+
+## H-13 — claves documentales (regla aprobada)
+Identidad exacta: DNI con 8 dígitos, preservando ceros; CE texto normalizado bajo verificación I02; OTRO subtipo obligatorio para comparación exacta. Si los datos documentales son ambiguos se conserva la captura sin clave documental para fusión, evitando falsos positivos. La coincidencia por nombre se limita a señalamiento de posible duplicidad. [Detalle](../03-base-datos/catalogos-e-identidad.md).

@@ -39,3 +39,12 @@ Las claves exactas identifican una Persona consolidada cuando están bien formad
 
 ## 5. Tests a ejecutar
 DNI con ceros `00123456`, DNI con 7 o 9 dígitos, tipo/numero parcial, dos subtipos OTRO con mismo número, mismo OTRO con subtipo normalizado, CE con guión/case y número válido según regla que se apruebe, búsqueda cruzada sin exposición de PII.
+
+## 6. Resolución funcional H-13 para construcción (APROBADA)
+La clave de identificación documental es **`tipo + subtipo (si OTRO) + número normalizado`**; no mezclar numeraciones iguales de distinta naturaleza. DNI usa **8 dígitos sin perder ceros**; C.E. se normaliza conservando texto alfanumérico y requiere contrastar reglas documentarias aplicables durante I02, sin inventar longitudes; OTRO necesita subtipo explícito para comparación exacta. Sin documento completo/confiable, `clave_identidad=NULL`, se guarda ficha incompleta y **no se fusiona Persona por nombre**. La validez de formato es diferente de la fidelidad al papel, que se verifica manualmente por presbiterio.
+
+**Ejemplos sin colisión:** `DNI:12345678`, `CE:12345678`, `OTRO:PASAPORTE:12345678` identifican categorías distintas. `DNI:00123456` es distinto de `DNI:12345678`.
+**Pruebas I02:** ceros, longitud incorrecta, OTRO sin subtipo, tipos distintos con mismo número, variante de espacios/guiones, documento vacío y ejecución concurrente bajo UNIQUE. No se agrega módulo de conciliación.
+
+## 7. Ubigeo — entrada obligatoria de construcción, NO decisión de alcance
+**Estado aprobado:** la fuente oficial INEI será un **insumo de I02**. Antes de cerrar la construcción de formularios y datos de Persona, registrar fuente, versión/corte, jerarquía departamento→provincia→distrito, códigos y pruebas de selección; cargarlo con un script versionado sin inventar códigos. La ausencia actual del archivo no impide I00/I01, pero sí impide declarar terminada la integración de ubigeo en I02. Los campos opcionales y guardado incompleto permanecen vigentes.

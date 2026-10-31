@@ -37,3 +37,6 @@ En I02, validar fechas reales en React y PHP; si valor imposible, exigir corregi
 5. Antes de declarar I01 LISTA: ejecutar SQL inicial y semilla en versión real MySQL/MariaDB, lint OpenAPI y evidencia de pruebas API/E2E. No afirmar ejecución sin evidencias.
 6. E2-D01 de consulta nominal se reserva principalmente a I04, E2-D03 es aceptación de riesgo antes de producción, no obliga a implantar infraestructura fuera de alcance.
 Ver [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md) y [casos](../05-pruebas/casos-prueba.md).
+
+## Actualización posterior: decisiones aprobadas
+H-12 se construirá con `alcance_consulta` por usuario (GENERAL/PRESBITERIO), **independiente de permisos de modificación**. H-13 validación de identidad DNI/CE/OTRO aprobada; fuente INEI del ubigeo se incorporará durante I02 como **entrada de construcción**. I00 debe crear **dos anexos del modelo físico sincronizados con SQL** y verificar columna por columna. H-28 y controles H-03/H-32/H-35 aceptados en diseño, pendientes de ejecución y pruebas.

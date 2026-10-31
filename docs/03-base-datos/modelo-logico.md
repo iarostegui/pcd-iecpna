@@ -28,3 +28,6 @@
 - Una Persona puede relacionarse con varias fichas fuente; consultar datos solo según ámbito aprobado; **E1-D01 y E2-D01 pendientes**.
 - Campos críticos faltantes no bloquean: se calculan al consultar bajo configuración vigente, con fechas tipadas.
 - CHECK y FK compuestas requieren **prueba en versión efectiva del hosting**, no declarar validadas aún.
+
+## Regla funcional de ámbito de consulta aprobado (E2-D01)
+`usuario.alcance_consulta` controla exclusivamente las **lecturas**: `PRESBITERIO` aplica ámbito(s) de `usuario_presbiterio`, `GENERAL` permite búsqueda nacional autenticada conforme a los privilegios del perfil. El digitador mantiene selección del presbiterio/sede operativa para registrar; el permiso GENERAL **no permite registrar ni editar fuera de permisos de escritura**. ADMIN opera nacionalmente y REPORTES solo en informes. Índice `ficha_captura(presbiterio_id, tipo_ficha, created_at)` soporta filtros por presbiterio.

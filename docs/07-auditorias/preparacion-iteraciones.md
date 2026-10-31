@@ -32,3 +32,10 @@ La **revisión de fidelidad del texto con el papel** corresponde a cada presbite
 | I05 | Matriz críticos y cálculo dinámico. | Prueba de informes con cambios ADMIN y control nacional. |
 | I06 | Sesiones/seguridad técnica previstas. | Privacidad H-40, hosting/backup/carga y pruebas de restauración. |
 **Estado global:** no existen pruebas productivas ejecutadas; propuestas no equivalen a decisiones aprobadas ni release.
+
+## Actualización tras decisiones Etapa 2
+- **I00:** preparar y conservar dos anexos técnicos **generados del SQL**: diagrama físico detallado y diccionario físico por columna; verificar concordancia con versión de esquema y ejecutar SQL en motor real cuando esté disponible.
+- **I01:** ámbito nacional ADMIN/REPORTES **aprobado** y credenciales separadas; `GENERAL/PRESBITERIO` se gestiona desde Administración, pero la lectura nacional no habilita edición. Hacer pruebas por matriz de roles.
+- **I02:** **ubigeo INEI como entrada de construcción obligatoria**, con fuente y versión verificadas; H-13 aprobado, persistencia tipo/subtipo/número sin ceros perdidos.
+- **I04:** probar que GENERAL muestra todos los presbiterios autorizados para consulta, PRESBITERIO solo los asociados, ambos con edición DIGITADOR restringida a propias fichas.
+- **I06:** la aceptación funcional de clave compartida no elimina la revisión de privacidad y pruebas de controles antes de operar con datos reales.

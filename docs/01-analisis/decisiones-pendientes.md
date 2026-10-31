@@ -36,3 +36,12 @@ Ver [resolución E1](../07-auditorias/etapa-1-resolucion.md).
 - **E2-T04 — PENDIENTE DE ENSAYO:** `CHECK` y FK compuestas en MySQL/MariaDB real de cPanel, versión del servidor, expiración/cookies, carga y rendimiento. No declarar SQL validado.
 - **DP-06 continúa PENDIENTE:** fuentes oficiales de ubigeo y formato documental C.E.; código INEI nunca inventado.
 Referencias: [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md), [catálogos e identidad](../03-base-datos/catalogos-e-identidad.md) y [calidad](../03-base-datos/campos-criticos.md).
+
+## Cierre de decisiones de Etapa 2 según responsable funcional (31/10/2026)
+- **DP-06 / Ubigeo — RECLASIFICADO:** el catálogo oficial INEI se recibirá/cargará como **entrada de construcción en I02** (fuente/versiones/códigos/jerarquía y pruebas). Ya no es cuestionamiento de alcance. No inventar datos.
+- **E2-D01 / H-12 — APROBADO CON MODIFICACIÓN:** permiso de **consulta** configurable por usuario: `GENERAL` (nacional) o `PRESBITERIO` (solo presbiterios asignados); su objetivo es control de lectura. **Nunca concede escritura adicional**. Digitador solo modifica sus fichas; ADMIN puede todas; REPORTES sigue solo lectura.
+- **E2-D02 / H-28 — APROBADO:** ADMIN y REPORTES nacionales por perfil, cambio explícito de contexto operativo para ADMIN y reportes nacionales sin sede para REPORTES.
+- **E2-D03 / H-03 — ACEPTACIÓN FUNCIONAL DE RIESGO RESIDUAL:** se conserva la contraseña inicial común para digitadores, con controles compensatorios y secretos independientes para ADMIN/REPORTES. Seguridad/privacidad y pruebas reales siguen siendo puerta de producción, no se declara el riesgo mitigado por completo.
+- **H-13 — APROBADO:** clave documental por tipo+subtipo+valor normalizado, DNI 8 dígitos conservando ceros, CE conservador sujeto a verificación de formato en I02, OTRO con subtipo, NULL cuando ambiguo.
+- **Anexos físicos — OBLIGATORIOS I00:** diagrama detallado y diccionario **columna a columna**, derivados de `001_initial.sql`.
+**SIGUEN ABIERTOS:** E1-D01 (vinculación automática entre presbiterios), E1-D02 (interpretación del GC preexistente), H-40 condiciones legales/de retención y compatibilidad real de hosting.

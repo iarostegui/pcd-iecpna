@@ -13,3 +13,6 @@
 | E2-T10 | Preparar I01 en tareas SDD con contratos listos y pruebas previstas | **ESPECIFICADO PARA PLANIFICACIÓN; E2-D02 y ensayos bloquean GO** |
 
 No modificar el prototipo HTML V2.2 ni implementar código productivo hasta completar planificación correspondiente.
+
+## Decisiones del responsable (31/10/2026)
+E2-D01 = **APROBADO CON MODIFICACIÓN** (consulta `GENERAL|PRESBITERIO` por usuario, independiente de edición). E2-D02 = **APROBADO** (ADMIN/REPORTES nacionales). E2-D03 = **ACEPTADO FUNCIONALMENTE** (clave común digitadores y mitigaciones; riesgo no eliminado). Catálogo ubigeo = **ENTRADA DE I02**. H-13 = **APROBADO**. La verificación real de SQL y API permanece pendiente.

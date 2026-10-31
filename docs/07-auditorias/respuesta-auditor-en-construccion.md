@@ -47,3 +47,11 @@ Al redactar la respuesta individual a cada observación, distinguir entre **corr
 | **H-35** | **Atender** | Líder de GC no debe estar duplicado en dos columnas; integridad de tipo de ficha protegida. No se crean integrantes nominales. | SQL modificado, **pendiente comprobar CHECK/FK** en hosting. |
 
 **No se atenderán ampliaciones no necesarias** como SSO corporativo, gestor de identidad permanente, maestro GC con integrantes, conciliación supervisada ni infraestructura externa. Temporalidad justifica reducir complejidad, **no** omitir controles esenciales de seguridad, integridad y privacidad. [Detalle E2](etapa-2-arquitectura-seguridad-datos.md).
+
+## Addendum aprobado del responsable funcional — Etapa 2
+- **H-07**: catálogo de ubigeo será **entrada de construcción I02**; no exigir ahora completar un catálogo ajeno al diseño y no inventar jerarquías.
+- **H-12**: **ATENDIDA_EN_DISEÑO** mediante permiso independiente `GENERAL/PRESBITERIO` por usuario. Consulta general es lectura nacional, con controles, y no amplía edición; revisión externa de calidad sigue manual.
+- **H-13**: **ATENDIDA_EN_DISEÑO** con clave `TIPO[:SUBTIPO]:NÚMERO_NORMALIZADO` cuando confiable; documentos ambiguos no se fusionan.
+- **H-28/H-32/H-35**: decisiones funcionales de Etapa 2 aprobadas; su implementación y pruebas siguen pendientes.
+- **Anexos del físico:** se requieren diagramas + diccionario completos y reproducibles a partir del SQL; no basta una tabla-resumen.
+- **Riesgo H-03**: aceptación funcional del esquema de clave común con controles compensatorios; riesgos de seguridad/privacidad deben verificarse antes de producción.

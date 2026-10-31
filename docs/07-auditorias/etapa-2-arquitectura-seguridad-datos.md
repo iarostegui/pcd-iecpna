@@ -93,3 +93,12 @@ Se comprobaron estáticamente, sobre el último contenido de GitHub:
 - El archivo prototipo `prototypes/PCD_v2.2.html` conserva el mismo SHA Git anterior.
 
 **Esta es validación ESTÁTICA limitada**: **NO** se ha ejecutado YAML lint con parser externo, SQL en MySQL/MariaDB real, API PHP, pruebas funcionales ni ensayos de concurrencia. No dar GO técnico final por la inspección estática.
+
+## 11. Decisiones ratificadas para ejecución SDD (31/10/2026)
+**H-07 / Ubigeo:** el catálogo oficial **es insumo de construcción I02**, no una ampliación ni impedimento de I00/I01. Debe registrarse procedencia, versión y jerarquía INEI antes de cerrar el componente.
+**H-12 / E2-D01:** sustituir la restricción fija anterior por **`usuario.alcance_consulta = GENERAL | PRESBITERIO`**, asignable por ADMIN. GENERAL habilita consulta nacional; PRESBITERIO filtra por los presbiterios asociados. Los permisos de modificación **NO cambian** (DIGITADOR solo fichas propias, ADMIN todas, REPORTES ninguna).
+**H-13:** aprobada clave documental por naturaleza/tipo/subtipo/número normalizado; DNI conserva ceros, CE no recibe límites inventados, OTRO sin subtipo no genera clave exacta.
+**H-28 / E2-D02:** rol nacional ADMIN/REPORTES y cambio explícito de presbiterio por ADMIN, aprobados.
+**H-03 / E2-D03:** aceptado el uso operativo de clave inicial común **con reconocimiento del riesgo de suplantación**; no se exime controles de privacidad ni la validación productiva.
+**Anexos I00:** diagrama físico y diccionario columna a columna obligatorios, generados desde mismo SQL.
+Los párrafos anteriores de H-12/H-28 que indiquen `pendiente de ratificación` son **históricos** y quedan reemplazados por esta resolución.
