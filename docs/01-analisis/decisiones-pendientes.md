@@ -1,0 +1,18 @@
+# Decisiones pendientes no bloqueantes y evidencias faltantes
+| ID | Tema | Situación actual | Tratamiento sin inventar |
+|---|---|---|---|
+| DP-01 | Catálogo oficial de sedes | Parcial, algunas sedes Lima identificadas; **no hay lista completa de 48** | Precargar solo confirmadas, permitir alta desde selector, no inventar |
+| DP-02 | Nombre oficial y correspondencia región/presbiterio | Lima, La Libertad–Trujillo, Chimbote, Iquitos usados en prototipo; estructura oficial parcial | Seeds explícitamente provisionales, homologación |
+| DP-03 | Hosting | Dominio `pcd.unobdata.com` creado, PHP/MySQL/límites no confirmados | Compatibilidad con 8.x/InnoDB; validar en cPanel |
+| DP-04 | Concurrencia | No se conoce número real de digitadores simultáneos | Escenarios de prueba 10/20/30; medir, no prometer |
+| DP-05 | Retención de GPS/logs | Finalidad definida, plazo no cerrado | Minimización, acceso restrictivo, retención pendiente aprobación |
+| DP-06 | Catálogo completo de ubigeo/responsabilidades | Fuente parcial; no usar valores ficticios productivos | Importar catálogo oficial cuando esté disponible |
+| DP-07 | Duplicado documental en distinta sede | Decisión: misma Persona, fichas de origen conservadas; UX de conciliación necesita prueba con equipo | Mostrar conflicto sin exponer PII ajena, registrar fuente sin duplicar |
+| DP-08 | Migración a SGSP | Se hará BD→BD después; esquema objetivo SGSP aún por homologar | No implementar ahora; conservar IDs y trazabilidad |
+| DP-09 | Contraseña común real | Requerida sin cambio forzado; valor no autorizado en documentos | Provisionar fuera de Git (hash), rotación administrativa sin forzar usuario |
+| DP-10 | Exportación de reportes | Deseable; no requisito para migración | Implementar solo si se aprueba y se valida minimización |
+| DP-11 | Referencia original del Excel en GitHub | Documento fuente existe como archivo de conversación, no repositorio | Registrar nombre exacto; carga binaria pendiente si se desea versionar |
+
+## Criterio
+Ningún DP autoriza al agente a crear datos falsos ni a cambiar funcionalidades del prototipo aprobado.
+
