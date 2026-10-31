@@ -37,3 +37,6 @@ HTTP: 400 formato, 401 no autenticado, 403 sin ámbito, 404 no revelable, 409 co
 - Toda respuesta exitosa confirma COMMIT con IDs internos persistidos.
 - Fecha papel `YYYY-MM-DD` en API; UI traduce `DD/MM/AAAA`.
 
+
+## Corrección de ficha individual
+`GET /fichas/{id}` y `PATCH /fichas/{id}` operan sobre ficha fuente (`datos_fuente_json`, observaciones). `PATCH` exige `version` y autor/ADMIN; no reemplaza silenciosamente Persona consolidada.

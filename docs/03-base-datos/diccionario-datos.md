@@ -25,3 +25,6 @@ Consultar `docs/01-analisis/diccionario-captura.md` para etiquetas del papel.
 - Catálogos de papel como valores normalizados / whitelists en API, ampliables por datos de catálogo externos una vez aprobados; no inventar nombres de sedes.
 - `campo_critico` permite alterar **métrica de completitud**, no integridad estructural.
 
+
+## Ampliación — ficha_captura.datos_fuente_json
+Columna JSON opcional que guarda el conjunto de campos transcritos de cada ficha de papel. Asegura independencia de fuentes cuando distintas sedes o usuarios entregan fichas de una Persona común. El cambio de ficha no altera automáticamente el agregado Persona.

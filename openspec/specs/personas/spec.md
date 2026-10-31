@@ -16,3 +16,6 @@ MUST incluir opción «Es líder GC» dentro de Persona; NO mostrar ni crear GC 
 ## Requirement PER-06: Idempotencia
 MUST evitar doble alta por doble clic/reintento; misma Idempotency-Key y payload debe retornar resultado previo.
 
+
+## Requirement PER-07: Varias fichas de una Persona
+MUST persistir snapshot por ficha. Si DIG-B aporta ficha a Persona de DIG-A, DIG-B solo edita su ficha, no los datos consolidados de DIG-A; ADMIN puede editar globalmente. Auditar cada cambio.

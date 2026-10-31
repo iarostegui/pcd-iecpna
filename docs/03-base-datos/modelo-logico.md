@@ -26,3 +26,6 @@
 ## Normalización y diseño físico
 Mayoría de datos 3FN; datos transcritos de papel se conservan sin imponer calidad artificial. Historial de cambios en auditoría. Consultar diccionario de captura, SQL y diagramas.
 
+
+## Correcciones de fichas con Persona compartida
+Una Persona puede tener fichas de distintos autores. DIGITADOR modifica exclusivamente su **ficha fuente** vía /fichas/{id}, incluyendo snapshot de transcripción en `ficha_captura.datos_fuente_json`. Los atributos consolidados de Persona solo los corrige el creador original o ADMIN. La fuente editada no sustituye silenciosamente la Persona, requiere conciliación. ADMIN tiene alcance general. 

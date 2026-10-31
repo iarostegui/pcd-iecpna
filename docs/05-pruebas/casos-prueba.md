@@ -56,3 +56,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-51 | Scripts SQL se ejecutan sin error en MySQL/MariaDB real | P0 |
 | CA-52 | Ninguna API ofrece migración/exportación SGSP | P0 |
 
+
+| CA-53 | Persona existente de DIG-A, nueva ficha de DIG-B → dos fichas con snapshots independientes | P0 |
+| CA-54 | DIG-B edita su ficha → permitido, no afecta identidad Persona de DIG-A | P0 |
+| CA-55 | DIG-B intenta PATCH Persona creada por DIG-A → 403; ADMIN autorizado | P0 |

@@ -38,3 +38,5 @@ La contraseña común fue solicitada expresamente; **no prueba identidad física
 ## Reglas no definidas
 No inferir cuáles son exactamente las 48 sedes ni pretender que todos los datos del papel son obligatorios para guardar; ver decisiones pendientes.
 
+
+**RN-26 — Distintas fuentes de una identidad:** cada digitador edita únicamente su ficha de origen y sus datos transcritos; el creador original o ADMIN puede editar la Persona consolidada. Ninguna ficha de otro autor sobreescribe identidad común sin conciliación.

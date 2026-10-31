@@ -414,3 +414,33 @@ paths:
         '200': { description: 'Solo ADMIN; acciones paginadas y control de GPS' }
         '403': { description: 'Sin permiso' }
 
+
+  /fichas/{id}:
+    get:
+      tags: [personas]
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/PersonId'
+      responses:
+        '200': { description: 'Ficha fuente según permisos' }
+        '403': { description: 'No autorizado' }
+    patch:
+      tags: [personas]
+      security: [{ cookieAuth: [], csrf: [] }]
+      parameters:
+        - $ref: '#/components/parameters/PersonId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [version, datos_fuente]
+              properties:
+                version: { type: integer, minimum: 1 }
+                datos_fuente: { type: object, additionalProperties: true }
+                observaciones: { type: string, nullable: true }
+      responses:
+        '200': { description: 'Ficha fuente editada con auditoría, creador intacto' }
+        '403': { description: 'Ficha ajena' }
+        '409': { description: 'Versión en conflicto' }

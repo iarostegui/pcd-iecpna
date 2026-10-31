@@ -16,3 +16,6 @@ Script: `database/migrations/001_initial.sql`. Motor InnoDB, UTF8MB4; PK `BIGINT
 ## Estado
 **Modelo de implementación propuesto y versionado**, sujeto a ejecutar en MySQL/MariaDB exactos de cPanel, EXPLAIN, pruebas de concurrencia y revisión del diccionario. No existe todavía backend implementado.
 
+
+## Snapshot de fuente y autorización
+`ficha_captura.datos_fuente_json` preserva datos originales de cada formulario para no perder discrepancias si dos fichas corresponden a una Persona. DIGITADOR modifica solo sus propias fichas con `version`/auditoría; la Persona consolidada la modifica su creador o ADMIN. Esto preserva origen para migración futura.

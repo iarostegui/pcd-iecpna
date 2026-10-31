@@ -114,6 +114,7 @@ CREATE TABLE IF NOT EXISTS ficha_captura (
  numero_ficha VARCHAR(50) NULL,
  fecha_papel DATE NULL, responsable_papel VARCHAR(180) NULL,
  observaciones TEXT NULL, control_papel TEXT NULL,
+ datos_fuente_json JSON NULL, -- snapshot original por ficha
  marca_calidad VARCHAR(30) NOT NULL DEFAULT 'INCOMPLETA',
  posible_duplicado TINYINT(1) NOT NULL DEFAULT 0,
  created_by BIGINT UNSIGNED NOT NULL, updated_by BIGINT UNSIGNED NULL,
