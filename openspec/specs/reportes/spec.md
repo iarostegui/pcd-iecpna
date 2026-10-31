@@ -10,3 +10,5 @@ REPORTES MUST consultar indicadores/agrupados sin poder modificar registros, usu
 ## Requirement REP-05: Sin proceso de migración
 MUST NO ofrecer acción de exportación/importación de datos hacia SGSP en esta fase; migración es proyecto posterior.
 
+## Requirement REP-06: Alcance de calidad frente al papel (aprobado E1)
+MUST calcular indicadores objetivos de datos faltantes y posibles coincidencias documentales, no afirmar haber verificado exactitud de transcripción. **Revisión manual por cada presbiterio fuera de PCD**; no tableros de supervisión, colas ni estados de conciliación. La edición posterior autorizada sí queda auditada.

@@ -19,3 +19,13 @@ MUST evitar doble alta por doble clic/reintento; misma Idempotency-Key y payload
 
 ## Requirement PER-07: Varias fichas de una Persona
 MUST persistir snapshot por ficha. Si DIG-B aporta ficha a Persona de DIG-A, DIG-B solo edita su ficha, no los datos consolidados de DIG-A; ADMIN puede editar globalmente. Auditar cada cambio.
+
+## Requirement PER-08: Campos tipados (aprobado E1/H-05)
+MUST validar una fecha DD/MM/AAAA como fecha calendario existente tanto en interfaz como en PHP. MUST NOT aceptar `31/02/1998` como valor de un control fecha; el digitador la corrige tras consultar el origen o deja el campo vacío y guarda una ficha incompleta. Persistencia SQL DATE válida o NULL.
+### Scenario — Fecha imposible
+GIVEN fecha `31/02/1998` WHEN usuario intenta guardarla THEN se solicita corrección/vaciado y no se persiste como DATE.
+
+## Requirement PER-09: Revisión de fidelidad al papel (aprobado E1/H-09)
+MUST validar formato, tipo, integridad y campos faltantes según configuración. MUST NOT afirmar que verifica automáticamente que un texto capturado coincide con la hoja física: `JUANA`/Juan o `JU4N4` son ejemplos de transcripción incorrecta no demostrable a partir de la entrada. **Cada presbiterio hace revisión manual fuera de PCD** y corrige por edición autorizada con auditoría. No implementar motor de conciliación, aprobaciones o asignaciones.
+### Scenario — Texto plausible mal transcrito
+GIVEN nombre sintácticamente admitido pero diferente de ficha original WHEN guarda THEN PCD no lo certifica como fiel al papel; revisión manual externa.

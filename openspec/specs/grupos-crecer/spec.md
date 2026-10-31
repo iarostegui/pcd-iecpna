@@ -12,3 +12,7 @@ MUST mantener capacidad y participantes aproximados separados; NO crear miembros
 ## Requirement GC-05: Contexto/auditoría
 MUST heredar presbiterio/sede y verificar ámbito en backend; guardar actor, autor, geo_sesion e historial para toda alta/edición.
 
+## Requirement GC-06: Solo líderes y resumen (alcance aprobado E1)
+MUST registrar únicamente el líder **previamente capturado como Persona** y datos generales del grupo, como nombre, estado, capacidad y número aproximado de integrantes. MUST NOT crear ni relacionar **integrantes nominales** porque su información no figura en las fichas del levantamiento.
+### Scenario — Grupo de 12 integrantes aproximados
+GIVEN ficha GC indica 12 integrantes aproximados WHEN se registra THEN se guarda el conteo 12 y el líder, sin crear 12 Personas ni relaciones de miembro.
