@@ -11,3 +11,6 @@ Almacena diagramas fuente **editables** del modelo PCD y, en el futuro, sus expo
 La referencia de atributos y claves es el [modelo lógico](../modelo-logico.md) y el [SQL inicial](../../../database/migrations/001_initial.sql). Si cambian cardinalidades, actualizar estos tres elementos conjuntamente; no sustituir el modelo de PCD por el del SGSP.
 
 **Etapa 2:** el modelo ER debe representar GC→ficha de tipo GC, cuya Persona es el único líder; el detalle de restricciones se encuentra en [modelo lógico](../modelo-logico.md) y [SQL](../../../database/migrations/001_initial.sql).
+
+## Modelo físico editable
+[er-pcd-fisico.mmd](er-pcd-fisico.mmd) muestra las tablas y campos desde el script SQL; se publica con el [Anexo 01](../anexos/anexo-01-diagrama-fisico.md) y [Anexo 02](../anexos/anexo-02-diccionario-fisico.md). El anterior `er-pcd.mmd` queda como representación conceptual resumida.

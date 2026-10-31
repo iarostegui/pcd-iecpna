@@ -40,3 +40,6 @@ Ver [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md) y [casos
 
 ## Actualización posterior: decisiones aprobadas
 H-12 se construirá con `alcance_consulta` por usuario (GENERAL/PRESBITERIO), **independiente de permisos de modificación**. H-13 validación de identidad DNI/CE/OTRO aprobada; fuente INEI del ubigeo se incorporará durante I02 como **entrada de construcción**. I00 debe crear **dos anexos del modelo físico sincronizados con SQL** y verificar columna por columna. H-28 y controles H-03/H-32/H-35 aceptados en diseño, pendientes de ejecución y pruebas.
+
+## Entregables del diseño físico I00
+Se generan [Anexo 01](../03-base-datos/anexos/anexo-01-diagrama-fisico.md) y [Anexo 02](../03-base-datos/anexos/anexo-02-diccionario-fisico.md) directamente desde el SQL; no se ha ejecutado aún el SQL en un servidor real.

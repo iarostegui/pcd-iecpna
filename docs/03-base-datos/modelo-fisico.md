@@ -33,3 +33,6 @@ El [levantamiento E1](../07-auditorias/etapa-1-resolucion.md) precisa que cada f
 **Calidad:** campos iniciales desde [Matriz](campos-criticos.md) del prototipo; diferenciar obligatorios técnicos de campos críticos de reporte. No crear flujo de conciliación/validación contra papel.
 
 **Estado:** propuesta de esquema inicial todavía no probada, no migración aplicada. No usar SQL en BD productiva hasta validar hosting y decisiones pendientes.
+
+## Anexos físicos
+[Diagrama ER detallado](anexos/anexo-01-diagrama-fisico.md) y [Diccionario físico completo](anexos/anexo-02-diccionario-fisico.md). El SQL es la fuente; el diagrama y diccionario se deben regenerar al cambiar la estructura, y se deben probar las restricciones en MySQL/MariaDB real.

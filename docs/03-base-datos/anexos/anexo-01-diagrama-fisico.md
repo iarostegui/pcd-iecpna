@@ -1,0 +1,269 @@
+# Anexo 01 — Diagrama físico PCD
+
+Generado desde [001_initial.sql](../../../database/migrations/001_initial.sql): 17 tablas, 109 columnas, 28 relaciones FK. Esta es la BD temporal de PCD, **no** SGSP.
+
+[Diccionario de todas las columnas](anexo-02-diccionario-fisico.md) · [Mermaid editable](../diagramas/er-pcd-fisico.mmd)
+
+## Mapa general
+
+```mermaid
+erDiagram
+  PRESBITERIO {
+    BIGINT_UNSIGNED id PK
+  }
+  USUARIO {
+    BIGINT_UNSIGNED id PK
+  }
+  USUARIO_PRESBITERIO {
+    BIGINT_UNSIGNED usuario_id PK,FK
+  }
+  SEDE {
+    BIGINT_UNSIGNED id PK
+  }
+  CAMPANA {
+    BIGINT_UNSIGNED id PK
+  }
+  CATALOGO_VALOR {
+    BIGINT_UNSIGNED id PK
+  }
+  SESION_CAPTURA {
+    BIGINT_UNSIGNED id PK
+  }
+  GEO_SESION {
+    BIGINT_UNSIGNED sesion_id PK,FK
+  }
+  LOGIN_EVENTO {
+    BIGINT_UNSIGNED id PK
+  }
+  PERSONA_CAPTURA {
+    BIGINT_UNSIGNED id PK
+  }
+  FICHA_CAPTURA {
+    BIGINT_UNSIGNED id PK
+  }
+  CONYUGE_PENDIENTE {
+    BIGINT_UNSIGNED id PK
+  }
+  PERSONA_RESPONSABILIDAD_CAPTURA {
+    BIGINT_UNSIGNED id PK
+  }
+  GRUPO_CRECER_CAPTURA {
+    BIGINT_UNSIGNED id PK
+  }
+  CAMPO_CRITICO {
+    ENUM entidad PK
+  }
+  AUDITORIA_EVENTO {
+    BIGINT_UNSIGNED id PK
+  }
+  IDEMPOTENCIA {
+    BIGINT_UNSIGNED id PK
+  }
+  USUARIO ||--o{ USUARIO_PRESBITERIO : fk_up_usuario
+  PRESBITERIO ||--o{ USUARIO_PRESBITERIO : fk_up_presbiterio
+  PRESBITERIO ||--o{ SEDE : fk_sede_presb
+  USUARIO ||--o{ SEDE : fk_sede_autor
+  USUARIO ||--o{ SESION_CAPTURA : fk_sc_user
+  PRESBITERIO ||--o{ SESION_CAPTURA : fk_sc_pres
+  SEDE ||--o{ SESION_CAPTURA : fk_sc_sede
+  SESION_CAPTURA ||--o| GEO_SESION : fk_geo_session
+  USUARIO ||--o{ LOGIN_EVENTO : fk_le_usuario
+  PRESBITERIO ||--o{ LOGIN_EVENTO : fk_le_pres
+  USUARIO ||--o{ PERSONA_CAPTURA : fk_pc_creador
+  USUARIO ||--o{ PERSONA_CAPTURA : fk_pc_editor
+  CAMPANA ||--o{ FICHA_CAPTURA : fk_fc_campana
+  PERSONA_CAPTURA ||--o{ FICHA_CAPTURA : fk_fc_persona
+  SEDE ||--o{ FICHA_CAPTURA : fk_fc_sede
+  USUARIO ||--o{ FICHA_CAPTURA : fk_fc_autor
+  USUARIO ||--o{ FICHA_CAPTURA : fk_fc_editor
+  PERSONA_CAPTURA ||--o{ CONYUGE_PENDIENTE : fk_con_persona
+  FICHA_CAPTURA ||--o{ CONYUGE_PENDIENTE : fk_con_ficha_persona
+  PERSONA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_persona
+  FICHA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_ficha_persona
+  SEDE ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_sede
+  FICHA_CAPTURA ||--o{ GRUPO_CRECER_CAPTURA : fk_gc_ficha_tipo
+  USUARIO ||--o{ CAMPO_CRITICO : fk_cc_user
+  SESION_CAPTURA ||--o{ AUDITORIA_EVENTO : fk_au_session
+  GEO_SESION ||--o{ AUDITORIA_EVENTO : fk_au_geo
+  USUARIO ||--o{ AUDITORIA_EVENTO : fk_au_user
+  USUARIO ||--o{ IDEMPOTENCIA : fk_idem_user
+```
+
+## Diagrama con columnas y claves
+
+```mermaid
+erDiagram
+  PRESBITERIO {
+    BIGINT_UNSIGNED id PK
+    VARCHAR_40 codigo UK
+    TINYINT_1 activo
+  }
+  USUARIO {
+    BIGINT_UNSIGNED id PK
+    VARCHAR_80 codigo UK
+    ENUM perfil
+    ENUM alcance_consulta
+    VARCHAR_255 password_hash
+    INT_UNSIGNED auth_version
+    DATETIME_6 created_at
+  }
+  USUARIO_PRESBITERIO {
+    BIGINT_UNSIGNED usuario_id PK,FK
+    BIGINT_UNSIGNED presbiterio_id PK,FK
+  }
+  SEDE {
+    BIGINT_UNSIGNED id PK
+    BIGINT_UNSIGNED presbiterio_id FK
+    VARCHAR_50 codigo
+    VARCHAR_200 nombre_norm
+    TINYINT_1 activo
+    BIGINT_UNSIGNED created_by FK
+  }
+  CAMPANA {
+    BIGINT_UNSIGNED id PK
+    VARCHAR_50 codigo UK
+    VARCHAR_30 estado
+    DATETIME_6 created_at
+  }
+  CATALOGO_VALOR {
+    BIGINT_UNSIGNED id PK
+    VARCHAR_45 dominio
+    VARCHAR_130 etiqueta
+    TINYINT_1 activo
+  }
+  SESION_CAPTURA {
+    BIGINT_UNSIGNED id PK
+    BIGINT_UNSIGNED usuario_id FK
+    BIGINT_UNSIGNED sede_id FK
+    VARBINARY_16 ip_login
+    DATETIME_6 fecha_login
+    DATETIME_6 last_seen
+    INT_UNSIGNED auth_version_al_ingreso
+  }
+  GEO_SESION {
+    BIGINT_UNSIGNED sesion_id PK,FK
+    ENUM estado
+    DECIMAL_10_7 latitud
+    DECIMAL_10_2 precision_m
+  }
+  LOGIN_EVENTO {
+    BIGINT_UNSIGNED id PK
+    BIGINT_UNSIGNED usuario_id FK
+    VARCHAR_80 codigo_intentado
+    ENUM resultado
+    VARBINARY_16 ip
+    DATETIME_6 created_at
+  }
+  PERSONA_CAPTURA {
+    BIGINT_UNSIGNED id PK
+    VARCHAR_24 tipo_documento
+    VARCHAR_60 numero_documento
+    VARCHAR_220 clave_identidad UK
+    VARCHAR_150 nombres
+    VARCHAR_100 apellido_materno
+    VARCHAR_24 sexo_codigo
+    VARCHAR_60 telefono
+    VARCHAR_180 facebook_usuario
+    VARCHAR_10 ubigeo_dpto_codigo
+    VARCHAR_10 ubigeo_dist_codigo
+    DATE fecha_condicion
+    BIGINT_UNSIGNED created_by FK
+    DATETIME_6 created_at
+    INT_UNSIGNED version
+  }
+  FICHA_CAPTURA {
+    BIGINT_UNSIGNED id PK
+    BIGINT_UNSIGNED campana_id FK
+    BIGINT_UNSIGNED persona_id FK
+    BIGINT_UNSIGNED presbiterio_id FK
+    BIGINT_UNSIGNED sede_id FK
+    ENUM tipo_ficha
+    VARCHAR_50 numero_ficha
+    DATE fecha_papel
+    TEXT observaciones
+    JSON datos_fuente_json
+    TINYINT_1 posible_duplicado
+    BIGINT_UNSIGNED created_by FK
+    DATETIME_6 created_at
+    INT_UNSIGNED version
+  }
+  CONYUGE_PENDIENTE {
+    BIGINT_UNSIGNED id PK
+    BIGINT_UNSIGNED persona_id FK
+    ENUM ficha_tipo FK
+    VARCHAR_24 tipo_documento
+    VARCHAR_240 nombre_libre
+  }
+  PERSONA_RESPONSABILIDAD_CAPTURA {
+    BIGINT_UNSIGNED id PK
+    BIGINT_UNSIGNED persona_id FK
+    ENUM ficha_tipo FK
+    VARCHAR_50 tipo_codigo
+    VARCHAR_180 region_libre
+    VARCHAR_280 descripcion
+  }
+  GRUPO_CRECER_CAPTURA {
+    BIGINT_UNSIGNED id PK
+    BIGINT_UNSIGNED ficha_id FK,UK
+    ENUM ficha_tipo FK
+    TINYINT_1 grupo_ya_existe
+    VARCHAR_220 nombre
+    VARCHAR_45 estado_gc
+    INT_UNSIGNED capacidad
+    VARCHAR_500 direccion_lugar
+    TINYINT_1 es_matrimonios
+    DATETIME_6 created_at
+  }
+  CAMPO_CRITICO {
+    ENUM entidad PK
+    VARCHAR_80 campo_codigo PK
+    VARCHAR_110 ruta_dato
+    TINYINT_1 es_critico
+    BIGINT_UNSIGNED updated_by FK
+  }
+  AUDITORIA_EVENTO {
+    BIGINT_UNSIGNED id PK
+    VARCHAR_75 request_id
+    BIGINT_UNSIGNED geo_sesion_id FK
+    VARCHAR_60 accion
+    BIGINT_UNSIGNED recurso_id
+    JSON antes_json
+    DATETIME_6 created_at
+  }
+  IDEMPOTENCIA {
+    BIGINT_UNSIGNED id PK
+    BIGINT_UNSIGNED usuario_id FK
+    CHAR_64 payload_hash
+    JSON response_json
+  }
+  USUARIO ||--o{ USUARIO_PRESBITERIO : fk_up_usuario
+  PRESBITERIO ||--o{ USUARIO_PRESBITERIO : fk_up_presbiterio
+  PRESBITERIO ||--o{ SEDE : fk_sede_presb
+  USUARIO ||--o{ SEDE : fk_sede_autor
+  USUARIO ||--o{ SESION_CAPTURA : fk_sc_user
+  PRESBITERIO ||--o{ SESION_CAPTURA : fk_sc_pres
+  SEDE ||--o{ SESION_CAPTURA : fk_sc_sede
+  SESION_CAPTURA ||--o| GEO_SESION : fk_geo_session
+  USUARIO ||--o{ LOGIN_EVENTO : fk_le_usuario
+  PRESBITERIO ||--o{ LOGIN_EVENTO : fk_le_pres
+  USUARIO ||--o{ PERSONA_CAPTURA : fk_pc_creador
+  USUARIO ||--o{ PERSONA_CAPTURA : fk_pc_editor
+  CAMPANA ||--o{ FICHA_CAPTURA : fk_fc_campana
+  PERSONA_CAPTURA ||--o{ FICHA_CAPTURA : fk_fc_persona
+  SEDE ||--o{ FICHA_CAPTURA : fk_fc_sede
+  USUARIO ||--o{ FICHA_CAPTURA : fk_fc_autor
+  USUARIO ||--o{ FICHA_CAPTURA : fk_fc_editor
+  PERSONA_CAPTURA ||--o{ CONYUGE_PENDIENTE : fk_con_persona
+  FICHA_CAPTURA ||--o{ CONYUGE_PENDIENTE : fk_con_ficha_persona
+  PERSONA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_persona
+  FICHA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_ficha_persona
+  SEDE ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_sede
+  FICHA_CAPTURA ||--o{ GRUPO_CRECER_CAPTURA : fk_gc_ficha_tipo
+  USUARIO ||--o{ CAMPO_CRITICO : fk_cc_user
+  SESION_CAPTURA ||--o{ AUDITORIA_EVENTO : fk_au_session
+  GEO_SESION ||--o{ AUDITORIA_EVENTO : fk_au_geo
+  USUARIO ||--o{ AUDITORIA_EVENTO : fk_au_user
+  USUARIO ||--o{ IDEMPOTENCIA : fk_idem_user
+```
+
+**Nota:** el Mermaid expresa FK; restricciones compuestas, NULL, índices y CHECK se documentan columna a columna en el Anexo 02. `grupo_crecer_captura` deriva su líder de `ficha_captura.persona_id`, sin integrantes nominales. `alcance_consulta` es permiso de lectura, no escritura. Se requiere probar SQL real antes de declarar compatibilidad.

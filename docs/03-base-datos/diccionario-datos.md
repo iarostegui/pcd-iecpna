@@ -39,3 +39,6 @@ Columna JSON opcional que guarda el conjunto de campos transcritos de cada ficha
 
 ## Catálogos y fuente de verdad E2
 Los códigos/etiquetas iniciales residen en `catalogo_valor`, no solo en una whitelist textual hard-coded. PHP consulta los valores activos, valida que sean dominios permitidos, y mantiene caché corta no sensible si resulta necesario. **Ubigeo INEI sigue pendiente** y no se debe inventar. `persona_captura.clave_identidad` es UNIQUE solo si la documentación proporciona clave completa confiable; `grupo_crecer_captura` no tiene `lider_persona_id` redundante.
+
+## Anexo por columna
+Este archivo es un **resumen**. El [Anexo 02](anexos/anexo-02-diccionario-fisico.md) detalla 109 columnas de las 17 tablas desde el SQL y sus FK/índices/CHECK.

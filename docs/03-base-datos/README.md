@@ -22,3 +22,8 @@ Contiene el **diseño de la base propia de PCD**, distinta de la base futura del
 - [campos-criticos.md](campos-criticos.md): matriz inicial del prototipo, campos desactivables y cálculo de reportes según configuración vigente.
 - [001_initial.sql](../../database/migrations/001_initial.sql): propuesta física revisada. **NO ejecutada**, requiere prueba de CHECK y FK compuestas en hosting.
 - [002_catalogos_calidad.sql](../../database/seeds/002_catalogos_calidad.sql): semillas técnicas basadas en fuente, sin datos personales.
+
+## Entregables físicos obligatorios I00
+- [Anexo 01 — Diagrama físico completo](anexos/anexo-01-diagrama-fisico.md), con fuente [Mermaid editable](diagramas/er-pcd-fisico.mmd).
+- [Anexo 02 — Diccionario físico por columna](anexos/anexo-02-diccionario-fisico.md).
+Ambos derivados del SQL vigente (17 tablas, 109 columnas). Actualizar con cada cambio. **No ejecutado todavía en motor MySQL/MariaDB.**
