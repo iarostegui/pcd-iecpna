@@ -23,3 +23,5 @@ Completar IDOR/CSRF/XSS, backups, REST/OpenAPI, pruebas carga, publicación en c
 ## Control
 Cada iteración: actualizar specs y código → ejecutar pruebas unitarias/API/E2E → reportar evidencia y diffs → correcciones → aprobación humana del lote. No modificar SGSP ni publicar prototipo como real. El build producción no necesita Node en hosting.
 
+## Auditoría E1: puertas de entrada
+La [matriz de preparación](../07-auditorias/preparacion-iteraciones.md) precisa estados. **I00 está habilitada solo para comenzar tareas técnicas**; I01 requiere cierre de seguridad/sesiones, I02/I03/I04 requieren aprobar deltas E1 y sincronizar API, SQL, casos de prueba. Las propuestas de diseño no equivalen a GO productivo.

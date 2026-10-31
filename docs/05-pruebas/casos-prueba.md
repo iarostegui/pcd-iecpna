@@ -60,3 +60,18 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-53 | Persona existente de DIG-A, nueva ficha de DIG-B → dos fichas con snapshots independientes | P0 |
 | CA-54 | DIG-B edita su ficha → permitido, no afecta identidad Persona de DIG-A | P0 |
 | CA-55 | DIG-B intenta PATCH Persona creada por DIG-A → 403; ADMIN autorizado | P0 |
+
+## Casos propuestos E1 (NO EJECUTADOS)
+| ID | Comprobación | Iteración |
+|---|---|---|
+| E1-CA-01 | Documento existente de otra sede: crear ficha nueva, no segunda Persona y no mostrar PII ajena | I02 |
+| E1-CA-02 | Crear primera ficha genera fuente y Persona; segunda ficha divergente no sobrescribe Persona | I02 |
+| E1-CA-03 | Autores distintos editan solo sus fichas; ADMIN conserva autoría | I02/I04 |
+| E1-CA-04 | Fecha inválida se preserva literalmente y columna DATE queda NULL sin bloquear | I02 |
+| E1-CA-05 | Correo inválido se preserva y observa sin bloquear | I02 |
+| E1-CA-06 | GC ya existe=Sí sin referencia previa → nueva ficha registrada | I03 |
+| E1-CA-07 | GC nombre parecido / líder diferente: advertencia sin fusión | I03 |
+| E1-CA-08 | Reportar incidencia simple y subsanar con edición auditada | I04/I05 |
+| E1-CA-09 | Inventario de campos coincide con las hojas del Excel, sin inventar dato | I02/I03 |
+| E1-CA-10 | Doble clic y concurrencia al adjuntar ficha no producen doble alta | I02 |
+**Estado: 10 pruebas diseñadas, ninguna ejecutada.**

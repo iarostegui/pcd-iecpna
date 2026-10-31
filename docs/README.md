@@ -14,6 +14,7 @@ Aquí se guardan **especificaciones explicativas** y decisiones técnicas de **P
 | [04-integracion/](04-integracion/README.md) | Contratos API y notas de migración futura a SGSP. | [OpenAPI](04-integracion/openapi.yaml) |
 | [05-pruebas/](05-pruebas/README.md) | Escenarios de aceptación y ensayo de carga en hosting compartido. | [Casos de prueba](05-pruebas/casos-prueba.md) |
 | [06-despliegue/](06-despliegue/README.md) | Publicación cPanel, operación, respaldo y cierre de campaña. | [Instalación cPanel](06-despliegue/instalacion-cpanel.md) |
+| [07-auditorias/](07-auditorias/README.md) | Hallazgos, levantamiento y respuesta al auditor. | [Etapa 1](07-auditorias/etapa-1-resolucion.md) |
 | [08-ia/](08-ia/README.md) | Instrucciones para agentes IA, trazabilidad y orden de implementación. | [Prompt maestro](08-ia/PROMPT-MAESTRO.md) |
 
 ## Criterios documentales

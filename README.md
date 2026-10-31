@@ -16,6 +16,7 @@
 | ↳ [04 — Integración](docs/04-integracion/README.md) | API REST/OpenAPI y estrategia **futura** de migración hacia SGSP. | Alinear frontend y backend, sin construir SGSP. |
 | ↳ [05 — Pruebas](docs/05-pruebas/README.md) | Matriz de aceptación y pruebas de capacidad. | Verificar cada implementación. |
 | ↳ [06 — Despliegue](docs/06-despliegue/README.md) | Instalación y operación en cPanel. | Publicar en el hosting existente. |
+| ↳ [07 — Auditorías](docs/07-auditorias/README.md) | Hallazgos, levantamiento y respuesta al auditor. | Revisar estado de preparación y decisiones. |
 | ↳ [08 — IA](docs/08-ia/README.md) | Prompt maestro, plan iterativo, matriz de trazabilidad y definición de terminado. | Encargar el desarrollo a la IA. |
 | **[openspec/](openspec/README.md)** | Especificaciones SDD vigentes por capacidad y registro de cambios futuros. | Implementar según requisitos verificables. |
 | **[database/](database/README.md)** | Migraciones SQL y notas de aprovisionamiento/catálogos. | Crear y evolucionar la BD **propia de PCD**. |

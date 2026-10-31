@@ -21,3 +21,5 @@ UI-10 Auditoría: consulta limitada a ADMIN.
 - Errores de validación junto al control, sin borrar contenido; accesible 320px, 390px, 768px y escritorio, scroll horizontal de tablas cuando necesario.
 - El prototipo contiene simulaciones locales; la implementación debe replicar experiencia, pero usar API/BD reales.
 
+## Diferencias reconocidas del HTML V2.2 (E1)
+El prototipo bloquea un documento duplicado y no representa fichas fuente múltiples. **No replicar esas limitaciones** en producción. La [propuesta E1](../07-auditorias/etapa-1-resolucion.md) permite guardar una ficha adicional sin duplicar Persona ni mostrar datos de otro presbiterio. No se cambia el HTML V2.2.

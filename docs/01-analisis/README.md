@@ -17,3 +17,6 @@ Define **qué necesidad resuelve PCD**, qué datos se transcriben de los formula
 **Fuente externa aún no versionada:** el Excel original de fichas Persona y Líder GC con sus ejemplos. El diccionario es la transcripción de trabajo; no sustituye una validación final contra el Excel. El diseño visual se encuentra en [PCD V2.2](../../prototypes/PCD_v2.2.html).
 
 **Para cambios:** revisar primero las reglas; actualizar la especificación por capacidad en [OpenSpec](../../openspec/README.md).
+
+## Fuentes contrastadas
+La transcripción de las fichas impresas y los datos del Excel verificado están en [fuentes/](fuentes/README.md). **El XLSX binario aún no se ha añadido a GitHub**.

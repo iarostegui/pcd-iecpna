@@ -61,3 +61,13 @@
 - Una misma Persona puede tener múltiples fichas de origen; **número impreso no identifica Persona**.
 - Reglas críticas de calidad se parametrizan, no deben forzar completitud.
 
+## Auditoría E1 — Contraste real con el Excel
+La fuente física se contrastó con [inventario-excel-original.md](fuentes/inventario-excel-original.md): hojas `Ficha_Persona`, `Ejemplo_Ficha_Persona`, `Ficha_Lider_GC`, `Ejemplo_Lider_GC` y `Hoja1` vacía.
+- Persona, filas 6 y 10: tipo de documento **Otro** y estado civil **Otro** requieren transcribir el detalle libre.
+- Persona, filas 32–36: conservar Sí/No de responsabilidades y dos descripciones con dos fechas; no inferir el Sí/No.
+- Persona, fila 20: opciones impresas Lima, Trujillo, Iquitos; el catálogo de trabajo PCD puede contener otros presbiterios ya autorizados, sin falsificar el papel.
+- GC, fila 11: «¿El grupo ya existe?» es un dato de la hoja, **no** un ID de grupo PCD.
+- GC, fila 33: firma solo en papel, no digitalizar.
+- Marcas `*`: calidad del formulario en papel, **nunca** bloqueo a un guardado PCD incompleto.
+- Campos y fechas inválidos deben conservar literal en el snapshot de ficha; la representación tipada debe ser válida o NULL.
+**H-14:** contraste documental realizado; falta agregar el original XLSX en el repositorio.

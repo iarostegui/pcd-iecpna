@@ -19,3 +19,6 @@ Script: `database/migrations/001_initial.sql`. Motor InnoDB, UTF8MB4; PK `BIGINT
 
 ## Snapshot de fuente y autorización
 `ficha_captura.datos_fuente_json` preserva datos originales de cada formulario para no perder discrepancias si dos fichas corresponden a una Persona. DIGITADOR modifica solo sus propias fichas con `version`/auditoría; la Persona consolidada la modifica su creador o ADMIN. Esto preserva origen para migración futura.
+
+## Hallazgos E1: modelo en discusión
+El [levantamiento E1](../07-auditorias/etapa-1-resolucion.md) propone conservar el literal de cada ficha en `datos_fuente_json` y mantener la Persona consolidada por separado; no fusionar registros GC sobre coincidencias débiles. Los cambios SQL definitivos están **pendientes**, no considerar este documento validación productiva.
