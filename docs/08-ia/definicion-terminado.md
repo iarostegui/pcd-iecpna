@@ -1,6 +1,6 @@
 # Definition of Done — PCD
 No declarar módulo terminado hasta cumplir todos:
-1. Ref. EF y caso de uso trazados a `openspec/specs`, UI V2.2, API y SQL.
+1. Requisito y caso de uso trazados a `openspec/specs`, UI **V2.3 vigente**, API V4 y SQL de 11 tablas.
 2. Login y autorización revalidados en backend; no IDOR.
 3. Transacciones, UNIQUE, FK, idempotencia y no pérdida ante doble clic.
 4. Autor original y auditoría antes/después conservados; GPS una vez por sesión.

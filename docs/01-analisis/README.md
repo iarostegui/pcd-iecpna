@@ -14,7 +14,7 @@ Define **qué necesidad resuelve PCD**, qué datos se transcriben de los formula
 | [reportes-consultas.md](reportes-consultas.md) | Consultas, filtros, avance por sede, productividad y calidad de datos. |
 | [decisiones-pendientes.md](decisiones-pendientes.md) | Datos o criterios que todavía no están confirmados y que la IA **no debe inventar**. |
 
-**Fuente externa aún no versionada:** el Excel original de fichas Persona y Líder GC con sus ejemplos. El diccionario es la transcripción de trabajo; no sustituye una validación final contra el Excel. El diseño visual se encuentra en [PCD V2.2](../../prototypes/PCD_v2.2.html).
+**Fuente externa aún no versionada:** el Excel original de fichas Persona y Líder GC con sus ejemplos. El diccionario es la transcripción de trabajo; no sustituye una validación final contra el Excel. El diseño visual vigente se encuentra en [PCD V2.3](../../prototypes/PCD_v2.3.html); [V2.2](../../prototypes/PCD_v2.2.html) se conserva como versión histórica.
 
 **Para cambios:** revisar primero las reglas; actualizar la especificación por capacidad en [OpenSpec](../../openspec/README.md).
 

@@ -19,7 +19,7 @@ Aquí se guardan **especificaciones explicativas** y decisiones técnicas de **P
 
 ## Criterios documentales
 
-- **Fuentes:** reglas aprobadas de PCD, formularios originales y prototipo V2.2; no confundir con SGSP.
+- **Fuentes:** alcance y decisiones V4 de PCD, fichas originales (el XLSX aún pendiente en GitHub) y prototipo **V2.3 vigente**; V2.2 solo histórico. No confundir con SGSP.
 - **Estados:** distinguir definido, propuesto, pendiente y verificado; los modelos aún no representan ejecución productiva.
 - **Cambios:** cuando una decisión funcional cambie, actualizar la especificación OpenSpec y los documentos afectados, además de las pruebas. Registrar temas no resueltos en [decisiones-pendientes.md](01-analisis/decisiones-pendientes.md).
 
