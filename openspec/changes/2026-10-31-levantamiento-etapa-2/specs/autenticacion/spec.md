@@ -1,3 +1,5 @@
+> **HISTÓRICO V3 (31/10/2026), NO CODIFICAR DESDE AQUÍ.** Prevalecen [las 11 tablas V4](https://github.com/iarostegui/pcd-iecpna/blob/main/database/migrations/001_initial.sql) y [las decisiones actuales](https://github.com/iarostegui/pcd-iecpna/blob/main/docs/01-analisis/decisiones-pendientes.md). Sin subtipo documental ni permiso de lectura territorial; consulta general por funcionalidad con filtros opcionales.
+
 # Delta E2 — autenticación y contexto nacional
 ## AUTH-05 ADDED: catálogo de login
 GIVEN usuario anónimo WHEN solicita GET /presbiterios THEN recibe SOLO id/código/nombre activos, sin usuarios ni información privada.

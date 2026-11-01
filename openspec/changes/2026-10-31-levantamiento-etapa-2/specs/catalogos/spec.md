@@ -1,3 +1,5 @@
+> **HISTÓRICO V3 (31/10/2026), NO CODIFICAR DESDE AQUÍ.** Prevalecen [las 11 tablas V4](https://github.com/iarostegui/pcd-iecpna/blob/main/database/migrations/001_initial.sql) y [las decisiones actuales](https://github.com/iarostegui/pcd-iecpna/blob/main/docs/01-analisis/decisiones-pendientes.md). Sin subtipo documental ni permiso de lectura territorial; consulta general por funcionalidad con filtros opcionales.
+
 # Delta E2 — catálogos e identidad
 ## CAT-05 ADDED: catálogo verificable
 GET /catalogos MUST exponer códigos/etiquetas de dominios confirmados por fichas; opciones activas con versión sin inventar ubigeo oficial.
