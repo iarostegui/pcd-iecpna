@@ -14,3 +14,5 @@
 | E4-T10 | Informe auditor final con atender/no atender/justificación/evidencia | EN CONSTRUCCIÓN |
 
 **Bloqueo:** no iniciar uso real con datos personales sin evidencias técnicas y cierre institucional de H-40.
+
+| **E4-T11 (H-46)** | Purga acotada idempotencia, control last_seen, hash PHP compatible y métricas sin tabla nueva | **DOCUMENTADO, NO EJECUTADO; PROD-11…13/CA-112…114 pendientes** |

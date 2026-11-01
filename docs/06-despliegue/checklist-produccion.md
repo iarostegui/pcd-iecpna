@@ -16,3 +16,12 @@
 | PROD-10 | Capacitar en revisión **manual externa** papel/dato | PENDIENTE | Pendiente | Presbiterios |
 
 **GO:** responsable técnico + funcional + responsable institucional aprueban evidencia y privacidad; sin firma PR-01…08 y sin pruebas mínimas no desplegar con datos reales. [Detalle Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md).
+
+## Optimización sin ampliar arquitectura — H-46
+| ID | Control | Estado |
+|---|---|---|
+| **PROD-11** | Idempotencia: ventana de reintento acordada y purga limitada de datos expirados, sin perder reintentos legítimos | NO EJECUTADO |
+| **PROD-12** | `sesion.last_seen` sin UPDATE por request; comprobar expiración y revocación tras optimización | NO EJECUTADO |
+| **PROD-13** | Hash PHP Argon2id disponible o alternativa segura documentada; métricas de pruebas sin tabla adicional | NO EJECUTADO |
+
+[H-46 completo](../07-auditorias/etapa-4-produccion-y-privacidad.md). Estos controles son parte de I01/I06, **no** justifican servicios residentes ni tablas nuevas. El GO productivo también depende de PROD-11…13.

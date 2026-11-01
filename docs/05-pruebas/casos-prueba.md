@@ -146,3 +146,12 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 
 ## Actualización V2.3 de la referencia de interfaz
 Los casos **CA-101…CA-111** se detallan en [validacion-prototipo-v2.3.md](validacion-prototipo-v2.3.md) y tienen prioridad sobre las expectativas históricas de V2.2 cuando exista contradicción. Requieren pruebas **demostrativas en HTML** y nuevamente en **React+API real**. No se han ejecutado aquí.
+
+## H-46 — nuevos casos de prueba (NO EJECUTADOS)
+| ID | Verificación | Iteración |
+|---|---|---|
+| **CA-112** | Idempotency-Key con mismo payload en ventana vigente devuelve misma respuesta; limpieza de claves vencidas no rompe reintento reciente ni causa tabla nueva. | I02/I06 |
+| **CA-113** | Múltiples GET sucesivos no generan UPDATE `sesion.last_seen` por cada request; inactividad/revocación funcionan tras limitación de escrituras. | I01/I06 |
+| **CA-114** | Password hashing compatible con PHP del hosting (`Argon2id` si disponible, alternativa fuerte documentada); pruebas de hash/verificación y bloqueo de fallos. | I01/I06 |
+
+**Estado H-46:** tres pruebas de diseño añadidas, ninguna ejecutada; [controles PROD-11…13](../06-despliegue/checklist-produccion.md).

@@ -30,3 +30,6 @@
 
 
 **RNF-V4-01:** Crear **11 tablas** en motor MySQL/MariaDB real, comprobar CHECK/FK y no habilitar producción sin pruebas. **RNF-V4-02:** consentimiento/base y retención H-40 validados por IECPNA según [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md). **RNF-V4-03:** inyección/CSRF/IDOR, consulta global con filtros, edición solo propias; no coordenadas en listados. **RNF-V4-04:** restablecer backup y realizar rollback con evidencias.
+
+## RNF-OPT-46 — Recursos mínimos de hosting
+En producción no escribir sesión por cada GET/tecla; limitar `last_seen` por intervalo con expiración efectiva. Retirar idempotencias antiguas tras ventana aprobada, sin afectar reintentos recientes. Comprobar Argon2id en PHP y alternativa segura; medir p95 y 5xx de manera sintética sin tabla extra ni servicio de monitoreo residente. **Verificar en I01/I06, no asumir implementación.**
