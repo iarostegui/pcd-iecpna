@@ -65,3 +65,6 @@ Los deltas `openspec/changes/2026-10-31-levantamiento-etapa-1`, `etapa-2`, `etap
 
 ## REGLA V2.3 — FASE UI ANTES DE GENERAR REACT
 **Fuente única de UX vigente:** [PCD_v2.3.html](prototypes/PCD_v2.3.html) y [matriz](docs/02-diseno/pcd-v2.3-alineacion.md). V2.2 es histórica. La nueva maqueta **no elimina** las decisiones pendientes E1-D01/E1-D02/H-23/H-24; cualquier solución allí requiere aprobación. No copiar simulación de passwords, roles, datos, GPS ni localStorage a producción. Validar [CA-101…111](docs/05-pruebas/validacion-prototipo-v2.3.md).
+
+## Puerta documental I00
+Ejecutar `node scripts/validar-sdd-i00.cjs` y `node scripts/validar-prototipo-v2.3.cjs` en el clon antes de programar. Seguir [I00 — handoff](docs/08-ia/I00-verificacion-estatica-y-handoff.md). Detectar referencias al modelo antiguo; no modificar el prototipo V2.2 ni crear funcionalidades SGSP.

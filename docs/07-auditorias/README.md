@@ -19,3 +19,5 @@ Se conservan **los hallazgos, decisiones y respuestas** a auditorías de documen
 - [Etapa 3 — Contratos y pruebas](etapa-3-contratos-pruebas.md): H-10/11/15/16/17/20…25/33/34/37/38/39/45; criterios de atención y exclusiones dentro de alcance. **Sin pruebas ejecutadas**.
 
 **Etapa 4 (V4) y modelo físico simplificado:** [preparación productiva](etapa-4-produccion-y-privacidad.md), [decisiones vigentes](../01-analisis/decisiones-pendientes.md), [justificación 11 tablas](../03-base-datos/anexos/justificacion-11-tablas.md). Los hallazgos de Etapas 1–3 conservan su historial pero **NO autorizan recuperar el modelo 17 tablas ni ampliar PCD**.
+
+- [Etapa 5 — Preparación I00](etapa-5-preparacion-i00.md): transición de auditoría a pruebas técnicas, artefactos y GO/NO-GO. **I00 aún no ejecutada en hosting.**

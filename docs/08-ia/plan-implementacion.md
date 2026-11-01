@@ -38,3 +38,6 @@
 **Referencia interactiva vigente:** [PCD_v2.3.html](../../prototypes/PCD_v2.3.html). [Cambios por pantalla](../02-diseno/pcd-v2.3-alineacion.md). I01 login por usuario escrito, claves separadas en producción, GPS único; I02 Persona tipo+número, fecha imposible rechazada, calidad externa; I03 GC sin selector adicional; I04 consulta nacional con filtros, lectura independiente de edición; I05 reportes generales. Probar **CA-101…111**. E1-D01/E1-D02/H-23/H-24 siguen pendientes, no quedan resueltos por la maqueta.
 
 **H-46 integrado en I01/I06:** controlar frecuencia de actualización de sesión, validación de hashing PHP, limpieza acotada de idempotencia y métricas p95 sin servicio adicional ni tablas. [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md) · [CA-112…114](../05-pruebas/casos-prueba.md).
+
+## Etapa 5 — Preparación técnica I00
+La [guía I00](I00-verificacion-estatica-y-handoff.md) incluye script [`validar-sdd-i00.cjs`](../../scripts/validar-sdd-i00.cjs) y checklist de pruebas reales. Generar evidencia del motor real antes de declarar I00 terminada; evitar repetir propuestas fuera de alcance y no depender de las decisiones E1-D01/E1-D02 para comenzar I00.

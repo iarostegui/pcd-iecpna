@@ -15,3 +15,5 @@
 | [Diagrama editable](diagramas/er-pcd-fisico.mmd) | Fuente Mermaid versionada. |
 
 **No usar** el diseño previo de 17 tablas ni crear tablas de listas cortas; **no** incluir `alcance_consulta` ni `tipo_documento_detalle`.
+
+**Control posterior:** [Etapa 5](../07-auditorias/etapa-5-preparacion-i00.md) mantiene el esquema V4 de 11 tablas y obliga a comprobar versiones SQL/hosting; los anexos describen diseño, no demuestran su ejecución.

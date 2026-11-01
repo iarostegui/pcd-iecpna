@@ -13,3 +13,5 @@ No declarar módulo terminado hasta cumplir todos:
 
 ## DoD adicional V4.0
 Ninguna iteración está terminada mientras el código no use exactamente el [modelo vigente de 11 tablas](../../database/migrations/001_initial.sql), consulta general con filtros Presbiterio/Sede, documento sin subtipo y pruebas automatizadas de permisos de edición propia. Para producción cumplir [PROD-01…10](../06-despliegue/checklist-produccion.md) y H-40, sin confundir documentación con pruebas.
+
+**Actualización de puerta I00:** ejecutar script de comprobación SDD y prototipo de forma local, y después pruebas reales SQL/PHP/MySQL + revisión de seguridad/privacidad. [Guía](I00-verificacion-estatica-y-handoff.md). La UX de referencia es V2.3, V2.2 solo histórico.

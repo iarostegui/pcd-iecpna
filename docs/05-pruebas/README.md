@@ -18,3 +18,5 @@ Para ejecutar las nuevas pruebas, usar [Asignación por iteración](asignacion-i
 
 ## Pruebas V4
 [Casos completos](casos-prueba.md), [asignación por iteraciones](asignacion-iteraciones.md) y [Etapa 4 / checklist productivo](../07-auditorias/etapa-4-produccion-y-privacidad.md). **CA-91…CA-100** prueban 11 tablas, consulta total, tipo/número sin subtipo y respaldo. Ningún caso está ejecutado.
+
+**Validación de estructura I00:** [script](../../scripts/validar-sdd-i00.cjs), [guía](../08-ia/I00-verificacion-estatica-y-handoff.md). No es una prueba SQL o E2E; registrar evidencia por entorno.

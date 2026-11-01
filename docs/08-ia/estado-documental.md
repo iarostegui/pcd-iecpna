@@ -21,3 +21,6 @@ Textos de análisis/auditorías y cambios E1/E2/E3 de fecha 31/10/2026 se preser
 
 ## Versión de UX vigente
 **PCD_v2.3.html** está publicado como referencia React V4; **PCD_v2.2.html** permanece intacto como historial. [Informe de alineación](../02-diseno/pcd-v2.3-alineacion.md), [pruebas CA-101…111](../05-pruebas/validacion-prototipo-v2.3.md). La demostración HTML no autentica de verdad ni guarda en MySQL. Las referencias antiguas del propio archivo a V2.2 como «vigente» quedan sustituidas.
+
+## Etapa 5 — Entrega al ciclo de implementación
+[Evaluación I00 estática](I00-verificacion-estatica-y-handoff.md) y [Etapa 5](../07-auditorias/etapa-5-preparacion-i00.md) formalizan el paso de auditoría documental al ensayo técnico. El script [`validar-sdd-i00.cjs`](../../scripts/validar-sdd-i00.cjs) comprueba regresiones de modelo y OpenAPI. **No prueba MySQL, PHP, backup ni cPanel.** Versión vigente: V4, 11 tablas, 134 columnas, 23 FK, UX V2.3.

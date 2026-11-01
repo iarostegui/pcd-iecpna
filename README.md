@@ -84,3 +84,5 @@ El modelo aprobado es de **11 tablas**, no 17: [justificación](docs/03-base-dat
 **V2.2 preservado sin modificación.** La IA construye usando V2.3 para pantalla/flujo y OpenSpec V4/SQL 11 tablas para negocio e infraestructura. No copiar claves ficticias ni almacenamiento local. E1-D01/E1-D02/H-23/H-24 quedan abiertos.
 
 **Comprobación estática para desarrollador:** `node scripts/validar-prototipo-v2.3.cjs` (sintaxis/estructura del HTML). [Casos de navegador CA-101…111](docs/05-pruebas/validacion-prototipo-v2.3.md); **no ejecutados todavía**. No confundir el test estático con QA de React o BD.
+
+**Siguiente etapa — I00 técnica:** [Guía y evidencia requerida](docs/08-ia/I00-verificacion-estatica-y-handoff.md) · [script de consistencia SDD](scripts/validar-sdd-i00.cjs). La documentación V4 ya define 11 tablas, consulta general y documento sin subtipo; las menciones a 17 tablas de historiales son antecedentes, **no vigentes**. El código productivo y las pruebas de hosting no están ejecutados.
