@@ -22,3 +22,5 @@ Cuando una modificación se apruebe, crear una carpeta `YYYY-MM-DD-descripcion/`
 - [2026-10-31-levantamiento-etapa-2/](2026-10-31-levantamiento-etapa-2/README.md) — H-03/04/07/12/13/18/28/32/35. Diseño y tareas preliminares, pendientes E2-D01/D02/D03 y validación de API/SQL reales. **No implementar mejoras fuera de ALC-PCD.**
 
 - [2026-10-31-levantamiento-etapa-3/](2026-10-31-levantamiento-etapa-3/README.md) — DTO y filtros API, trazabilidad integral y casos de prueba; sin implementación productiva.
+
+**Cambios históricos:** `2026-10-31-levantamiento-etapa-1`, `etapa-2`, `etapa-3` documentan la evolución de decisiones V3. Cualquier referencia a 17 tablas, subtype o `alcance_consulta` queda reemplazada por [V4](../../docs/01-analisis/decisiones-pendientes.md). **Cambio vigente de preparación**: [Etapa 4](2026-11-01-etapa-4-produccion/README.md).

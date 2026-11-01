@@ -64,3 +64,17 @@ Al redactar la respuesta individual a cada observación, distinguir entre **corr
 - **H-22:** un estado GPS por sesión, sin reintento dentro de la misma sesión, incluso tras denegación.
 - **H-23/H-24/H-25:** documentar incertidumbres sin hacer suposiciones del negocio; no bloquear integración con estados arbitrarios, no imponer UNIQUE por nombre GC sin aprobación.
 **Nota:** documentos y contratos corregidos ≠ pruebas ejecutadas. [Informe E3](etapa-3-contratos-pruebas.md).
+
+## **ADDENDUM V4.0 DE RESPUESTA AL AUDITOR (01/11/2026): PREVALENCIA SOBRE LA MATRIZ HISTÓRICA**
+
+| Materia | Estado actual | Respuesta final prevista |
+|---|---|---|
+| H-12 | **Criterio funcional aprobado y diseño sincronizado** | La consulta es **total dentro de la funcionalidad autorizada**, con filtros opcionales por Presbiterio/Sede; no se crea tabla/permiso territorial. Edición DIGITADOR solo propia. No implementar `alcance_consulta`. |
+| H-13 | **Aprobado** | Solo tipo y número de documento. No agregar subtipo; DNI/CE normalizados cuando confiables, OTRO como candidato sin fusión exacta automática. |
+| Modelo físico | **Atendido mediante simplificación aprobada** | De 17 a [11 tablas](../03-base-datos/anexos/justificacion-11-tablas.md), ER y diccionario físico generados del SQL: `organizacion`, `catalogo`, `ubigeo`, `persona`, `ficha`, `grupo_crecer`, `usuario`, `sesion`, `login_evento`, `auditoria_evento`, `idempotencia`. |
+| H-07 | **Insumo I02** | UBIGEO INEI jerárquico a importar en construcción; no exigir cargar códigos inventados en auditoría. |
+| H-08/H-09 | **No ampliar** | Sin miembros nominales GC ni revisión automática contra papel (cada presbiterio la realiza manualmente); duración temporal y ausencia de fuentes nominales justifican exclusión. |
+| H-40 | **Pendiente institucional** | Datos personales y potencialmente sensibles requieren requisitos aprobados, seguridad, plazo, respaldo y cierre; temporalidad **no** permite omitirlos. [Etapa 4](etapa-4-produccion-y-privacidad.md). |
+| Pruebas | **NO EJECUTADAS** | Documentación, SQL/anexos y API actualizados; verificar MySQL/PHP/React/cPanel, backup y cumplimiento antes de cerrar hallazgos con evidencias. |
+
+**Importante:** las tablas/marcas de respuesta escritas antes de este addendum reflejan la historia de E1–E3 y quedan **SUPEDITADAS** a lo anterior. El informe de auditor final se emitirá con `ATENDIDA`, `NO_SE_ATIENDE_FUERA_DE_ALCANCE`, `DIFERIDA`, etc., solo cuando existan verificaciones y decisiones pendientes. **No** reportar como implementación lo que solo es diseño.

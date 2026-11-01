@@ -47,3 +47,14 @@ La **revisión de fidelidad del texto con el papel** corresponde a cada presbite
 - I04: ámbito GENERAL/PRESBITERIO **aprobado**; falta implementar API y tests de edición solo propia.
 - I05: reportes por actor de auditoría, filtros y parametrización aprobados, sin resultados probados.
 - I06: H-40 protección de datos/retención y validación de hosting son parte de la siguiente etapa.
+
+## V4 — actualizaciones obligatorias de puertas I00–I06
+- **I00:** SQL de **11 tablas**, fuente [Anexo ER](../03-base-datos/anexos/anexo-01-diagrama-fisico.md), [diccionario](../03-base-datos/anexos/anexo-02-diccionario-fisico.md). Probar MySQL real antes del GO.
+- **I01:** sesión con GPS dentro de `sesion`, ORGANIZACION única para presbiterios y sedes, usuario con presbiterio operativo. Sin `usuario_presbiterio`.
+- **I02:** Persona y Ficha, solo tipo+número, cónyuge/responsabilidades en JSON, entrada UBIGEO INEI oficial; E1-D01 y H-24 pendientes.
+- **I03:** Grupo Crecer solo líder desde ficha y datos agregados, E1-D02/H-23 pendientes.
+- **I04:** **consulta total** en funcionalidad permitida con filtros presbiterio/sede, edición digitador solo propias.
+- **I05:** cambios de críticos en `catalogo.config_json`, sin tabla física `campo_critico` ni ámbitos de lectura configurables.
+- **I06:** [PROD-01…10](../06-despliegue/checklist-produccion.md) y [Etapa 4](etapa-4-produccion-y-privacidad.md). H-40 pendiente.
+
+**Los estados o GO expresados antes de V4 quedan invalidados cuando supongan 17 tablas, permisos territoriales o subtipo**; las pruebas deben replanificarse.

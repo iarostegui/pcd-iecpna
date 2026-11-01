@@ -16,3 +16,5 @@ Explica **cómo** se implementará PCD sobre el **hosting compartido existente**
 **Relaciones:** modelo de datos en [03-base-datos](../03-base-datos/README.md); endpoints en [04-integracion](../04-integracion/README.md); interfaz de referencia en [prototypes/](../../prototypes/README.md).
 
 **Estado:** diseño V3.1; cualquier meta de rendimiento sigue pendiente de prueba sobre el hosting real.
+
+**MODELO V4 vigente:** [11 tablas](../03-base-datos/modelo-logico.md), [seguridad y consulta general](seguridad-auditoria.md), [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md). La fuente de implementación es SQL V4, no diagramas históricos.

@@ -46,3 +46,6 @@ El prototipo bloquea un documento duplicado y no representa fichas fuente múlti
 - **H-22:** reintento manual GPS en la misma sesión tras denegación: **no replicar**; una única captura/estado de ubicación por sesión.
 - **H-25:** bloqueo de nombre GC repetido en demostración: no imponer UNIQUE sin cerrar E1-D02.
 **No se modifica el HTML V2.2**, que permanece como referencia visual y de flujo, no autoridad de políticas.
+
+## V4 — Diferencias autorizadas entre UX demostrativa y producto
+El HTML PCD V2.2 permanece **inalterado** como referencia visual. El software productivo elimina enumeración pública de usuarios, GPS repetido, acciones fuera de alcance, selector de ámbito de consulta GENERAL/PRESBITERIO (no autorizado), y subtipo documental (no autorizado). **Consultas** permiten buscar todos los registros de la funcionalidad con filtros independientes por Presbiterio y/o Sede. El formulario de Personas contiene solo **tipo y número de documento**, secciones cónyuge/responsabilidades en datos JSON fuente, y el árbol INEI es entrada de construcción I02. Sede se elige para **capturar**, no para limitar la consulta.

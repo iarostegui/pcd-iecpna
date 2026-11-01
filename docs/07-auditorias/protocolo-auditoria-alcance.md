@@ -88,3 +88,6 @@ La clasificación por tipo es **independiente** de la severidad. Una propuesta e
 | No existe botón de migración SGSP | **EXC-06**, no defecto; conservar trazabilidad para migración futura. |
 
 **Este protocolo es de aplicación obligatoria en nuevas auditorías y en la reevaluación de las observaciones H-01…H-49 existentes.**
+
+## Actualización de criterios de auditoría V4
+El auditor debe evaluar **el modelo aprobado de 11 tablas**, una tabla de catálogos, organización jerárquica y ubigeo independiente. La ausencia de una tabla por cada catálogo, de permisos territoriales de consulta o de subtipo documental **no es defecto**: son decisiones explícitas. Consultas son generales por funcionalidad con filtros opcionales por presbiterio y/o sede. No convertir sugerencias de normalización adicional en requisitos. Los riesgos esenciales H-40, CSRF, privacidad y backup sí se revisan aunque PCD sea temporal.

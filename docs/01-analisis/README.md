@@ -22,3 +22,5 @@ Define **qué necesidad resuelve PCD**, qué datos se transcriben de los formula
 La transcripción de las fichas impresas y los datos del Excel verificado están en [fuentes/](fuentes/README.md). **El XLSX binario aún no se ha añadido a GitHub**.
 
 **Para cualquier auditoría:** aplicar primero el [alcance oficial](alcance-funcional.md) y el [protocolo de auditoría](../07-auditorias/protocolo-auditoria-alcance.md). Proponer ampliaciones es válido, pero no son incumplimientos hasta que el responsable funcional apruebe el cambio.
+
+**ALCANCE V4:** [Decisiones vigentes](decisiones-pendientes.md), [reglas](reglas-negocio.md), [captura de fichas](diccionario-captura.md), [modelo simplificado](../03-base-datos/anexos/justificacion-11-tablas.md). Consulta general con filtros y documento tipo+número; no usar viejas asociaciones territoriales.
