@@ -1,7 +1,7 @@
 # PCD V4 — Personas y fichas
 
 ## PER-01 — Transcripción de Persona
-MUST representar los campos y orden del [Excel original](../../docs/01-analisis/fuentes/inventario-excel-original.md), tecla Enter/Tab y número impreso opcional, como prototipo PCD V2.2.
+MUST representar los campos y orden del [Excel original](../../../docs/01-analisis/fuentes/inventario-excel-original.md), tecla Enter/Tab y número impreso opcional, como prototipo PCD V2.2.
 
 ## PER-02 — Incompletos
 MUST guardar fichas sin campos críticos o sin número impreso; integridad técnica de usuario/presbiterio/sede no es desactivable. La definición de una ficha completamente vacía sigue pendiente **H-24**.
