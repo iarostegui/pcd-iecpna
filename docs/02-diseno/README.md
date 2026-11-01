@@ -18,3 +18,5 @@ Explica **cómo** se implementará PCD sobre el **hosting compartido existente**
 **Estado:** diseño V3.1; cualquier meta de rendimiento sigue pendiente de prueba sobre el hosting real.
 
 **MODELO V4 vigente:** [11 tablas](../03-base-datos/modelo-logico.md), [seguridad y consulta general](seguridad-auditoria.md), [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md). La fuente de implementación es SQL V4, no diagramas históricos.
+
+**Referencia de diseño vigente:** [PCD V2.3](../../prototypes/PCD_v2.3.html), [matriz de cambios](pcd-v2.3-alineacion.md) y [pruebas CA-101…111](../05-pruebas/validacion-prototipo-v2.3.md). V2.2 queda histórica.

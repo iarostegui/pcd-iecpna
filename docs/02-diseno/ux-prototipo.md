@@ -1,3 +1,5 @@
+> **REFERENCIA ACTUALIZADA:** [PCD V2.3](../../prototypes/PCD_v2.3.html) es la fuente visual-operativa vigente para React. [Matriz completa de cambios](pcd-v2.3-alineacion.md). El análisis siguiente incluye antecedentes de V2.2: cualquier restricción territorial de consulta, supervisor, conciliación o contraseña de demostración compartida por todos los roles está reemplazada por V2.3/SDD V4. La **V2.2 original se conserva sin editar**.
+
 # UI-PCD-2.2 · Diseño y experiencia de digitación
 **Autoridad visual:** `prototypes/PCD_v2.2.html` — identidad destacada **PCD / Plataforma de Captura de Datos IECPNA**, versión 2.2 sin cambios funcionales.
 
@@ -49,3 +51,6 @@ El prototipo bloquea un documento duplicado y no representa fichas fuente múlti
 
 ## V4 — Diferencias autorizadas entre UX demostrativa y producto
 El HTML PCD V2.2 permanece **inalterado** como referencia visual. El software productivo elimina enumeración pública de usuarios, GPS repetido, acciones fuera de alcance, selector de ámbito de consulta GENERAL/PRESBITERIO (no autorizado), y subtipo documental (no autorizado). **Consultas** permiten buscar todos los registros de la funcionalidad con filtros independientes por Presbiterio y/o Sede. El formulario de Personas contiene solo **tipo y número de documento**, secciones cónyuge/responsabilidades en datos JSON fuente, y el árbol INEI es entrada de construcción I02. Sede se elige para **capturar**, no para limitar la consulta.
+
+## Control actual de versión de prototipo
+V2.3 corrige las pantallas Login, Consulta y filtros nacionales, Detalle sin GPS, Persona (calidad manual y fechas), Grupo Crecer (única pregunta impresa, avisos sin bloquear) y Reportes nacionales. **La apariencia visual sigue basándose en V2.2**. Ver [CA-101…111](../05-pruebas/validacion-prototipo-v2.3.md); todavía no se ejecutaron pruebas de React/PHP.

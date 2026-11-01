@@ -78,3 +78,6 @@ Al redactar la respuesta individual a cada observación, distinguir entre **corr
 | Pruebas | **NO EJECUTADAS** | Documentación, SQL/anexos y API actualizados; verificar MySQL/PHP/React/cPanel, backup y cumplimiento antes de cerrar hallazgos con evidencias. |
 
 **Importante:** las tablas/marcas de respuesta escritas antes de este addendum reflejan la historia de E1–E3 y quedan **SUPEDITADAS** a lo anterior. El informe de auditor final se emitirá con `ATENDIDA`, `NO_SE_ATIENDE_FUERA_DE_ALCANCE`, `DIFERIDA`, etc., solo cuando existan verificaciones y decisiones pendientes. **No** reportar como implementación lo que solo es diseño.
+
+## Evidencia de alineación UI V2.3 (diseño, NO código productivo)
+Se creó [PCD_v2.3.html](../../prototypes/PCD_v2.3.html) sin modificar V2.2. H-03 login por usuario escrito sin enumeración, H-12 consulta total con filtros Presbiterio/Sede, H-13 sin subtipo, H-08/H-25 GC sin selector de reconciliación ni bloqueo por nombre, H-09 revisión manual por presbiterios, H-22 GPS sin reintento, H-20 detalle de Persona sin coordenadas. [Matriz UI/SDD](../02-diseno/pcd-v2.3-alineacion.md) y [CA-101…111](../05-pruebas/validacion-prototipo-v2.3.md). **Estos cambios son del prototipo autónomo y no demuestran implementación PHP/MySQL/React ni pruebas E2E.**

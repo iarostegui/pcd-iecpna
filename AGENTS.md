@@ -4,7 +4,7 @@
 ## Límite de producto — cumplimiento obligatorio
 **Documento normativo de alcance:** [`docs/01-analisis/alcance-funcional.md`](docs/01-analisis/alcance-funcional.md) (ALC-PCD-3.1). Contiene **objetivos, inclusiones ALC-01…ALC-12, exclusiones EXC-01…EXC-10, roles, calidad manual y frontera con SGSP**.
 
-Toda IA —desarrolladora o auditora— debe **leerlo antes** de interpretar requisitos y evaluar hallazgos. El prototipo V2.2 muestra UX demostrativa, pero **no autoriza funcionalidades fuera del alcance oficial**.
+Toda IA —desarrolladora o auditora— debe **leerlo antes** de interpretar requisitos y evaluar hallazgos. El prototipo vigente V2.3 muestra UX demostrativa, pero **no autoriza funcionalidades fuera del alcance oficial**.
 
 **Al auditar:** utilizar el [protocolo de control de alcance](docs/07-auditorias/protocolo-auditoria-alcance.md). Es legítimo cuestionar el alcance y proponer mejoras; no lo es registrar la ausencia de funciones excluidas como incumplimiento ni alterar la planificación sin aprobación. Los riesgos esenciales de seguridad, protección de datos e integridad dentro de PCD sí requieren evaluación y control proporcional.
 
@@ -15,11 +15,11 @@ Toda IA —desarrolladora o auditora— debe **leerlo antes** de interpretar req
 2. `docs/01-analisis/alcance-funcional.md`, `reglas-negocio.md`, `procesos-negocio.md`, `casos-uso.md`;
 3. `docs/02-diseno/`, `docs/03-base-datos/`, `docs/04-integracion/`;
 4. `openspec/specs/<capacidad>/spec.md`;
-5. `prototypes/PCD_v2.2.html`, como patrón visual y orden de formulario;
+5. `prototypes/PCD_v2.3.html`, como patrón visual y orden de formulario;
 6. `docs/05-pruebas/`.
 
 ## Prohibiciones
-- No reemplazar diseño PCD V2.2, no convertir prototipo localStorage en producción.
+- Preservar PCD V2.2 como histórico; usar V2.3 para construir, sin convertir localStorage o demo login en producción.
 - No crear roles pastorales ni módulos de SGSP.
 - No usar 48 sedes inventadas ni dar por oficiales los datos de demostración.
 - No exigir número de ficha impresa, no bloquear guardado por campos críticos faltantes, no exigir revisión de supervisor.
@@ -62,3 +62,6 @@ Antes de planificar, generar código, auditar o proponer rediseños leer en este
 **NO PROGRAMAR:** tablas antiguas de 17 (sesion_captura, geo_sesion, etc.), subtipo documental, alcance_consulta, permisos de lectura por presbiterio, integrantes nominales GC, módulos SGSP. **SÍ:** consulta total por funcionalidad con filtros opcionales Presbiterio/Sede, edición solo de autor, 11 tablas, tabla CATALOGO y UBIGEO independiente.
 
 Los deltas `openspec/changes/2026-10-31-levantamiento-etapa-1`, `etapa-2`, `etapa-3` son antecedentes; todo texto incompatible con V4 está **supersedido**, no es orden de construcción. Nuevos cambios desde la versión V4 y con evidencia de SQL/test. No declarar PASS sin ejecutar pruebas reales.
+
+## REGLA V2.3 — FASE UI ANTES DE GENERAR REACT
+**Fuente única de UX vigente:** [PCD_v2.3.html](prototypes/PCD_v2.3.html) y [matriz](docs/02-diseno/pcd-v2.3-alineacion.md). V2.2 es histórica. La nueva maqueta **no elimina** las decisiones pendientes E1-D01/E1-D02/H-23/H-24; cualquier solución allí requiere aprobación. No copiar simulación de passwords, roles, datos, GPS ni localStorage a producción. Validar [CA-101…111](docs/05-pruebas/validacion-prototipo-v2.3.md).

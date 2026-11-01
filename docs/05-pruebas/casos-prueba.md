@@ -143,3 +143,6 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | **CA-100** | Restauración BD y rollback de API/build funcionan con un respaldo de prueba y controles de datos sensibles. | I06 |
 
 **Los casos CA-91…CA-100 son propuestas de aceptación**, sin resultados. Ante contradicción con casos históricos, prevalece V4 y se debe corregir el caso antes de ejecutarlo.
+
+## Actualización V2.3 de la referencia de interfaz
+Los casos **CA-101…CA-111** se detallan en [validacion-prototipo-v2.3.md](validacion-prototipo-v2.3.md) y tienen prioridad sobre las expectativas históricas de V2.2 cuando exista contradicción. Requieren pruebas **demostrativas en HTML** y nuevamente en **React+API real**. No se han ejecutado aquí.

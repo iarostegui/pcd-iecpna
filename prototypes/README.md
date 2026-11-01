@@ -1,11 +1,10 @@
-# prototypes — Referencia visual y funcional PCD
+# Prototipos PCD — IECPNA
 
-[↑ Índice principal](../README.md)
-
-| Archivo | Finalidad | Estado |
+| Archivo | Rol | Estado |
 |---|---|---|
-| **[PCD_v2.2.html](PCD_v2.2.html)** | Prototipo HTML interactivo **vigente**, con la identidad comercial **PCD — Plataforma de Captura de Datos IECPNA** y el flujo de digitación aprobado. | **V2.2, referencia de UX; no producción**. |
+| **[PCD_v2.3.html](PCD_v2.3.html)** | **Referencia visual y de interacción para construir React/SDD V4**. Login por código escrito, consulta general con filtros, GC sin conciliación ficticia, GPS único, QA manual. | **Vigente** |
+| [PCD_v2.2.html](PCD_v2.2.html) | Versión original previa a las correcciones; preserva capturas y comportamiento anterior. | **Histórico, no alterar** |
 
-**Cómo utilizarlo:** revisar pantalla de login, contexto de sede, fichas Persona/GC, navegación Enter/Tab, búsqueda/consulta, administración, reportes y responsive. Implementar la misma experiencia en React sin copiar los mecanismos ficticios de login ni persistencia `localStorage`.
+**No subir fichas reales al HTML.** La demostración funciona en el navegador con datos ficticios en `localStorage`. Las contraseñas de prueba del HTML son públicas y no constituyen autenticación.
 
-**No subir fichas reales al prototipo.** Requisitos y permisos reales están en [análisis](../docs/01-analisis/README.md), [especificaciones OpenSpec](../openspec/README.md) y [seguridad](../docs/02-diseno/seguridad-auditoria.md). Se conserva el número de versión **2.2**: los cambios exclusivamente documentales no modifican el HTML.
+**Para programar**: leer [matriz pantalla ↔ SDD V4](../docs/02-diseno/pcd-v2.3-alineacion.md), [OpenSpec](../openspec/specs/README.md), [OpenAPI](../docs/04-integracion/openapi.yaml), [SQL 11 tablas](../database/migrations/001_initial.sql) y [pruebas CA-101…111](../docs/05-pruebas/validacion-prototipo-v2.3.md). No copiar el almacenamiento ni el login local al backend.

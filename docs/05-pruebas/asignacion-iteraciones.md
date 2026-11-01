@@ -25,3 +25,6 @@ CA-77…CA-100 cubren contratos de éxito/error, consulta configurable, conflict
 - **I05:** CA-79/85 (NO administrar ámbitos de consulta, solo presbiterio de digitación).
 - **I06:** CA-100 (restore y reversión).
 Los casos de E2/E3 incompatibles se consideran reemplazados por V4, no PASS.
+
+## Prototipo vigente V2.3
+Casos **CA-101…111**: I01 CA-101/102/109; I02 CA-105/106/107; I03 CA-108; I04 CA-103/104/110; I05 CA-111. [Guía de pruebas](validacion-prototipo-v2.3.md). Pendientes de ejecutar en implementación.

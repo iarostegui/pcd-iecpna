@@ -18,3 +18,6 @@ E1-D01, E1-D02, H-23, H-24; H-14 Excel binario; fuente/corte INEI durante I02; a
 
 ## Documentación histórica
 Textos de análisis/auditorías y cambios E1/E2/E3 de fecha 31/10/2026 se preservan como **antecedentes**; cualquier mención a 17 tablas, `alcance_consulta`, subtipo documental o permisos territoriales **ha sido anulada** por decisiones V4.0. El prototipo V2.2 no se modificó.
+
+## Versión de UX vigente
+**PCD_v2.3.html** está publicado como referencia React V4; **PCD_v2.2.html** permanece intacto como historial. [Informe de alineación](../02-diseno/pcd-v2.3-alineacion.md), [pruebas CA-101…111](../05-pruebas/validacion-prototipo-v2.3.md). La demostración HTML no autentica de verdad ni guarda en MySQL. Las referencias antiguas del propio archivo a V2.2 como «vigente» quedan sustituidas.
