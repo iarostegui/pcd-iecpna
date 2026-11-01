@@ -29,3 +29,5 @@ Antes de ejecutar I01, lee [Etapa 2](../07-auditorias/etapa-2-arquitectura-segur
 
 ## **ACTUALIZACIÓN V2.3 — GATE DE UI ANTES DE CONSTRUIR**
 Usar **prototypes/PCD_v2.3.html** (no V2.2) como autoridad actual de UX, junto a [matriz de cambios](../02-diseno/pcd-v2.3-alineacion.md). Prototipo **V2.2 se mantiene inalterado** como histórico. Solo backend PHP/MySQL y React productivos autentican de verdad: NO copiar `DEMO_KEYS`, `localStorage`, IDs ficticios, valores de sedes ni API simulada. Consulta es general por funcionalidad con filtros presbiterio/sede, DIGITADOR edita propias; GC no concilia grupos; fecha imposible no se guarda; GPS única vez en SESION. Completar [CA-101…111](../05-pruebas/validacion-prototipo-v2.3.md) con evidencias, además de casos V4.
+
+**Comando de control sin dependencias:** `node scripts/validar-prototipo-v2.3.cjs`. Si falla, no avanzar a I01 antes de corregir. Después ejecutar pruebas interactivas CA-101…111 y API; no declarar pruebas como realizadas por solo documentarlas.

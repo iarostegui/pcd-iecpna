@@ -82,3 +82,5 @@ El modelo aprobado es de **11 tablas**, no 17: [justificación](docs/03-base-dat
 ## Referencia UI/React actual — V2.3
 [**Abrir prototipo PCD V2.3**](prototypes/PCD_v2.3.html) · [**Matriz de alineación con SDD V4**](docs/02-diseno/pcd-v2.3-alineacion.md) · [**Pruebas CA-101…111**](docs/05-pruebas/validacion-prototipo-v2.3.md).
 **V2.2 preservado sin modificación.** La IA construye usando V2.3 para pantalla/flujo y OpenSpec V4/SQL 11 tablas para negocio e infraestructura. No copiar claves ficticias ni almacenamiento local. E1-D01/E1-D02/H-23/H-24 quedan abiertos.
+
+**Comprobación estática para desarrollador:** `node scripts/validar-prototipo-v2.3.cjs` (sintaxis/estructura del HTML). [Casos de navegador CA-101…111](docs/05-pruebas/validacion-prototipo-v2.3.md); **no ejecutados todavía**. No confundir el test estático con QA de React o BD.

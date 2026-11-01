@@ -120,7 +120,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-83 | GET /reportes/avance filtros presbiterio/sede/digitador/fecha y ediciones atribuidas al actor | I05 |
 | CA-84 | Error 401/403/409/422 utiliza mismo DTO Error con request_id, sin revelar PII | I01–I05 |
 | CA-85 | Administración permite presbiterio operativo del digitador, NO campo alcance_consulta ni tabla usuario_presbiterio | I05 | RN-29 |
-| CA-86 | Prototipo muestra GPS/usuarios, pero producción omite GPS en consulta y no enumera cuentas en login | I01/I04 |
+| CA-86 | **V2.3:** login sin lista de cuentas; detalle nominal no muestra GPS. En producción aplicar ambas restricciones también en API | I01/I04 |
 | CA-87 | Tras GPS denegado, refrescar/cambiar sede no vuelve a solicitar geolocalización | I01 |
 | CA-88 | Reporte calidad recalcula faltantes al cambiar parámetros; sin aprobación de supervisor | I05 |
 | CA-89 | Nuevo registro GC no crea miembros nominales aunque tenga cantidad aproximada | I03 |
