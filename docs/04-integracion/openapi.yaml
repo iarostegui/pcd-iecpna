@@ -279,6 +279,7 @@ components:
         codigo: { type: string }
         nombre_display: { type: string }
         perfil: { type: string, enum: [DIGITADOR, ADMIN, REPORTES] }
+        presbiterio_id: { type: integer, nullable: true, description: Requerido para DIGITADOR, no para ADMIN/REPORTES. }
         activo: { type: boolean }
 paths:
   /auth/login:
@@ -443,7 +444,6 @@ paths:
         - in: query
           name: tipo_documento
           schema: { type: string }
-        - in: query
         - in: query
           name: numero_documento
           schema: { type: string }
