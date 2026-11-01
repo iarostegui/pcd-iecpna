@@ -1,3 +1,5 @@
+> **HISTÓRICO V3 (31/10/2026), NO CODIFICAR DESDE AQUÍ.** Prevalecen [SQL V4 de 11 tablas](https://github.com/iarostegui/pcd-iecpna/blob/main/database/migrations/001_initial.sql) y [decisiones vigentes](https://github.com/iarostegui/pcd-iecpna/blob/main/docs/01-analisis/decisiones-pendientes.md): consulta general por funcionalidad con filtros presbiterio/sede, documentos solo tipo+número sin subtipo, catálogo único y ubigeo separado. Cualquier regla histórica contradictoria queda sustituida.
+
 # Diseño de contratos y pruebas E3
 - **DTO:** PersonaResumen, FichaDetalle, PersonaGuardada, GrupoDetalle, UsuarioPublico/Patch, ReporteAvance/Calidad, páginas y Error; [OpenAPI](../../../docs/04-integracion/openapi.yaml) es contrato de intercambio.
 - **Consulta:** permiso GENERAL/PRESBITERIO en usuario, filtro backend; edición digitador solo autor, ADMIN global, REPORTES lectura. Nunca exponer GPS en DTO de Persona.
