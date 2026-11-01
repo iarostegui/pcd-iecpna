@@ -1,4 +1,4 @@
-# Reglas aprobadas PCD V3.1 (fuente normativa de producto)
+# Reglas vigentes PCD V4.0 (fuente normativa de producto)
 | ID | Regla | Prioridad |
 |---|---|---|
 | RN-01 | Login exige presbiterio del catálogo y credenciales válidas; ámbito autorizado verificado en servidor. | Crítica |
@@ -11,7 +11,7 @@
 | RN-08 | Las fechas se ingresan DD/MM/AAAA; valores inexistentes como 31/02/1998 son rechazados como fecha. El digitador los corrige consultando la ficha o deja el campo vacío para guardar incompleto. Solo fechas reales pasan a SQL DATE. Validación en frontend y backend. | Alta |
 | RN-09 | N.º ficha impresa Persona/GC es opcional y no es clave de identidad ni bloquea guardado. | Alta |
 | RN-10 | Falta de datos críticos NO impide guardar; reportes detectan incompletitud; configuración editable por ADMIN durante la campaña. | Crítica |
-| RN-11 | Coincidencia por **clave de identidad documental confiable** (Tipo+Subtipo cuando corresponde+Número normalizado) no crea segunda Persona. Conservar nueva ficha de origen sin duplicar la identidad; detalle cross-presbiterio E1-D01 pendiente. Sin clave válida, no fusionar solo por nombre. | Crítica |
+| RN-11 | Coincidencia por **clave de identidad documental confiable** (Tipo+Número normalizado) no crea segunda Persona. Conservar nueva ficha de origen sin duplicar la identidad; detalle cross-presbiterio E1-D01 pendiente. Sin clave válida, no fusionar solo por nombre. | Crítica |
 | RN-12 | Posibles coincidencias por nombres/apellidos/nacimiento generan **advertencia o indicador de calidad**, no fusión ni bloqueo automático; no crear circuito de conciliación dentro de PCD. | Alta |
 | RN-13 | La opción de líder GC es a demanda; abrir solo después de persistir Persona, o desde Consulta posteriormente. | Crítica |
 | RN-14 | GC vinculado al ID Persona; presbiterio y sede heredados de contexto, sin segunda digitación de líder. | Crítica |
@@ -29,12 +29,12 @@
 | RN-26 | Un digitador modifica solo su ficha fuente; el autor original o ADMIN puede modificar la Persona consolidada; conservar trazabilidad y no sobrescribir por otra ficha. | Crítica |
 | RN-27 | PCD valida tipos, formatos, integridad y faltantes; no verifica automáticamente si la captura reproduce literalmente el papel. La revisión de fidelidad es **manual por cada presbiterio, fuera del sistema**, sin aprobaciones ni circuito de conciliación. | Alta |
 | RN-28 | GC registra solo la Persona **líder** y los datos generales del grupo. La cantidad aproximada de integrantes es resumen, no existen integrantes nominales registrados ni vínculos miembro–GC. | Crítica |
-| RN-29 | El ámbito de **consulta** de cada usuario se configura como GENERAL o PRESBITERIO; GENERAL habilita lectura nacional autorizada y PRESBITERIO limita a asociaciones de usuario. **La edición no cambia:** DIGITADOR solo fichas propias, ADMIN todas, REPORTES solo lectura. La autorización se aplica en PHP. | Crítica |
+| RN-29 | **Consulta total por funcionalidad autorizada:** buscar sin filtro o filtrar opcionalmente por presbiterio y/o sede; **no** se parametriza permiso territorial por usuario ni se crea tabla para ello. Consultar no autoriza editar: DIGITADOR solo modifica fichas propias; ADMIN todas; REPORTES solo lectura en sus funcionalidades. | Crítica |
 
 ## Reglas de coincidencia — decisión derivada a validar en UAT
 1. Clave de identidad documental confiable coincidente: identidad existente; marcar coincidencia y conservar ficha fuente sin duplicar Persona (E1-D01 aún por ratificar para otro presbiterio).
 2. Sin documento, nombres+apellidos+fecha nacimiento coincidentes: señal de posible duplicado; el digitador puede continuar.
-3. Solo parecido fonético/textual: advertir, no prohibir. Evitar revelar registros fuera del ámbito del usuario.
+3. Solo parecido fonético/textual: advertir, no prohibir. Los resultados solo se ofrecen dentro de la funcionalidad autorizada, con minimización y sin GPS en listas.
 
 ## Regla de contraseña compartida: límite de identidad
 La contraseña común fue solicitada expresamente; **no prueba identidad física del operador**. Deben existir cuentas personales distintas, bitácora de sesión, throttling, monitoreo y mecanismo seguro de revocación. No elevar geolocalización a prueba de identidad.
@@ -47,3 +47,6 @@ No inferir cuáles son exactamente las 48 sedes ni pretender que todos los datos
 - Que un nombre tenga formato textual válido **no demuestra** que se haya copiado bien: **JUANA** en lugar de **Juan**, o **JU4N4**, puede superar un control de texto. PCD no compara automáticamente contra la ficha física.
 - **Cada presbiterio realizará revisiones de calidad manuales fuera de PCD**; después un digitador autorizado o ADMIN podrá corregir la ficha usando los controles existentes, con auditoría.
 - Los reportes objetivos de campos críticos vacíos y coincidencias documentales se mantienen. **No** crear bandejas de revisión, supervisores, motor de detección de errores de transcripción, aprobaciones ni estados de conciliación.
+
+## Estructura física simplificada obligatoria
+Las reglas se implementan sobre [11 tablas](../03-base-datos/anexos/justificacion-11-tablas.md): organización jerárquica, una tabla de catálogos, ubigeo independiente, Persona+Ficha+GC, sesión con GPS, seguridad y auditoría. **Sin subtipos documentales, sin permiso de consulta por territorio y sin administración nominal de miembros de GC.**

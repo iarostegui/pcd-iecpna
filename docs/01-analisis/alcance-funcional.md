@@ -109,3 +109,11 @@ La [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md) define co
 
 ## Precisión aprobada posterior: H-12
 La **consulta** se controla por el parámetro de usuario `GENERAL` o `PRESBITERIO`; no confundir el ámbito de lectura con el presbiterio de digitación ni con el permiso de **edición solo propia** del digitador. ADMIN nacional y REPORTES de solo lectura conservan su función. Se auditan operaciones y se restringe PII/GPS según finalidad, especialmente en el reporte nacional.
+
+## Actualización vinculante V4.0 — simplificación aprobada (01/11/2026)
+
+**La consulta de una funcionalidad autorizada es GENERAL**, con filtros opcionales por Presbiterio y/o Sede; no existe autorización de lectura territorial configurable. No incorporar `alcance_consulta` ni `usuario_presbiterio`. Editar sigue limitado a autor o ADMIN, y REPORTES continúa sin escritura.
+
+**H-13:** los únicos campos de identificación documental son **tipo y número**. No existe subtipo. Las coincidencias del tipo Otro no concluyentes requieren revisión manual, no fusión.
+
+**Modelo físico vigente:** [11 tablas](../03-base-datos/anexos/justificacion-11-tablas.md), no 17. ORGANIZACION unifica presbiterio/sede; CATALOGO agrega listas y campos críticos; UBIGEO tiene entidad jerárquica propia; las secciones de cónyuge/responsabilidades están en FICHA.datos_fuente_json. **Una auditoría no puede convertir el modelo anterior en requisito vigente**.

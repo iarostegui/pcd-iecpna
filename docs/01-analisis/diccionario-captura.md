@@ -4,58 +4,58 @@
 ## Persona — mapeo físico y semántico
 | ID | Campo papel | Campo propuesto PCD | Regla |
 |---|---|---|---|
-| P01 | N.º ficha impresa | ficha_captura.numero_ficha | Texto opcional, conserva ceros; no único |
-| P02 | Tipo documento DNI/C.E./Otro | persona_captura.tipo_documento | Catálogo / Otro detallable |
-| P03 | N.º documento | persona_captura.numero_documento | Texto opcional en carga, si completo normalizar |
-| P04 | Nombres | persona_captura.nombres | Texto |
-| P05 | Apellido paterno | persona_captura.apellido_paterno | Texto |
-| P06 | Apellido materno | persona_captura.apellido_materno | Texto |
-| P07 | Fecha nacimiento | persona_captura.fecha_nacimiento | DD/MM/AAAA entrada, DATE persistido |
-| P08 | Sexo | persona_captura.sexo_codigo | Femenino/Masculino (papel) |
-| P09 | Estado civil | persona_captura.estado_civil_codigo | Soltero/Casado/Otro |
-| P10 | Teléfono | persona_captura.telefono | Texto (no entero) |
-| P11 | Correo | persona_captura.correo | Validar formato si presente |
-| P12 | Facebook | persona_captura.facebook_usuario | Texto |
-| P13 | Dirección / referencia | persona_captura.direccion | Texto |
-| P14–P16 | Departamento / Provincia / Distrito | persona_captura.ubigeo_* | Listas dependientes, catálogo oficial a importar |
-| P17 | Presbiterio | ficha_captura.presbiterio_id | Heredado login, no editable |
-| P18 | Sede IECPNA | ficha_captura.sede_id | Selector contexto, FK consistente |
-| P19 | Condición actual | persona_captura.condicion_codigo | Invitado/Nuevo Creyente/Miembro |
-| P20 | Fecha desde condición | persona_captura.fecha_condicion | Fecha |
-| P21–P23 | Cónyuge/pareja: tipo/n.º/nombre | conyuge_pendiente.* | No crear Persona ficticia |
-| P24–P25 | Pastor de sede / nombre de sede | persona_responsabilidad_captura.* | Rol de negocio, sede catálogo |
-| P26–P27 | Presbítero / región | persona_responsabilidad_captura.* | Región NO implica presbiterio automáticamente |
-| P28–P32 | Otras responsabilidades + fechas | persona_responsabilidad_captura.* | Múltiples responsabilidades |
-| P33 | Observaciones | ficha_captura.observaciones | Texto |
-| P34 | Fecha de llenado (papel) | ficha_captura.fecha_papel | Distinta de guardado digital |
-| P35 | Responsable llenado (papel) | ficha_captura.responsable_papel | Distinto de usuario autenticado |
-| P36–P39 | Control uso interno en papel | ficha_captura.control_papel | Transcribir sin convertir automáticamente a estado validado |
+| P01 | N.º ficha impresa | ficha.numero_ficha | Texto opcional, conserva ceros; no único |
+| P02 | Tipo documento DNI/C.E./Otro | persona.tipo_documento | Solo tipo; **no subtipo**. Descripción libre de «Otro» del papel, si existe, solo en JSON de fuente. |
+| P03 | N.º documento | persona.numero_documento | Texto opcional, ceros preservados; deduplicar solo documentos confiables. |
+| P04 | Nombres | persona.nombres | Texto |
+| P05 | Apellido paterno | persona.apellido_paterno | Texto |
+| P06 | Apellido materno | persona.apellido_materno | Texto |
+| P07 | Fecha nacimiento | persona.fecha_nacimiento | DD/MM/AAAA entrada, DATE persistido |
+| P08 | Sexo | persona.sexo_codigo | Femenino/Masculino (papel) |
+| P09 | Estado civil | persona.estado_civil_codigo | Soltero/Casado/Otro |
+| P10 | Teléfono | persona.telefono | Texto (no entero) |
+| P11 | Correo | persona.correo | Validar formato si presente |
+| P12 | Facebook | persona.facebook_usuario | Texto |
+| P13 | Dirección / referencia | persona.direccion | Texto |
+| P14–P16 | Departamento / Provincia / Distrito | persona.ubigeo_* | Listas dependientes, catálogo oficial a importar |
+| P17 | Presbiterio | ficha.presbiterio_id | Heredado login, no editable |
+| P18 | Sede IECPNA | ficha.sede_id | Selector contexto, FK consistente |
+| P19 | Condición actual | persona.condicion_codigo | Invitado/Nuevo Creyente/Miembro |
+| P20 | Fecha desde condición | persona.fecha_condicion | Fecha |
+| P21–P23 | Cónyuge/pareja: tipo/n.º/nombre | ficha.datos_fuente_json.conyuge | No crear Persona ficticia |
+| P24–P25 | Pastor de sede / nombre de sede | ficha.datos_fuente_json.responsabilidades | Rol de negocio, sede catálogo |
+| P26–P27 | Presbítero / región | ficha.datos_fuente_json.responsabilidades | Región NO implica presbiterio automáticamente |
+| P28–P32 | Otras responsabilidades + fechas | ficha.datos_fuente_json.responsabilidades | Múltiples responsabilidades |
+| P33 | Observaciones | ficha.observaciones | Texto |
+| P34 | Fecha de llenado (papel) | ficha.fecha_papel | Distinta de guardado digital |
+| P35 | Responsable llenado (papel) | ficha.responsable_papel | Distinto de usuario autenticado |
+| P36–P39 | Control uso interno en papel | ficha.control_papel | Transcribir sin convertir automáticamente a estado validado |
 
 **Dato UI no impreso:** `es_lider_gc_intencion`: seleccionar si luego del guardado se abre GC; no da acceso técnico.
 
 ## GC — mapeo físico y semántico
 | ID | Campo papel | Campo propuesto | Regla |
 |---|---|---|---|
-| G01 | N.º ficha GC | ficha_captura.numero_ficha | Independiente y opcional, no único |
-| G02–G03 | Documento/nombre líder | ficha_captura.persona_id (para ficha tipo GC) | Se obtiene de Persona guardada; la tabla GC NO duplica líder |
-| G04 | ¿Grupo existe? | grupo_crecer_captura.grupo_ya_existe | Sí/No; buscar asociación si Sí |
-| G05 | Estado actual | grupo_crecer_captura.estado_gc | Activo/En baja/Dado de baja |
-| G06 | Nombre grupo | grupo_crecer_captura.nombre | Texto |
-| G07 | Tipo grupo | grupo_crecer_captura.tipo_gc | Varones/Mujeres/Matrimonios/Mixto |
-| G08–G09 | Presbiterio/Sede | ficha_captura.presbiterio_id / sede_id | Heredados de sesión |
-| G10 | Fecha inicio | grupo_crecer_captura.fecha_inicio | Fecha |
-| G11 | Capacidad aprox. | grupo_crecer_captura.capacidad | Entero separado de asistentes |
-| G12–G13 | Lugar/referencia | grupo_crecer_captura.direccion_lugar / referencia | Texto |
-| G14 | Cantidad aproximada integrantes | grupo_crecer_captura.cantidad_integrantes_aprox | NO representa lista nominal |
-| G15 | ¿Grupo matrimonios? | grupo_crecer_captura.es_matrimonios | Coherente con tipo |
-| G16 | Observaciones | ficha_captura.observaciones | Texto |
-| G17 | Fecha llenado papel | ficha_captura.fecha_papel | Fecha |
-| G18 | Responsable papel | ficha_captura.responsable_papel | Texto |
+| G01 | N.º ficha GC | ficha.numero_ficha | Independiente y opcional, no único |
+| G02–G03 | Documento/nombre líder | ficha.persona_id (para ficha tipo GC) | Se obtiene de Persona guardada; la tabla GC NO duplica líder |
+| G04 | ¿Grupo existe? | grupo_crecer.grupo_ya_existe | Sí/No; buscar asociación si Sí |
+| G05 | Estado actual | grupo_crecer.estado_gc | Activo/En baja/Dado de baja |
+| G06 | Nombre grupo | grupo_crecer.nombre | Texto |
+| G07 | Tipo grupo | grupo_crecer.tipo_gc | Varones/Mujeres/Matrimonios/Mixto |
+| G08–G09 | Presbiterio/Sede | ficha.presbiterio_id / sede_id | Heredados de sesión |
+| G10 | Fecha inicio | grupo_crecer.fecha_inicio | Fecha |
+| G11 | Capacidad aprox. | grupo_crecer.capacidad | Entero separado de asistentes |
+| G12–G13 | Lugar/referencia | grupo_crecer.direccion_lugar / referencia | Texto |
+| G14 | Cantidad aproximada integrantes | grupo_crecer.cantidad_integrantes_aprox | NO representa lista nominal |
+| G15 | ¿Grupo matrimonios? | grupo_crecer.es_matrimonios | Coherente con tipo |
+| G16 | Observaciones | ficha.observaciones | Texto |
+| G17 | Fecha llenado papel | ficha.fecha_papel | Fecha |
+| G18 | Responsable papel | ficha.responsable_papel | Texto |
 | G19 | Firma del líder | **no se captura** | El papel se conserva fuera de la aplicación |
-| G20–G21 | Uso interno/digitado/revisado/fecha/observación | ficha_captura.control_papel | Conservar evidencia si consta en papel |
+| G20–G21 | Uso interno/digitado/revisado/fecha/observación | ficha.control_papel | Conservar evidencia si consta en papel |
 
 ## Separaciones semánticas obligatorias
-- `ficha_captura.created_by` = digitador original; `usuario` = cuenta técnica; persona y GC son entidades diferentes.
+- `ficha.created_by` = digitador original; `usuario` = cuenta técnica; persona y GC son entidades diferentes.
 - `fecha_papel` ≠ `created_at`, `responsable_papel` ≠ `created_by`.
 - Condición pastoral ≠ estado de captura ≠ estado técnico activo/inactivo.
 - Una misma Persona puede tener múltiples fichas de origen; **número impreso no identifica Persona**.
@@ -77,3 +77,7 @@ La fuente física se contrastó con [inventario-excel-original.md](fuentes/inven
 - **Texto:** un nombre ingresado con letras o caracteres admitidos puede estar mal copiado de la hoja (JUANA/Juan; JU4N4). Sin una comparación humana contra el documento físico, **PCD no puede certificar esa fidelidad**.
 - La calidad de transcripción es responsabilidad de la **revisión manual externa de cada presbiterio**; la calidad calculada por PCD se limita a hechos verificables como faltantes, integridad y coincidencias documentales.
 - GC **no** incluye registro nominal de integrantes ni su pertenencia; solo el líder y datos agregados del grupo. Véase [levantamiento E1](../07-auditorias/etapa-1-resolucion.md).
+
+## Mapeo PCD V4.0 obligatorio
+
+Se emplean exclusivamente 11 tablas. Los tipos de documento son **tipo/número**, sin subtipo en Persona ni en API; las secciones cónyuge y responsabilidades se guardan dentro de `ficha.datos_fuente_json`, no en tablas físicas independientes. `organizacion` contiene presbiterio/sede, `catalogo` las listas pequeñas y `ubigeo` el árbol oficial INEI a importar en I02. Para identidad global E1-D01 todavía se requiere decisión funcional. Consultar [diccionario físico](../03-base-datos/anexos/anexo-02-diccionario-fisico.md).

@@ -1,27 +1,27 @@
-# Requisitos de consultas y reportes PCD
-## Consulta operativa
-- Búsqueda con lupa por documento, nombres, apellidos y número opcional de ficha.
-- Filtros: presbiterio permitido, sede, digitador de origen, rango de fecha guardado, tipo de ficha, estado incompleto/posible duplicado.
-- Paginar servidor (25 por página, máximo 50), ordenar por fecha reciente, mostrar autor original y última modificación.
-- DIGITADOR consulta bajo sus ámbitos, **edita únicamente propias fichas**. ADMIN consulta/edita todas. REPORTES solo lectura agregada y calidad autorizada, sin acceso GPS ni datos personales extensos por defecto.
-- No confundir «número de ficha» (puede repetirse/faltar) con `ficha_captura.id` autogenerado.
+# Requisitos de consultas y reportes PCD V4.0
 
-## Reporte A: Avance por sede
-Columnas: presbiterio, sede, Personas capturadas, fichas GC, total por período, última fecha de guardado por sede, digitador último guardado, fecha último dato corregido si aplica. Filtrar período y ámbito nacional.
+## Consulta operativa general
+Un usuario autorizado para utilizar la funcionalidad **consulta la totalidad de registros disponibles de esa funcionalidad**, con posibilidad de filtrar por **Presbiterio y/o Sede**, de manera independiente. Puede buscar por documento (solo tipo+número), nombre/apellidos y número de ficha opcional; añadir digitador, rango de fechas, tipo de ficha, incompletitud y posible coincidencia cuando corresponda.
 
-## Reporte B: Productividad
-Por presbiterio/sede/digitador/fecha: fichas Persona creadas, fichas GC creadas, modificaciones, último registro. Contar **altas** por autor original y **ediciones** por actor real, no atribuir correcciones ADMIN al autor.
+**No** existe permiso por registro/presbiterio para lectura, ni parámetro `alcance_consulta`. La selección de presbiterio/sede del login es para **registrar fichas**, no para restringir búsquedas. Seguridad obliga a que el usuario esté autenticado y autorizado para la funcionalidad; **no** habilita operaciones de modificación.
 
-## Reporte C: Calidad
-Campos críticos parametrizables por `campo_critico`; contabilizar personas/GC con faltantes, detalle por campo, digitador creador, sede y fecha. El cambio de criticidad altera cálculo de reportes; **no modifica fichas ni impide captura**.
+- DIGITADOR consulta las funciones permitidas, **edita exclusivamente sus fichas**. ADMIN consulta/edita de acuerdo con su rol. REPORTES solo lectura de sus informes autorizados.
+- Paginación backend 25 por página, máximo 50; sin descargar datasets completos al abrir pantalla.
+- Datos personales para consulta en pantalla acorde a finalidad; **no incluir coordenadas GPS ni datos de auditoría sensibles**.
+- Filtros combinables Presbiterio/Sede validan que sede pertenezca al presbiterio si se indican ambos.
+- Datos se consultan mediante `persona`, `ficha`, `grupo_crecer` y `organizacion`, no desde tablas antiguas.
 
-## Reporte D: Posibles duplicados
-Separar coincidencia documental exacta, coincidencia fuerte por nombre+fecha nacimiento y coincidencia parcial. Personas documentales iguales no deben convertirse automáticamente en dos identidades; mostrar datos minimizados en digitadores.
+## Reporte A — Avance
+Personas y GC capturados por presbiterio/sede, fechas de guardado, último digitador, últimos cambios. Altas contadas por autor inicial.
 
-## Seguridad y tiempos
-Filtrar por rol/ámbito antes de devolver datos; paginar. Índices por sede, autor, fecha, documento; medir p95 y planes EXPLAIN. Exportar reporte solo cuando esté expresamente habilitado y con minimización; no equivale a migrar al SGSP.
+## Reporte B — Productividad
+Por digitador, presbiterio y sede en período: fichas nuevas, correcciones, última actividad. Las **modificaciones** se asignan al usuario actor de `auditoria_evento`, no al creador original.
 
-## Etapa 2 — consulta y calidad mínima propuestas
-- **H-12/E2-D01 pendiente:** DIGITADOR podría consultar fichas del **propio presbiterio** (comportamiento del prototipo) y solo editar propias; nunca mostrar PII/GPS de otros presbiterios incluso si comparten Persona consolidada. Esta política debe ratificarse antes de I04.
-- **H-18:** indicadores de campos críticos se **recalculan al consultar** mediante [campos-criticos.md](../03-base-datos/campos-criticos.md); no confiar en `marca_calidad` fija ni añadir tareas de recomputación.
-- **H-28/E2-D02 pendiente:** ADMIN puede cambiar contexto explícito de presbiterio/sede; REPORTES nacional accede a agregados sin sede. No hacer accesible información nominal a REPORTES por simple rol nacional.
+## Reporte C — Calidad
+Indicadores computables de fichas incompletas y campos críticos desde `catalogo` con `categoria=CAMPO_CRITICO_PERSONA/GC`. Los parámetros pueden cambiar durante campaña sin editar registros. **No** se mide fidelidad al papel automáticamente.
+
+## Reporte D — Posibles duplicados
+DNI/C.E. coincidentes y validables, candidatos por nombres+fecha o documento OTRO no concluyente. Advertir sin fusionar Personas inciertas. La identificación global puede apoyar conteos nacionales, pero E1-D01 (vincular fichas de diferente presbiterio) sigue por cerrar.
+
+## Seguridad y rendimiento
+Permiso por funcionalidad en PHP, consultas parametrizadas, filtros opcionales, paginación; límites de resultados, índices y `EXPLAIN`. No implementar mecanismo de supervisión de digitación, miembros nominales GC ni exportación a SGSP.
