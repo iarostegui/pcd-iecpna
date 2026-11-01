@@ -18,3 +18,11 @@ Comienza con **I00** de `plan-implementacion.md`; implementa únicamente ese alc
 
 ## Gate E2
 Antes de ejecutar I01, lee [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md), [Catálogos/identidad](../03-base-datos/catalogos-e-identidad.md), [Calidad](../03-base-datos/campos-criticos.md), [Seguridad](../02-diseno/seguridad-auditoria.md) y [Preparación de iteraciones](../07-auditorias/preparacion-iteraciones.md). No suponer que E2-D01/D02/D03 ya están aprobadas. Controlar el dato de entrada, evitar listar usuarios, y **no replicar contraseñas de demo**. Mantener IA/hosting dentro del alcance temporal PCD.
+
+## REGLAS V4.0 ANTES DE GENERAR CÓDIGO (PRIORIDAD SOBRE TODO TEXTO V3)
+1. BD inicial exclusiva: [11 tablas SQL](../../database/migrations/001_initial.sql); los anexos se regeneran desde ese SQL. No recuperar 17 tablas ni añadir tablas por catálogos de 5–7 filas.
+2. Únicos datos documentales `tipo_documento` y `numero_documento`. DNI/CE normalizar sin ceros inventados, OTRO solo coincidencia potencial, **sin subtipo**.
+3. Acceso a funcionalidad Consulta implica **lectura total** y filtros opcionales Presbiterio/Sede; **no** ámbito territorial por usuario. DIGITADOR solo edita sus fichas, REPORTES no escribe.
+4. `organizacion` = presbiterio+sede; `catalogo` = tabla de tablas (campos críticos por JSON); `ubigeo` = 1 tabla INEI por importar en I02; `sesion` integra GPS; `ficha.datos_fuente_json` conserva cónyuge/responsabilidades.
+5. No modificar HTML V2.2 ni SGSP salvo pedido explícito. **No generar código productivo desde especificaciones históricas E1–E3 contradictorias**.
+6. Etapa 4: [protección de datos](../07-auditorias/etapa-4-produccion-y-privacidad.md), [checklist](../06-despliegue/checklist-produccion.md). H-40 no resuelto, ejecución de SQL/PHP/React no realizada. No afirmar GO ni pruebas aprobadas.

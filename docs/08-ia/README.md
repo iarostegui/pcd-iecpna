@@ -15,3 +15,5 @@ Organiza el **contrato de trabajo** para una IA que implemente PCD respetando SD
 **Modo de trabajo:** leer fuentes → preparar cambio OpenSpec → implementar solo el alcance → probar → documentar evidencia → corregir. No implementar SGSP ni su proceso futuro de migración.
 
 **Límite obligatorio de la IA:** [ALC-PCD-3.1](../01-analisis/alcance-funcional.md) define qué está incluido y excluido. Propuestas de ampliación o críticas al alcance no habilitan desarrollo sin aprobación del responsable funcional.
+
+**Versión V4 vigente:** [modelo de 11 tablas](../03-base-datos/anexos/justificacion-11-tablas.md), [OpenSpec](../../openspec/specs/README.md), [OpenAPI](../04-integracion/openapi.yaml), [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md). Nunca generar código desde un delta histórico E1/E2/E3 que contradiga V4.

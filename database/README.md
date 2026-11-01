@@ -12,3 +12,5 @@ Aquí vivirán las **migraciones y los datos de inicialización** de la base **i
 **Advertencia:** `001_initial.sql` es un **diseño propuesto**, no prueba de instalación. Ejecutar primero en base de pruebas y validar contra versión efectiva de cPanel, índices y reglas. No almacenar volcados con datos personales.
 
 **Inicialización E2:** [database/seeds/002_catalogos_calidad.sql](seeds/002_catalogos_calidad.sql) precarga catálogos y criticidad verificados; no contiene credenciales ni sedes. No ejecutar en BD productiva sin validar primero el esquema y las decisiones pendientes.
+
+**V4:** [001_initial.sql](migrations/001_initial.sql) crea **11 tablas** (no 17), [002_catalogos_calidad.sql](seeds/002_catalogos_calidad.sql) carga categorías de la tabla única CATALOGO. [Diagrama](../docs/03-base-datos/anexos/anexo-01-diagrama-fisico.md) y [diccionario](../docs/03-base-datos/anexos/anexo-02-diccionario-fisico.md). No ejecutar 001 sobre BD vieja con datos; verificar MySQL real.

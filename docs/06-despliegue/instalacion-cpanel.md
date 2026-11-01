@@ -25,3 +25,7 @@ Backup protegido BD y versión build ANTES de reemplazar `index.html`; simulacro
 ## Notas
 El prototipo en `prototypes/` no autentica realmente y no debe usarse para fichas reales; despliegue productivo requiere backend PHP/MySQL terminado y probado.
 
+## Validación del modelo V4 antes de despliegue
+El `database/migrations/001_initial.sql` **fue reemplazado por un esquema nuevo de 11 tablas** para instalaciones desde cero. Si ya hay alguna BD con tablas anteriores **no aplicar 001 encima**, realizar respaldo, diagnóstico y migración de datos independiente. Primero ejecutar SQL y [seed](../../database/seeds/002_catalogos_calidad.sql) en base de **pruebas**; verificar `organizacion`, `catalogo`, `ubigeo`, `sesion`, FKs y CHECK; verificar su compatibilidad con versión real cPanel.
+
+Consulta de Persona/GC de alcance total solo dentro de funcionalidad autorizada, filtros opcionales Presbiterio/Sede; backend prohíbe modificar fichas ajenas. Carga de UBIGEO es entrada I02. [Checklist GO de producción](checklist-produccion.md) condiciona H-40, restore y seguridad.

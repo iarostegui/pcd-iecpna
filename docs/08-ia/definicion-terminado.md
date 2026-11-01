@@ -11,3 +11,5 @@ No declarar módulo terminado hasta cumplir todos:
 9. Código/documentación y OpenAPI sincronizados, sin alterar SGSP.
 10. Informe de riesgos residuales, incluyendo contraseña operativa común y GPS opcional.
 
+## DoD adicional V4.0
+Ninguna iteración está terminada mientras el código no use exactamente el [modelo vigente de 11 tablas](../../database/migrations/001_initial.sql), consulta general con filtros Presbiterio/Sede, documento sin subtipo y pruebas automatizadas de permisos de edición propia. Para producción cumplir [PROD-01…10](../06-despliegue/checklist-produccion.md) y H-40, sin confundir documentación con pruebas.

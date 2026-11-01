@@ -12,3 +12,5 @@ No incluir credenciales, información real de miembros ni datos de ubicación de
 
 ## E2 — Compatibilidad de constraints
 `001_initial.sql` ahora incorpora `CHECK` y FK compuestas en la relación ficha/Persona/GC, revocación de sesiones, catálogo, identidad normalizada y calidad derivada. Se requiere **prueba de creación en versión exacta MySQL/MariaDB del hosting** antes de aprobar I00/I01; no se ha ejecutado. Para nuevos entornos ya desplegados no se aplica un `ALTER` implícito: migración futura separada tras inspección del estado real.
+
+**ÚNICO ESQUEMA INICIAL V4:** [001_initial.sql](001_initial.sql) sustituye la propuesta anterior de 17 tablas por **11**. La migración inicial es SOLO para una BD nueva y aún requiere prueba en el motor cPanel. Una BD existente necesita procedimiento de transición y respaldo, no un RE-RUN del archivo.
