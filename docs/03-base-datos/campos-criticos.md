@@ -1,26 +1,23 @@
-# CAL-PCD-3.1 — Matriz de criticidad inicial
-**Fuente:** constantes del prototipo PCD V2.2 `CRITICAL_PERSON`, `CRITICAL_GC`, `HARD_FIELDS`; estas opciones son *baseline de diseño*, no valores de un catálogo oficial de sedes. La configuración ADMIN puede modificarse en campaña **sin impedir guardar incompletos**.
+# CAL-PCD-4.0 — Matriz inicial de completitud (tabla CATALOGO)
 
-| Entidad | Código del prototipo | Etiqueta | Ruta PCD de evaluación | Inicial | ¿Desactivable? |
-|---|---|---|---|---|---|
-| PERSONA | first | Nombres | persona.nombres | Sí | Sí |
-| PERSONA | last1 | Apellido paterno | persona.apellido_paterno | Sí | Sí |
-| PERSONA | type | Tipo documento | persona.tipo_documento | Sí | Sí |
-| PERSONA | doc | N.º documento | persona.numero_documento | Sí | Sí |
-| PERSONA | birth | Fecha nacimiento | persona.fecha_nacimiento | Sí | Sí |
-| PERSONA | sex | Sexo | persona.sexo_codigo | Sí | Sí |
-| PERSONA | pres | Presbiterio | ficha.presbiterio_id | Sí | **No: relación técnica** |
-| PERSONA | sede | Sede | ficha.sede_id | Sí | **No: relación técnica** |
-| PERSONA | condition | Condición pastoral | persona.condicion_codigo | Sí | Sí |
-| GC | personId | Líder registrado | ficha.persona_id | Sí | **No: relación técnica** |
-| GC | pres | Presbiterio | ficha.presbiterio_id | Sí | **No: relación técnica** |
-| GC | sede | Sede | ficha.sede_id | Sí | **No: relación técnica** |
-| GC | type | Tipo GC | grupo.tipo_gc | Sí | Sí |
-| GC | start | Fecha inicio | grupo.fecha_inicio | Sí | Sí |
-| GC | capacity | Capacidad | grupo.capacidad | Sí | Sí |
+Los campos críticos de calidad **no son campos obligatorios de guardado**. Se almacenan como filas de `catalogo` en categorías `CAMPO_CRITICO_PERSONA` y `CAMPO_CRITICO_GC`, con `config_json` para `ruta_dato`, `es_critico` y `desactivable`.
 
-**Distinción:** la integridad de claves foráneas y relaciones obligatorias no está parametrizada y se valida al guardar. Los demás campos se pueden marcar críticos para **reporte**, sin hacerlos obligatorios para la captura.
+| Tipo | Código | Ruta de evaluación | Desactivable |
+|---|---|---|---|
+| PERSONA | first | persona.nombres | Sí |
+| PERSONA | last1 | persona.apellido_paterno | Sí |
+| PERSONA | type | persona.tipo_documento | Sí |
+| PERSONA | doc | persona.numero_documento | Sí |
+| PERSONA | birth | persona.fecha_nacimiento | Sí |
+| PERSONA | sex | persona.sexo_codigo | Sí |
+| PERSONA | pres | ficha.presbiterio_id | **No** |
+| PERSONA | sede | ficha.sede_id | **No** |
+| PERSONA | condition | persona.condicion_codigo | Sí |
+| GC | personId | ficha.persona_id | **No** |
+| GC | pres | ficha.presbiterio_id | **No** |
+| GC | sede | ficha.sede_id | **No** |
+| GC | type | grupo_crecer.tipo_gc | Sí |
+| GC | start | grupo_crecer.fecha_inicio | Sí |
+| GC | capacity | grupo_crecer.capacidad | Sí |
 
-**Cálculo:** la completitud se evalúa al consultar contra la configuración vigente y la ficha/persona autorizada; **no** persistir `marca_calidad` como fuente de verdad porque quedaría desactualizada al cambiar parámetros. Si se requiere cache a futuro, deberá invalidarse/versionarse y aprobarse, sin nuevos procesos residentes.
-
-**Auditoría:** cambios `campo_critico` se guardan con usuario, fecha y `auditoria_evento` antes/después. No hace falta flujo histórico separado de versiones de configuración: auditoría ya permite reconstruir modificaciones.
+La configuración inicial se carga con [seed oficial](../../database/seeds/002_catalogos_calidad.sql), derivada del prototipo V2.2. PHP debe validar las rutas del JSON contra una **lista blanca**, no convertir la ruta en SQL arbitrario. Los cambios realizados por ADMIN se auditan y la completitud se calcula en consulta con valores actuales: **no** se persiste `marca_calidad` fija ni se implementa supervisión automática de concordancia con papel.

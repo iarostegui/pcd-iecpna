@@ -1,33 +1,31 @@
-# Modelo lógico PCD V3.1 — revisión E2 (propuesta de implementación)
-**No es el modelo del SGSP.** [Alcance](../01-analisis/alcance-funcional.md) · [Documento E2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md) · [SQL propuesto](../../database/migrations/001_initial.sql).
+# PCD V4.0 — Modelo lógico vigente: 11 tablas
 
-| Tabla | Claves / relaciones esenciales | Regla relevante |
+**Fuente física:** [001_initial.sql](../../database/migrations/001_initial.sql). [Anexo ER](anexos/anexo-01-diagrama-fisico.md) · [Diccionario por columna](anexos/anexo-02-diccionario-fisico.md) · [Justificación tabla por tabla](anexos/justificacion-11-tablas.md).
+
+| Área | Tabla | Función / vínculos |
 |---|---|---|
-| presbiterio | id, codigo único | Activo y disponible en login público (solo id/código/nombre). |
-| usuario | id, codigo único | perfil DIGITADOR/ADMIN/REPORTES, hash, auth_version para revocar. |
-| usuario_presbiterio | (usuario_id,presbiterio_id) | Solo ámbito explícito de DIGITADOR; **nacional por perfil** para ADMIN/REPORTES **E2-D02 pendiente**. |
-| sede | id, presbiterio_id, nombre_norm | UNIQUE presbiterio+nombre normalizado. |
-| catalogo_valor | id, (dominio,codigo) único | Opciones confirmadas del papel y etiquetas versionadas; ubigeo sin fuente oficial aparte. |
-| campana | id, codigo | Identifica campaña temporal; no módulos de multi-campañas. |
-| sesion_captura | id, usuario_id, presbiterio_id, sede_id | session_ref_hash único; auth_version_al_ingreso, revocada_en, last_seen/fecha_login/fecha_logout. |
-| login_evento | id | Log de éxito/fallo/bloqueo/logout; índice código/fecha e IP/fecha. |
-| geo_sesion | sesion_id PK y FK | UNA captura/estado por sesión; reusar. |
-| persona_captura | id; clave_identidad UNIQUE NULL-permitida | tipo/subtipo/documento normalizados, autor original, campos consolidado y versión. |
-| ficha_captura | id, campana_id, persona_id, presbiterio_id, sede_id, tipo_ficha | snapshot por ficha; autor inmutable, control edición y trazabilidad; calidad se calcula, no marca_calidad fija. |
-| conyuge_pendiente | id, ficha_id + persona_id + ficha_tipo | Solo ficha PERSONA; triple FK compuesta y CHECK de tipo. |
-| persona_responsabilidad_captura | id, ficha_id + persona_id + ficha_tipo | Solo ficha PERSONA, sin rol de seguridad. |
-| grupo_crecer_captura | id, ficha_id, ficha_tipo='GC' | **Líder = ficha_captura.persona_id**. Sin lider_persona_id redundante. Tipo GC protegido. |
-| campo_critico | (entidad,campo_codigo) | etiqueta/ruta_dato/desactivable/es_critico; no desactivar relaciones estructurales. |
-| auditoria_evento | id, sesión/usuario/geo/recurso | Antes/después para operaciones autorizadas, acceso restringido. |
-| idempotencia | id, (usuario_id,clave) único | Evita guardados duplicados ante doble clic/reintento. |
+| Organización | `organizacion` | Presbiterio (raíz) y sede (hijo) en tabla única, con referencia de parent. |
+| Seguridad | `usuario` | Login, roles, contraseña hash, presbiterio operativo del digitador. **Sin tabla de permisos territoriales de consulta.** |
+| Seguridad | `sesion` | Sesión segura/contexto/GPS opcional una sola vez, revocación. |
+| Seguridad | `login_evento` | Accesos y fallos, incluidos intentos anónimos. |
+| Configuración | `catalogo` | **Tabla de tablas**: categorías, opciones, campos críticos en `config_json`. |
+| Configuración | `ubigeo` | Una sola jerarquía INEI de tres niveles; entrada de construcción I02. |
+| Registro | `persona` | Identidad consolidada con **tipo + número de documento** solamente. |
+| Registro | `ficha` | Fuentes de Persona/GC, sede/presbiterio, autor original, JSON de cónyuge y responsabilidades. |
+| Registro | `grupo_crecer` | Ficha GC y datos agregados, líder derivado de `ficha.persona_id`. Sin miembros nominales. |
+| Control | `auditoria_evento` | Antes/después, actor y sesión de ediciones. |
+| Control | `idempotencia` | Evita duplicados por reintento en operaciones de escritura. |
 
-## Integridad y ámbitos
-- Toda ficha pertenece a sede y presbiterio consistentes mediante FK compuesta.
-- El líder GC se infiere exclusivamente de Persona asociada a su ficha GC; no existe registro nominal de miembros.
-- Documento DNI de ocho dígitos; CE/OTRO conservador y **no inventar validez oficial**. `clave_identidad` NULL si falta subtipo/tipo suficiente.
-- Una Persona puede relacionarse con varias fichas fuente; consultar datos solo según ámbito aprobado; **E1-D01 y E2-D01 pendientes**.
-- Campos críticos faltantes no bloquean: se calculan al consultar bajo configuración vigente, con fechas tipadas.
-- CHECK y FK compuestas requieren **prueba en versión efectiva del hosting**, no declarar validadas aún.
+## Restricciones y decisiones funcionales
 
-## Regla funcional de ámbito de consulta aprobado (E2-D01)
-`usuario.alcance_consulta` controla exclusivamente las **lecturas**: `PRESBITERIO` aplica ámbito(s) de `usuario_presbiterio`, `GENERAL` permite búsqueda nacional autenticada conforme a los privilegios del perfil. El digitador mantiene selección del presbiterio/sede operativa para registrar; el permiso GENERAL **no permite registrar ni editar fuera de permisos de escritura**. ADMIN opera nacionalmente y REPORTES solo en informes. Índice `ficha_captura(presbiterio_id, tipo_ficha, created_at)` soporta filtros por presbiterio.
+- **Consulta:** cualquier usuario con acceso a la funcionalidad puede consultar sus registros **a nivel general**; los filtros de presbiterio/sede son **opcionales** y no definen ámbitos de permiso. No se añade `alcance_consulta` ni `usuario_presbiterio`.
+- **Escritura:** DIGITADOR solo modifica fichas que creó; ADMIN tiene facultades nacionales; REPORTES no edita. La selección de presbiterio/sede de la sesión sí delimita **dónde se registra**, no qué se puede consultar.
+- **Documentos:** solo `tipo_documento` y `numero_documento` de formulario. Normalizar sin perder ceros; clave exacta DNI/C.E. cuando confiable. Para OTRO sin identificación concluyente, clave identidad NULL y **posible duplicado**, no fusión automática. Sin subtipo.
+- **Fuentes:** varias fichas pueden corresponder a una Persona; `datos_fuente_json` conserva valores transcritos y secciones del papel sin inventar tablas operativas para cónyuge/responsabilidades.
+- **Organización:** sede `organizacion.tipo='SEDE'` y padre de tipo PRESBITERIO; FK compuesta de ficha/sesión mantiene sede-padres, PHP comprueba los tipos.
+- **Ubigeo:** códigos en Persona, con validación de nivel y jerarquía en PHP; catálogo INEI cargado durante I02. No inventar códigos.
+- **Calidad:** valores en CATALOGO categorías `CAMPO_CRITICO_PERSONA` y `CAMPO_CRITICO_GC`. No marcar ficha incompleta como error bloqueante ni comparar automáticamente con papel.
+- **GC:** una ficha GC puede originar un registro GC y su líder es la Persona de esa ficha; prohibido crear miembros nominales.
+- **Pendientes:** E1-D01 vínculo cross-presbiterio; E1-D02 grupo preexistente; H-23/H-24 reglas operativas, H-40 retención y privacidad. No asumir aprobaciones.
+
+**Estado:** esquema nuevo inicial para construcción; **no ejecutado** contra MySQL/MariaDB. El diseño anterior de 17 tablas queda reemplazado y **no** debe utilizarse en código nuevo.
