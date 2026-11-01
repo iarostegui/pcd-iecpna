@@ -1,17 +1,19 @@
-# SDD PCD — Administración
-## Requirement ADM-01: Perfil ADMIN
-MUST ser nacional y poder crear/activar/desactivar usuarios, gestionar sedes y cambiar parámetros, consultar y editar cualquier ficha con su propio actor ADMIN.
-## Requirement ADM-02: Usuarios iniciales
-MUST crear seis usuarios por presbiterio existente independientemente de sedes disponibles, más un ADMIN nacional y un REPORTES nacional. La clave común no se almacena en texto plano ni en Git y no se exige cambio al primer login.
-## Requirement ADM-03: Calidad configurable
-MUST mostrar campos críticos de Persona/GC con interruptores editables por ADMIN en tiempo real. Cambios recalculan conteos de calidad sin alterar integridad ni volver obligatorios los guardados.
-### Scenario — Campo desmarcado
-GIVEN campo nacimiento crítico WHEN ADMIN lo desmarca THEN el reporte deja de contabilizarlo como faltante pero no modifica fichas.
-## Requirement ADM-04: Restricciones
-MUST rechazar escrituras de perfil REPORTES y DIGITADOR en administración; registrar cambios en auditoría.
+# PCD V4 — Administración
 
-## Requirement ADM-05 — sesiones y rol nacional (E2)
-ADMIN puede desactivar usuarios; **desactivar o cambiar credencial debe revocar todas sus sesiones** (versión/autorización y registro). ADMIN y REPORTES tienen claves distintas de digitadores y ámbitos nacionales por perfil (E2-D02 a ratificar). No se muestran nombres de usuarios en endpoints públicos.
+## ADM-01 — ADMIN nacional
+MUST crear, activar/desactivar y restablecer usuarios, administrar parámetros de calidad, consultar y corregir fichas; cada cambio se audita con actor ADMIN y revocación de sesión si aplica.
 
-## Requirement ADM-06: Configurar ámbito de consulta (APROBADO E2-D01)
-Solo ADMIN MUST poder asignar `GENERAL` / `PRESBITERIO` a una cuenta; aplicar cambios desde PHP, auditar antes/después y revocar/revalidar sesiones en cambios de permisos. No modificar rol ni permisos de **edición** implícitamente. `GET /admin/usuarios` y `PATCH /admin/usuarios/{id}` mantienen este campo.
+## ADM-02 — Cuentas iniciales
+Seis cuentas DIGITADOR por presbiterio disponible, una ADMIN y una REPORTES nacionales. Cada digitador tiene **un** presbiterio operativo `usuario.presbiterio_id`; no tabla de relaciones territoriales. Contraseña inicial común sin cambio forzado pero hash, rate limiting y auditoría; nacionales con secretos distintos.
+
+## ADM-03 — Campos críticos en tabla de tablas
+MUST gestionar filas `catalogo` categoría CAMPO_CRITICO_PERSONA/GC, `config_json` validado. Los toggles actualizan reportes pero no bloquean guardado incompleto. No se permite desactivar relaciones técnicas ni SQL dinámico arbitrario.
+
+## ADM-04 — Solo ADMIN escribe configuración
+DIGITADOR/REPORTES no pueden escribir usuarios, catálogos críticos ni parámetros técnicos.
+
+## ADM-05 — Revocación
+Desactivar o restablecer credenciales incrementa `usuario.auth_version`; `sesion` antigua deja de autorizar. ADMIN/REPORTES nacionales por rol, sin duplicar permisos por presbiterio.
+
+## ADM-06 — NO HAY PERMISOS DE CONSULTA POR ÁMBITO
+MUST NOT construir campo `alcance_consulta`, tabla `usuario_presbiterio`, UI de selección GENERAL/PRESBITERIO ni su API. La **consulta general con filtros presbiterio/sede** se define en la propia funcionalidad; la edición conserva su autorización independiente.
