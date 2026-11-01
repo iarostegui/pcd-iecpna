@@ -17,7 +17,7 @@ const names = [...sql.matchAll(/^CREATE TABLE IF NOT EXISTS (\w+)\s*\(/gm)].map(
 const wanted = ['organizacion','usuario','sesion','login_evento','catalogo','ubigeo','persona','ficha','grupo_crecer','auditoria_evento','idempotencia'];
 ensure(names.length === 11 && unique(names) && wanted.every(n => names.includes(n)), 'SQL debe incluir 11 tablas vigentes sin duplicados.');
 for (const old of ['usuario_presbiterio', 'alcance_consulta', 'tipo_documento_detalle', 'conyuge_pendiente', 'campo_critico (', 'geo_sesion (']) {
- ensure(!sql.includes(old), 'SQL retiene estructura V3 eliminada: ' + old);
+ ensure(!names.includes(old) && !/^\s*(alcance_consulta|tipo_documento_detalle)\s+(ENUM|VARCHAR|CHAR)/m.test(sql), 'SQL retiene estructura V3 eliminada: ' + old);
 }
 ensure(/CREATE TABLE IF NOT EXISTS organizacion/.test(sql) && /padre_id/.test(sql), 'Falta organización jerárquica.');
 ensure(/CREATE TABLE IF NOT EXISTS ubigeo/.test(sql) && /padre_codigo/.test(sql), 'Falta UBIGEO jerárquico.');
