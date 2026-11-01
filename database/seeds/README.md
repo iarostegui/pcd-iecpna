@@ -10,6 +10,6 @@
 ## E2: SQL de inicialización confirmado con prototipo
 [002_catalogos_calidad.sql](002_catalogos_calidad.sql) define SOLO dominios y parámetros de criticidad de campos comprobados en fichas y en el JS de PCD V2.2. No contiene catálogo oficial de sedes/ubigeo ni usuarios reales. Se ejecuta **después** de `database/migrations/001_initial.sql` en BD **de prueba**.
 
-**No sobrescribir** decisiones ADMIN: utiliza `INSERT IGNORE` para no restablecer `campo_critico.es_critico` al re-ejecutar semillas. Los códigos ubigeo siguen pendientes DP-06 y no se inventan. Ninguna contraseña se versiona.
+**No sobrescribir** decisiones ADMIN: utiliza `INSERT IGNORE` para no restablecer `catalogo.config_json.es_critico` al re-ejecutar semillas. Los códigos ubigeo siguen pendientes DP-06 y no se inventan. Ninguna contraseña se versiona.
 
 **V4:** [002_catalogos_calidad.sql](002_catalogos_calidad.sql) carga dominios pequeños + criticidad a la tabla **catalogo**. No existen `catalogo_valor` ni `campo_critico` como tablas; UBIGEO oficial se incorpora en I02 desde fuente INEI. No incluir usuarios reales ni credenciales en semillas.

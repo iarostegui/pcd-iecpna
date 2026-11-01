@@ -38,7 +38,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-33 | Digitador edita ficha ajena → 403 | P0 |
 | CA-34 | ADMIN edita ficha ajena → permitido, actor ADMIN, creador inalterado | P0 |
 | CA-35 | REPORTES intenta POST/PATCH → 403 | P0 |
-| CA-36 | Iniciar sesión → 1 solicitud GPS, 1 fila geo_sesion | P0 |
+| CA-36 | Iniciar sesión → 1 solicitud GPS opcional, datos/estado en UNA fila sesion (sin tabla geo_sesion) | P0 |
 | CA-37 | Guardar 10 Personas+GC → misma ubicación de sesión sin nuevos prompts | P0 |
 | CA-38 | Refrescar página → misma ubicación almacenada, no nuevo prompt | P0 |
 | CA-39 | Denegar GPS → guardar, auditoría indica DENEGADA | P0 |

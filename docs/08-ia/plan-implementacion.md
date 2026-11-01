@@ -1,57 +1,35 @@
-# Plan de desarrollo por IA — implementación PCD (no SGSP)
-## I00 — Preparación
-Confirmar versiones cPanel; crear rama de trabajo, configurar CI/lint/tests, validar SQL de prueba y contrato. No usar datos reales.
+# Plan de implementación PCD V4.0 — fuente vigente para SDD
 
-## I01 — Seguridad/contexto
-Backend PHP login, sesión, roles, usuario_presbiterio, sedes, geolocalización snapshot único, logs; React Login y selector. Pruebas CA-01..14 y CA-36..41.
+**Alcance:** [ALC-PCD](../01-analisis/alcance-funcional.md), aplicación **temporal** independiente de SGSP. Base física [11 tablas SQL](../../database/migrations/001_initial.sql), [anexos](../03-base-datos/anexos/README.md) y [specs](../../openspec/specs/README.md). El prototipo HTML V2.2 es referencia de UX **sin cambios**.
 
-## I02 — Persona
-Capturar campos del Excel, componentes React desde V2.2; lookup documento, datos incompletos, ficha opcional, idempotencia, auditoría y control de concurrencia. Pruebas CA-15..28.
+## Reglas obligatorias para la IA
+1. **Consulta general en la funcionalidad autorizada** con filtros opcionales presbiterio y/o sede; no hay `alcance_consulta` ni tabla para ACL territorial.
+2. Digitador edita exclusivamente fichas creadas por él; ADMIN ejerce funciones nacionales, REPORTES solo lectura.
+3. H-13: únicamente tipo+número documento. Sin subtipo. DNI válido y CE confiable generan clave técnica; OTRO coincidencia potencial sin fusión automática.
+4. BD simplificada: `organizacion` (presbiterio+sede), `catalogo` (tabla de tablas), `ubigeo` INEI, `persona`, `ficha`, `grupo_crecer`, `usuario`, `sesion` (GPS), `login_evento`, `auditoria_evento`, `idempotencia`.
+5. Cónyuge/responsabilidades se conservan como `ficha.datos_fuente_json` validado; no tablas/CRUD independientes.
+6. Fechas imposibles rechazadas o vacías; se guarda incompleto; comparación con papel se revisa manualmente por presbiterios.
+7. No generar integración SGSP, integrantes nominales GC, aprobación de supervisor ni canal WhatsApp.
 
-## I03 — Grupo Crecer
-GC solo tras Persona o desde Consulta; grupo existente/nuevo, líder persistido; CA-29..31.
+## Ciclo de trabajo por iteración SDD
+**Plan → especificación → implementación frontend/backend → pruebas automatizadas → revisión de consistencia SQL/API/UX → auditoría de resultados → correcciones → aceptación humana**. Cada etapa conserva evidencia por commit y casos de prueba por ID; jamás declarar PASS sin ejecutar.
 
-## I04 — Consulta y edición
-Buscar, filtrar, editar solo propios, Admin todos; historial, paginación, permisos; CA-32..35,43.
+| Iteración | Alcance funcional / técnico | Productos esperados | Puerta para iniciar |
+|---|---|---|---|
+| **I00 — Infraestructura técnica** | Confirmar hosting PHP/MySQL, estructura repo, ejecutar SQL 11 tablas y seed en **BD de prueba**; comprobar constraints; generar diagramas/diccionario. | Esquema instalado en test, scripts y reporte de compatibilidad, anexos sincronizados. | Insumos hosting y acceso BD de pruebas. |
+| **I01 — Autenticación, contexto** | Login por presbiterio (usuario tecleado), cookie/CSRF, bloqueo, revocación, GPS 1 vez en `sesion`; organización con presbiterios/sedes jerárquicos y alta sede. | React Login/selector, PHP Auth/Org, pruebas CA-01…14 y CA-91/92/94. | I00 SQL probado; credenciales protegidas. |
+| **I02 — Captura Persona** | Persona/Ficha, tipo+número documento, incompletos, JSON fuente cónyuge/responsabilidades, idempotencia, ubigeo INEI importado. | Formulario React, PHP Persona/Ficha, test duplicados/concurrencia/formatos/JSON. | **E1-D01 + H-24** y fuente INEI/CE aplicable aprobados. |
+| **I03 — Líder GC** | Ficha GC con referencia Persona líder, datos agregados, versión ficha; no miembros nominales. | React GC, PHP GC, pruebas FK, líder y 409. | **E1-D02 + H-23**, I02. |
+| **I04 — Consulta/edición** | Consulta nacional de función con filtros opcionales presbiterio/sede/fecha/digitador; autor de ficha controla edición. | React búsqueda y detalle, PHP list/get/patch, CA-77/78/97/98. | I02 y permisos backend test. |
+| **I05 — Admin/reportes** | Usuarios, catálogos críticos, informes de avance/calidad/productividad, auditoría. | React/Admin, PHP, cálculos sobre `catalogo`, CA-79/85/93/88. | I04/BD, pruebas de métricas/actor real. |
+| **I06 — Integración/producción** | Pruebas carga/seguridad, backup restore, despliegue cPanel y cierre, datos personales sensibles. | [Checklist PROD-01…10](../06-despliegue/checklist-produccion.md), evidencia y decisión GO. | H-40 PR-01…08 institucional, pruebas y backups verificadas. |
 
-## I05 — Administración/calidad/reportes
-Usuarios por presbiterio, criticidad dinámica, reportes por presbiterio/sede/usuario/fecha; CA-03,21,44,45.
+## Decisiones e insumos abiertos
+- **E1-D01:** vincular ficha a Persona existente entre presbiterios.
+- **E1-D02:** GC «ya existe» declarado en papel.
+- **H-23:** ficha GC por digitador distinto del creador Persona.
+- **H-24:** umbral mínimo de ficha no totalmente vacía.
+- **H-40:** responsable, finalidad, base jurídica, aviso, retención y cierre.
+- Fuente oficial INEI y corte para I02; catálogo de sedes incompleto pero hay alta de sedes; versión real hosting y carga por probar.
 
-## I06 — Seguridad/performance/despliegue
-Completar IDOR/CSRF/XSS, backups, REST/OpenAPI, pruebas carga, publicación en cPanel; CA-46..52.
-
-## Control
-Cada iteración: actualizar specs y código → ejecutar pruebas unitarias/API/E2E → reportar evidencia y diffs → correcciones → aprobación humana del lote. No modificar SGSP ni publicar prototipo como real. El build producción no necesita Node en hosting.
-
-## Auditoría E1: puertas de entrada
-La [matriz de preparación](../07-auditorias/preparacion-iteraciones.md) precisa estados. **I00 está habilitada solo para comenzar tareas técnicas**; I01 requiere cierre de seguridad/sesiones, I02/I03/I04 requieren aprobar deltas E1 y sincronizar API, SQL, casos de prueba. Las propuestas de diseño no equivalen a GO productivo.
-
-## Aclaraciones funcionales aprobadas de la auditoría E1
-En I02, validar fechas reales en React y PHP; si valor imposible, exigir corregir o vaciar el campo, pudiendo guardar incompleto. No persistir fechas imposibles con tipo fecha ni crear mecanismo de excepción. La revisión de fidelidad `JUANA`/Juan o `JU4N4` se hará **manualmente por presbiterio, fuera de PCD**, no existe motor/flujo de conciliación. I03 **solo registra líderes de GC y datos generales**, nunca integrantes nominales. E1-D01/E1-D02 y sincronización SQL/API/test siguen pendientes para I02/I03.
-
-## E2 — plan de iteración I01 listo para preparar en modo Plan, no para publicarlo sin decisiones
-1. Crear cambio OpenSpec I01 con controles AUTH-05…AUTH-09 y CAT-01…03; especificar el comportamiento de E2-D02 o registrarlo expresamente pendiente.
-2. Confirmar mecanismo de sesión cookie/CSRF, login público de presbiterios y campo de usuario **escrito** (no desplegable). ADMIN/REPORTES con contraseñas individuales.
-3. Programar solo tras decisión: PHP login/logout/me, throttling, sesiones 45m/12h y revocación, `usuario_presbiterio` y contexto sede, geo_sesion única por sesión; React pantalla/selector siguiendo V2.2.
-4. **Pruebas obligatorias:** CA-01…14, CA-36…41, CA-56…67 y CA-76 (incluyendo 401, 403, 429, CSRF y sesiones revocadas).
-5. Antes de declarar I01 LISTA: ejecutar SQL inicial y semilla en versión real MySQL/MariaDB, lint OpenAPI y evidencia de pruebas API/E2E. No afirmar ejecución sin evidencias.
-6. E2-D01 de consulta nominal se reserva principalmente a I04, E2-D03 es aceptación de riesgo antes de producción, no obliga a implantar infraestructura fuera de alcance.
-Ver [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md) y [casos](../05-pruebas/casos-prueba.md).
-
-## Actualización posterior: decisiones aprobadas
-H-12 se construirá con `alcance_consulta` por usuario (GENERAL/PRESBITERIO), **independiente de permisos de modificación**. H-13 validación de identidad DNI/CE/OTRO aprobada; fuente INEI del ubigeo se incorporará durante I02 como **entrada de construcción**. I00 debe crear **dos anexos del modelo físico sincronizados con SQL** y verificar columna por columna. H-28 y controles H-03/H-32/H-35 aceptados en diseño, pendientes de ejecución y pruebas.
-
-## Entregables del diseño físico I00
-Se generan [Anexo 01](../03-base-datos/anexos/anexo-01-diagrama-fisico.md) y [Anexo 02](../03-base-datos/anexos/anexo-02-diccionario-fisico.md) directamente desde el SQL; no se ha ejecutado aún el SQL en un servidor real.
-
-## Etapa 3 registrada
-[Informe E3](../07-auditorias/etapa-3-contratos-pruebas.md), [OpenAPI 3.2](../04-integracion/openapi.yaml), [trazabilidad RN→CU→UI→API→SQL→CA](matriz-trazabilidad.md) y [asignación de pruebas](../05-pruebas/asignacion-iteraciones.md). I01 se planifica con contratos más completos; I02/I03 dependen de E1-D01/E1-D02 y decisiones H-23/H-24. **No desarrollar módulos extra por observaciones fuera de ALC-PCD.**
-
-## Ajuste RN-29 aprobado
-La consulta `GENERAL/PRESBITERIO` es un atributo explícito de cuenta (`usuario.alcance_consulta`), independiente de la edición. [Spec REP-09](../../openspec/specs/reportes/spec.md) y [ADM-06](../../openspec/specs/administracion/spec.md). I04 debe probar CA-77/78; I05 cambia permisos de lectura, audita y revalida sesiones.
-
-## **Prioridad absoluta V4.0 — revisar antes de cualquier iteración**
-- Arquitectura física **11 tablas**, SQL [`001_initial.sql`](../../database/migrations/001_initial.sql), [anexos](../03-base-datos/anexos/README.md), [justificación](../03-base-datos/anexos/justificacion-11-tablas.md).
-- Documento solo tipo+número, sin subtipo. Consulta **total por funcionalidad**, filtros opcionales presbiterio/sede, no ACL territorial. Modificación DIGITADOR solo propias.
-- I00 validar SQL nuevo y seeds; I01 sesión integrada con GPS; I02 Persona/Ficha/GC en JSON más ubigeo INEI; I03 solo líder GC; I04 consulta global; I05 catálogo crítico; I06 [checklist](../06-despliegue/checklist-produccion.md) y H-40.
-- Las referencias históricas V3 a 17 tablas y autorización territorial quedan **anuladas**, no deben convertirse en prompts de código.
+**Estado real:** SQL, OpenAPI, anotaciones y anexos están en GitHub; **NO hay frontend/backend productivos**, ni pruebas de motor, integración, restore o carga ejecutadas.
