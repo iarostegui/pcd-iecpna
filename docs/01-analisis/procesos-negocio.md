@@ -1,5 +1,5 @@
 # Procesos de negocio PCD (operación vs automatización)
-## P1 — Preparación campaña
+## P1 — Preparación de la campaña temporal
 **Negocio:** organizar fichas impresas, asignar presbiterios y digitadores, recopilar catálogo existente. **PCD:** ADMIN configura presbiterios, sedes disponibles, seis usuarios iniciales por presbiterio, un usuario ADMIN y REPORTES; configura campos críticos.
 
 ## P2 — Iniciar jornada
@@ -12,11 +12,14 @@
 **Negocio:** usar hoja del líder y características resumidas del grupo. **PCD:** identificar Persona persistida → capturar GC nuevo o existente (sin sustituir líder) → guardar con auditoría → siguiente Persona / consulta. Cantidad aproximada NO crea miembros nominales.
 
 ## P5 — Consultar/corregir
-**Negocio:** un digitador subsana datos de sus fichas; ADMIN atiende errores globales. **PCD:** buscar/filtrar por presbiterio, sede, autor, incompletitud y duplicados → editar autorizado → preservar creador → guardar historial antes/después y nueva georreferencia de la sesión.
+**Negocio:** un digitador subsana datos de sus fichas; ADMIN atiende errores globales. **PCD:** buscar/filtrar por presbiterio, sede, autor, incompletitud y duplicados → editar autorizado → preservar creador → guardar historial antes/después y la única georreferencia/estado previamente registrada en la sesión.
 
 ## P6 — Monitorear calidad
 **Negocio:** consultar avance y detectar vacíos sin exigir revisión individual. **PCD:** reportes actualizados por presbiterio/sede/digitador y fecha última digitación; comparar campos críticos parametrizados, exportación de reportes si se implementa con permisos; no migración final en esta fase.
 
 ## P7 — Cerrar campaña
-**Negocio:** definir fecha, conciliar duplicados y planificar migración. **PCD:** mantener IDs y trazas para proyecto posterior de migración; respaldos verificables. No activar migración automática al SGSP en esta entrega.
+**Negocio:** definir fecha, registrar posibles duplicados identificados y planificar migración posterior. **PCD:** mantener IDs y trazas para proyecto posterior de migración; respaldos verificables. No activar migración automática al SGSP en esta entrega.
 
+
+## Criterio transversal V4
+La función de **consulta** obtiene resultados generales, con filtros **opcionales** por Presbiterio/Sede; la selección de sede solo determina dónde se **digita**. La fuente de PCD V4 es una BD de 11 tablas: ORGANIZACION (sede/presbiterio), CATALOGO (listas pequeñas), UBIGEO (INEI I02), PERSONA/FICHA/GC (cónyuge y responsabilidades JSON), SESION (GPS). Solo tipo+número documental.

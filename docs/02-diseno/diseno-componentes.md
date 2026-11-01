@@ -1,4 +1,4 @@
-# Diseño de componentes PCD V3.1
+# Diseño de componentes PCD V4.0
 ## Frontend React/TypeScript/Vite
 ```text
 src/
@@ -36,14 +36,14 @@ backend/
   src/Db/                PDOConnection, Repositorios
   config/                configuración protegida fuera webroot
 ```
-**Responsabilidad:** autorización, validación estructural, normalización documental, idempotencia, transacciones y auditoría.
+**Responsabilidad:** autorización por funcionalidad y edición, validación estructural, normalización documental, idempotencia, transacciones y auditoría.
 
 ## Secuencias clave
 ### Login y ubicación
 1. React POST login → PHP crea sesión y login_evento.
 2. React pide ubicación **una vez**; POST /auth/ubicacion incluso si denegada.
-3. PHP persiste geo_sesion UNIQUE(sesion_id); en futuros refresh, GET /auth/me devuelve resumen y no se llama geolocalización de nuevo.
-4. Guardados referencian snapshot previamente persistido.
+3. PHP actualiza sesion.geo_estado/geo_* UNA vez por sesión; en futuros refresh, GET /auth/me devuelve resumen y no se llama geolocalización de nuevo.
+4. Guardados referencian estado/valor en sesion.geo_*.
 
 ### Persona y GC
 1. Formulario captura papel, valida local, búsqueda documento por API.
@@ -61,3 +61,6 @@ backend/
 ## Responsabilidad de despliegue
 Solo `frontend/dist` y `backend/public` accesibles por HTTP; API /api/v1 en mismo dominio; secretos, scripts SQL, documentación y fuentes fuera de Document Root.
 
+
+## V4 — Proyección de entidades
+Frontend consulta `GET /personas` sin filtro o con filtros combinados Presbiterio/Sede; no hay selector de permiso territorial. El backend sirve `organizacion`, `catalogo`, `ubigeo` y `persona`/`ficha`/`grupo_crecer`. Cónyuge/responsabilidades son secciones validadas de `ficha.datos_fuente_json`. Sesión y geolocalización conviven en `sesion`. Solo tipo+número documental, sin subtipo. SQL [11 tablas](../../database/migrations/001_initial.sql).

@@ -10,3 +10,6 @@ GIVEN usuario deniega permiso GPS WHEN guarda ficha THEN guarda correctamente y 
 ## Requirement AUD-04: Consulta protegida
 Solo ADMIN MUST acceder a detalle completo de auditoría y ubicación; REPORTES solo indicadores agregados autorizados.
 
+
+## AUD-05 V4 — Ubicación integrada y privacidad
+MUST guardar estado y coordenadas opcionales en la fila única de `sesion`, no tabla adicional; auditoría referencia `sesion_id`. Solo ADMIN con función de auditoría autorizada puede acceder a datos de ubicación, nunca a través de consultas generales. `login_evento` y `auditoria_evento` son distintos porque un fallo previo al login no tiene sesión válida. Retención pendiente H-40.

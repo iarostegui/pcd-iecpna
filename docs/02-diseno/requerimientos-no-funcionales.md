@@ -1,4 +1,4 @@
-# RNF-PCD-3.1 · Requerimientos no funcionales y verificaciones
+# RNF-PCD-4.0 · Requerimientos no funcionales y verificaciones
 | ID | Dimensión | Criterio de aceptación / medición |
 |---|---|---|
 | RNF-01 | Plataforma | Ejecutar en cPanel existente con frontend compilado, PHP 8.x y MySQL/MariaDB InnoDB; sin Node residente. |
@@ -7,9 +7,9 @@
 | RNF-04 | Duplicidad | Objetivo p95 ≤500 ms para búsqueda indexada, medido sin cache engañosa. |
 | RNF-05 | Concurrencia | Probar 10/20/30 usuarios simulados; preservar rendimiento web institucional; umbral real sujeto a baseline. |
 | RNF-06 | Consistencia | Transacciones InnoDB para datos relacionados + auditoría; rollback completo en fallos. |
-| RNF-07 | Identidad | Documento único válido por tipo/número normalizado, permitiendo NULL; duplicados de fichas sin duplicar Persona. |
+| RNF-07 | Identidad | Clave técnica única NULL-permitida para documento DNI/CE confiable por tipo+número, sin subtipo y sin fusionar automáticamente OTRO; duplicados de fichas sin duplicar Persona. |
 | RNF-08 | Seguridad | HTTPS, autenticación real, hash de contraseñas, CSRF, throttling/login, sin secretos Git. |
-| RNF-09 | Autorización | Permisos verificados por backend en TODA operación, búsqueda incluida. |
+| RNF-09 | Autorización | Permiso de funcionalidad comprobado en backend; consulta total y filtros opcionales Presbiterio/Sede, escritura por autor/ADMIN comprobada en backend. |
 | RNF-10 | Privacidad | Sin PII en localStorage, URLs ni consola; reportes mínimos y acceso GPS restringido. |
 | RNF-11 | Auditoría | Creador inmutable, actor editor, antes/después, IP, hora, sesión, GPS disponible; fallos logueados. |
 | RNF-12 | Ubicación | Pedir como máximo una captura por sesión, reutilizable tras refresh; denegación no bloqueante. |
@@ -28,3 +28,5 @@
 
 **No son cifras garantizadas:** RNF-02 a 05 son metas a verificar en el hosting actual. Preparar informe p50/p95, errores, CPU/conexiones si cPanel ofrece información, y baseline del sitio institucional.
 
+
+**RNF-V4-01:** Crear **11 tablas** en motor MySQL/MariaDB real, comprobar CHECK/FK y no habilitar producción sin pruebas. **RNF-V4-02:** consentimiento/base y retención H-40 validados por IECPNA según [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md). **RNF-V4-03:** inyección/CSRF/IDOR, consulta global con filtros, edición solo propias; no coordenadas en listados. **RNF-V4-04:** restablecer backup y realizar rollback con evidencias.
