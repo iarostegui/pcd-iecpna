@@ -1,58 +1,39 @@
-# Anexo 01 — Diagrama físico de PCD
+# Anexo 01 — Diagrama físico PCD V4.0 (11 tablas)
 
-**Fuente única:** [SQL](../../../database/migrations/001_initial.sql); **17 tablas, 165 columnas, 28 FK**. BD temporal propia de PCD, no SGSP.
+**Fuente de verdad:** [migración inicial SQL](../../../database/migrations/001_initial.sql). **11 tablas, 134 columnas, 23 FK**. Producto temporal PCD (no SGSP).
 
-[Anexo 02: Diccionario físico](anexo-02-diccionario-fisico.md) · [Fuente Mermaid editable](../diagramas/er-pcd-fisico.mmd)
+[Diccionario completo](anexo-02-diccionario-fisico.md) · [Fuente editable Mermaid](../diagramas/er-pcd-fisico.mmd)
 
-## Vista global
+## Mapa de entidades
+
 ```mermaid
 erDiagram
-  PRESBITERIO {
+  ORGANIZACION {
     BIGINT_UNSIGNED id PK
   }
   USUARIO {
     BIGINT_UNSIGNED id PK
   }
-  USUARIO_PRESBITERIO {
-    BIGINT_UNSIGNED usuario_id PK,FK
-    BIGINT_UNSIGNED presbiterio_id PK,FK
-  }
-  SEDE {
+  SESION {
     BIGINT_UNSIGNED id PK
-  }
-  CAMPANA {
-    BIGINT_UNSIGNED id PK
-  }
-  CATALOGO_VALOR {
-    BIGINT_UNSIGNED id PK
-  }
-  SESION_CAPTURA {
-    BIGINT_UNSIGNED id PK
-  }
-  GEO_SESION {
-    BIGINT_UNSIGNED sesion_id PK,FK
   }
   LOGIN_EVENTO {
     BIGINT_UNSIGNED id PK
   }
-  PERSONA_CAPTURA {
+  CATALOGO {
     BIGINT_UNSIGNED id PK
   }
-  FICHA_CAPTURA {
+  UBIGEO {
+    VARCHAR_6 codigo PK
+  }
+  PERSONA {
     BIGINT_UNSIGNED id PK
   }
-  CONYUGE_PENDIENTE {
+  FICHA {
     BIGINT_UNSIGNED id PK
   }
-  PERSONA_RESPONSABILIDAD_CAPTURA {
+  GRUPO_CRECER {
     BIGINT_UNSIGNED id PK
-  }
-  GRUPO_CRECER_CAPTURA {
-    BIGINT_UNSIGNED id PK
-  }
-  CAMPO_CRITICO {
-    ENUM entidad PK
-    VARCHAR_80 campo_codigo PK
   }
   AUDITORIA_EVENTO {
     BIGINT_UNSIGNED id PK
@@ -60,88 +41,59 @@ erDiagram
   IDEMPOTENCIA {
     BIGINT_UNSIGNED id PK
   }
-  USUARIO ||--o{ USUARIO_PRESBITERIO : fk_up_usuario
-  PRESBITERIO ||--o{ USUARIO_PRESBITERIO : fk_up_presbiterio
-  PRESBITERIO ||--o{ SEDE : fk_sede_presb
-  USUARIO ||--o{ SEDE : fk_sede_autor
-  USUARIO ||--o{ SESION_CAPTURA : fk_sc_user
-  PRESBITERIO ||--o{ SESION_CAPTURA : fk_sc_pres
-  SEDE ||--o{ SESION_CAPTURA : fk_sc_sede
-  SESION_CAPTURA ||--o| GEO_SESION : fk_geo_session
-  USUARIO ||--o{ LOGIN_EVENTO : fk_le_usuario
-  PRESBITERIO ||--o{ LOGIN_EVENTO : fk_le_pres
-  USUARIO ||--o{ PERSONA_CAPTURA : fk_pc_creador
-  USUARIO ||--o{ PERSONA_CAPTURA : fk_pc_editor
-  CAMPANA ||--o{ FICHA_CAPTURA : fk_fc_campana
-  PERSONA_CAPTURA ||--o{ FICHA_CAPTURA : fk_fc_persona
-  SEDE ||--o{ FICHA_CAPTURA : fk_fc_sede
-  USUARIO ||--o{ FICHA_CAPTURA : fk_fc_autor
-  USUARIO ||--o{ FICHA_CAPTURA : fk_fc_editor
-  PERSONA_CAPTURA ||--o{ CONYUGE_PENDIENTE : fk_con_persona
-  FICHA_CAPTURA ||--o{ CONYUGE_PENDIENTE : fk_con_ficha_persona
-  PERSONA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_persona
-  FICHA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_ficha_persona
-  SEDE ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_sede
-  FICHA_CAPTURA ||--o{ GRUPO_CRECER_CAPTURA : fk_gc_ficha_tipo
-  USUARIO ||--o{ CAMPO_CRITICO : fk_cc_user
-  SESION_CAPTURA ||--o{ AUDITORIA_EVENTO : fk_au_session
-  GEO_SESION ||--o{ AUDITORIA_EVENTO : fk_au_geo
-  USUARIO ||--o{ AUDITORIA_EVENTO : fk_au_user
-  USUARIO ||--o{ IDEMPOTENCIA : fk_idem_user
+  ORGANIZACION ||--o{ ORGANIZACION : fk_org_padre
+  ORGANIZACION ||--o{ USUARIO : fk_usuario_presb
+  USUARIO ||--o{ SESION : fk_sesion_usuario
+  ORGANIZACION ||--o{ SESION : fk_sesion_presb
+  ORGANIZACION ||--o{ SESION : fk_sesion_sede
+  USUARIO ||--o{ LOGIN_EVENTO : fk_login_usuario
+  ORGANIZACION ||--o{ LOGIN_EVENTO : fk_login_presb
+  USUARIO ||--o{ CATALOGO : fk_catalogo_editor
+  UBIGEO ||--o{ UBIGEO : fk_ubigeo_padre
+  USUARIO ||--o{ PERSONA : fk_persona_creador
+  USUARIO ||--o{ PERSONA : fk_persona_editor
+  UBIGEO ||--o{ PERSONA : fk_persona_dpto
+  UBIGEO ||--o{ PERSONA : fk_persona_prov
+  UBIGEO ||--o{ PERSONA : fk_persona_dist
+  PERSONA ||--o{ FICHA : fk_ficha_persona
+  ORGANIZACION ||--o{ FICHA : fk_ficha_presb
+  ORGANIZACION ||--o{ FICHA : fk_ficha_sede
+  USUARIO ||--o{ FICHA : fk_ficha_creador
+  USUARIO ||--o{ FICHA : fk_ficha_editor
+  FICHA ||--o{ GRUPO_CRECER : fk_gc_ficha_tipo
+  SESION ||--o{ AUDITORIA_EVENTO : fk_audit_sesion
+  USUARIO ||--o{ AUDITORIA_EVENTO : fk_audit_usuario
+  USUARIO ||--o{ IDEMPOTENCIA : fk_idem_usuario
 ```
 
-## Diagrama con todos los campos y FK
+## Diagrama detallado de atributos y relaciones
+
 ```mermaid
 erDiagram
-  PRESBITERIO {
+  ORGANIZACION {
     BIGINT_UNSIGNED id PK
-    VARCHAR_40 codigo UK
-    VARCHAR_180 nombre
+    ENUM tipo
+    BIGINT_UNSIGNED padre_id FK
+    VARCHAR_50 codigo UK
+    VARCHAR_200 nombre
+    VARCHAR_200 nombre_norm
+    VARCHAR_300 referencia
     TINYINT_1 activo
+    DATETIME_6 created_at
   }
   USUARIO {
     BIGINT_UNSIGNED id PK
     VARCHAR_80 codigo UK
     VARCHAR_180 nombre_display
     ENUM perfil
-    ENUM alcance_consulta
+    BIGINT_UNSIGNED presbiterio_id FK
     VARCHAR_255 password_hash
     TINYINT_1 activo
     INT_UNSIGNED auth_version
     DATETIME_6 created_at
     DATETIME_6 updated_at
   }
-  USUARIO_PRESBITERIO {
-    BIGINT_UNSIGNED usuario_id PK,FK
-    BIGINT_UNSIGNED presbiterio_id PK,FK
-  }
-  SEDE {
-    BIGINT_UNSIGNED id PK
-    BIGINT_UNSIGNED presbiterio_id FK
-    VARCHAR_50 codigo
-    VARCHAR_200 nombre_oficial
-    VARCHAR_200 nombre_norm
-    VARCHAR_300 ubicacion_referencia
-    TINYINT_1 activo
-    BIGINT_UNSIGNED created_by FK
-    DATETIME_6 created_at
-  }
-  CAMPANA {
-    BIGINT_UNSIGNED id PK
-    VARCHAR_50 codigo UK
-    VARCHAR_180 nombre
-    VARCHAR_30 estado
-    DATETIME_6 created_at
-  }
-  CATALOGO_VALOR {
-    BIGINT_UNSIGNED id PK
-    VARCHAR_45 dominio
-    VARCHAR_65 codigo
-    VARCHAR_130 etiqueta
-    SMALLINT_UNSIGNED orden
-    TINYINT_1 activo
-  }
-  SESION_CAPTURA {
+  SESION {
     BIGINT_UNSIGNED id PK
     BIGINT_UNSIGNED usuario_id FK
     BIGINT_UNSIGNED presbiterio_id FK
@@ -154,14 +106,11 @@ erDiagram
     DATETIME_6 last_seen
     DATETIME_6 revocada_en
     INT_UNSIGNED auth_version_al_ingreso
-  }
-  GEO_SESION {
-    BIGINT_UNSIGNED sesion_id PK,FK
-    ENUM estado
-    DECIMAL_10_7 latitud
-    DECIMAL_10_7 longitud
-    DECIMAL_10_2 precision_m
-    DATETIME_6 capturada_en
+    ENUM geo_estado
+    DECIMAL_10_7 geo_latitud
+    DECIMAL_10_7 geo_longitud
+    DECIMAL_10_2 geo_precision_m
+    DATETIME_6 geo_capturada_en
   }
   LOGIN_EVENTO {
     BIGINT_UNSIGNED id PK
@@ -173,13 +122,30 @@ erDiagram
     VARCHAR_255 user_agent
     DATETIME_6 created_at
   }
-  PERSONA_CAPTURA {
+  CATALOGO {
+    BIGINT_UNSIGNED id PK
+    VARCHAR_70 categoria
+    VARCHAR_85 codigo
+    VARCHAR_160 etiqueta
+    SMALLINT_UNSIGNED orden
+    TINYINT_1 activo
+    JSON config_json
+    BIGINT_UNSIGNED updated_by FK
+    DATETIME_6 updated_at
+  }
+  UBIGEO {
+    VARCHAR_6 codigo PK
+    ENUM tipo
+    VARCHAR_6 padre_codigo FK
+    VARCHAR_160 nombre
+    TINYINT_1 activo
+  }
+  PERSONA {
     BIGINT_UNSIGNED id PK
     VARCHAR_24 tipo_documento
-    VARCHAR_100 tipo_documento_detalle
     VARCHAR_60 numero_documento
     VARCHAR_60 numero_documento_norm
-    VARCHAR_220 clave_identidad UK
+    VARCHAR_120 clave_identidad UK
     VARCHAR_150 nombres
     VARCHAR_100 apellido_paterno
     VARCHAR_100 apellido_materno
@@ -190,9 +156,9 @@ erDiagram
     VARCHAR_180 correo
     VARCHAR_180 facebook_usuario
     VARCHAR_500 direccion
-    VARCHAR_10 ubigeo_dpto_codigo
-    VARCHAR_10 ubigeo_prov_codigo
-    VARCHAR_10 ubigeo_dist_codigo
+    VARCHAR_6 ubigeo_dpto_codigo FK
+    VARCHAR_6 ubigeo_prov_codigo FK
+    VARCHAR_6 ubigeo_dist_codigo FK
     VARCHAR_40 condicion_codigo
     DATE fecha_condicion
     TINYINT_1 es_lider_gc_intencion
@@ -202,9 +168,8 @@ erDiagram
     DATETIME_6 updated_at
     INT_UNSIGNED version
   }
-  FICHA_CAPTURA {
+  FICHA {
     BIGINT_UNSIGNED id PK
-    BIGINT_UNSIGNED campana_id FK
     BIGINT_UNSIGNED persona_id FK
     BIGINT_UNSIGNED presbiterio_id FK
     BIGINT_UNSIGNED sede_id FK
@@ -222,27 +187,7 @@ erDiagram
     DATETIME_6 updated_at
     INT_UNSIGNED version
   }
-  CONYUGE_PENDIENTE {
-    BIGINT_UNSIGNED id PK
-    BIGINT_UNSIGNED persona_id FK
-    BIGINT_UNSIGNED ficha_id FK
-    ENUM ficha_tipo FK
-    VARCHAR_24 tipo_documento
-    VARCHAR_60 numero_documento
-    VARCHAR_240 nombre_libre
-  }
-  PERSONA_RESPONSABILIDAD_CAPTURA {
-    BIGINT_UNSIGNED id PK
-    BIGINT_UNSIGNED persona_id FK
-    BIGINT_UNSIGNED ficha_id FK
-    ENUM ficha_tipo FK
-    VARCHAR_50 tipo_codigo
-    BIGINT_UNSIGNED sede_id FK
-    VARCHAR_180 region_libre
-    VARCHAR_280 descripcion
-    DATE fecha_desde
-  }
-  GRUPO_CRECER_CAPTURA {
+  GRUPO_CRECER {
     BIGINT_UNSIGNED id PK
     BIGINT_UNSIGNED ficha_id FK,UK
     ENUM ficha_tipo FK
@@ -259,21 +204,10 @@ erDiagram
     DATETIME_6 created_at
     DATETIME_6 updated_at
   }
-  CAMPO_CRITICO {
-    ENUM entidad PK
-    VARCHAR_80 campo_codigo PK
-    VARCHAR_150 etiqueta
-    VARCHAR_110 ruta_dato
-    TINYINT_1 desactivable
-    TINYINT_1 es_critico
-    BIGINT_UNSIGNED updated_by FK
-    DATETIME_6 updated_at
-  }
   AUDITORIA_EVENTO {
     BIGINT_UNSIGNED id PK
     VARCHAR_75 request_id
     BIGINT_UNSIGNED sesion_id FK
-    BIGINT_UNSIGNED geo_sesion_id FK
     BIGINT_UNSIGNED usuario_id FK
     VARCHAR_60 accion
     VARCHAR_60 recurso_tipo
@@ -292,34 +226,31 @@ erDiagram
     JSON response_json
     DATETIME_6 created_at
   }
-  USUARIO ||--o{ USUARIO_PRESBITERIO : fk_up_usuario
-  PRESBITERIO ||--o{ USUARIO_PRESBITERIO : fk_up_presbiterio
-  PRESBITERIO ||--o{ SEDE : fk_sede_presb
-  USUARIO ||--o{ SEDE : fk_sede_autor
-  USUARIO ||--o{ SESION_CAPTURA : fk_sc_user
-  PRESBITERIO ||--o{ SESION_CAPTURA : fk_sc_pres
-  SEDE ||--o{ SESION_CAPTURA : fk_sc_sede
-  SESION_CAPTURA ||--o| GEO_SESION : fk_geo_session
-  USUARIO ||--o{ LOGIN_EVENTO : fk_le_usuario
-  PRESBITERIO ||--o{ LOGIN_EVENTO : fk_le_pres
-  USUARIO ||--o{ PERSONA_CAPTURA : fk_pc_creador
-  USUARIO ||--o{ PERSONA_CAPTURA : fk_pc_editor
-  CAMPANA ||--o{ FICHA_CAPTURA : fk_fc_campana
-  PERSONA_CAPTURA ||--o{ FICHA_CAPTURA : fk_fc_persona
-  SEDE ||--o{ FICHA_CAPTURA : fk_fc_sede
-  USUARIO ||--o{ FICHA_CAPTURA : fk_fc_autor
-  USUARIO ||--o{ FICHA_CAPTURA : fk_fc_editor
-  PERSONA_CAPTURA ||--o{ CONYUGE_PENDIENTE : fk_con_persona
-  FICHA_CAPTURA ||--o{ CONYUGE_PENDIENTE : fk_con_ficha_persona
-  PERSONA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_persona
-  FICHA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_ficha_persona
-  SEDE ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : fk_pr_sede
-  FICHA_CAPTURA ||--o{ GRUPO_CRECER_CAPTURA : fk_gc_ficha_tipo
-  USUARIO ||--o{ CAMPO_CRITICO : fk_cc_user
-  SESION_CAPTURA ||--o{ AUDITORIA_EVENTO : fk_au_session
-  GEO_SESION ||--o{ AUDITORIA_EVENTO : fk_au_geo
-  USUARIO ||--o{ AUDITORIA_EVENTO : fk_au_user
-  USUARIO ||--o{ IDEMPOTENCIA : fk_idem_user
+  ORGANIZACION ||--o{ ORGANIZACION : fk_org_padre
+  ORGANIZACION ||--o{ USUARIO : fk_usuario_presb
+  USUARIO ||--o{ SESION : fk_sesion_usuario
+  ORGANIZACION ||--o{ SESION : fk_sesion_presb
+  ORGANIZACION ||--o{ SESION : fk_sesion_sede
+  USUARIO ||--o{ LOGIN_EVENTO : fk_login_usuario
+  ORGANIZACION ||--o{ LOGIN_EVENTO : fk_login_presb
+  USUARIO ||--o{ CATALOGO : fk_catalogo_editor
+  UBIGEO ||--o{ UBIGEO : fk_ubigeo_padre
+  USUARIO ||--o{ PERSONA : fk_persona_creador
+  USUARIO ||--o{ PERSONA : fk_persona_editor
+  UBIGEO ||--o{ PERSONA : fk_persona_dpto
+  UBIGEO ||--o{ PERSONA : fk_persona_prov
+  UBIGEO ||--o{ PERSONA : fk_persona_dist
+  PERSONA ||--o{ FICHA : fk_ficha_persona
+  ORGANIZACION ||--o{ FICHA : fk_ficha_presb
+  ORGANIZACION ||--o{ FICHA : fk_ficha_sede
+  USUARIO ||--o{ FICHA : fk_ficha_creador
+  USUARIO ||--o{ FICHA : fk_ficha_editor
+  FICHA ||--o{ GRUPO_CRECER : fk_gc_ficha_tipo
+  SESION ||--o{ AUDITORIA_EVENTO : fk_audit_sesion
+  USUARIO ||--o{ AUDITORIA_EVENTO : fk_audit_usuario
+  USUARIO ||--o{ IDEMPOTENCIA : fk_idem_usuario
 ```
 
-**Advertencia:** líder GC se obtiene de `ficha_captura.persona_id`, sin integrantes nominales. La lectura `GENERAL/PRESBITERIO` no altera derechos de modificación. Modelo sin ejecución MySQL real.
+**Notas:** ORGANIZACION combina presbiterio/sede con jerarquía. CATALOGO combina listas y configuración de campos críticos. UBIGEO es una tabla jerárquica específica. FICHA guarda secciones de cónyuge/responsabilidades como JSON; PERSONA mantiene identidad separada. SESION integra geolocalización opcional. El líder GC se obtiene desde FICHA.persona_id. No hay subtipo documental ni tabla de ámbito de consulta.
+
+**Pendiente:** probar CHECK y FK compuestas en el motor de hosting y regenerar anexos después de modificar el SQL.

@@ -1,19 +1,57 @@
 erDiagram
-  PRESBITERIO ||--o{ SEDE : incluye
-  USUARIO ||--o{ USUARIO_PRESBITERIO : tiene
-  PRESBITERIO ||--o{ USUARIO_PRESBITERIO : autoriza
-  USUARIO ||--o{ SESION_CAPTURA : inicia
-  SESION_CAPTURA ||--o| GEO_SESION : captura_una_vez
-  USUARIO ||--o{ LOGIN_EVENTO : intenta
-  PRESBITERIO ||--o{ FICHA_CAPTURA : contexto
-  SEDE ||--o{ FICHA_CAPTURA : origen
-  PERSONA_CAPTURA ||--o{ FICHA_CAPTURA : sustenta
-  PERSONA_CAPTURA ||--o{ CONYUGE_PENDIENTE : relaciona
-  PERSONA_CAPTURA ||--o{ PERSONA_RESPONSABILIDAD_CAPTURA : participa
-  FICHA_CAPTURA ||--o| GRUPO_CRECER_CAPTURA : registra_gc_tipo_GC
-  USUARIO ||--o{ FICHA_CAPTURA : digita
-  SESION_CAPTURA ||--o{ AUDITORIA_EVENTO : registra
-  GEO_SESION ||--o{ AUDITORIA_EVENTO : referencia
-  USUARIO ||--o{ CAMPO_CRITICO : configura
-  %% Lider GC = ficha_captura.persona_id; NO existe segundo lider_persona_id.
-  %% catalogo_valor es independiente; no FK entre cada lista y tablas del negocio.
+  ORGANIZACION {
+    BIGINT_UNSIGNED id PK
+  }
+  USUARIO {
+    BIGINT_UNSIGNED id PK
+  }
+  SESION {
+    BIGINT_UNSIGNED id PK
+  }
+  LOGIN_EVENTO {
+    BIGINT_UNSIGNED id PK
+  }
+  CATALOGO {
+    BIGINT_UNSIGNED id PK
+  }
+  UBIGEO {
+    VARCHAR_6 codigo PK
+  }
+  PERSONA {
+    BIGINT_UNSIGNED id PK
+  }
+  FICHA {
+    BIGINT_UNSIGNED id PK
+  }
+  GRUPO_CRECER {
+    BIGINT_UNSIGNED id PK
+  }
+  AUDITORIA_EVENTO {
+    BIGINT_UNSIGNED id PK
+  }
+  IDEMPOTENCIA {
+    BIGINT_UNSIGNED id PK
+  }
+  ORGANIZACION ||--o{ ORGANIZACION : fk_org_padre
+  ORGANIZACION ||--o{ USUARIO : fk_usuario_presb
+  USUARIO ||--o{ SESION : fk_sesion_usuario
+  ORGANIZACION ||--o{ SESION : fk_sesion_presb
+  ORGANIZACION ||--o{ SESION : fk_sesion_sede
+  USUARIO ||--o{ LOGIN_EVENTO : fk_login_usuario
+  ORGANIZACION ||--o{ LOGIN_EVENTO : fk_login_presb
+  USUARIO ||--o{ CATALOGO : fk_catalogo_editor
+  UBIGEO ||--o{ UBIGEO : fk_ubigeo_padre
+  USUARIO ||--o{ PERSONA : fk_persona_creador
+  USUARIO ||--o{ PERSONA : fk_persona_editor
+  UBIGEO ||--o{ PERSONA : fk_persona_dpto
+  UBIGEO ||--o{ PERSONA : fk_persona_prov
+  UBIGEO ||--o{ PERSONA : fk_persona_dist
+  PERSONA ||--o{ FICHA : fk_ficha_persona
+  ORGANIZACION ||--o{ FICHA : fk_ficha_presb
+  ORGANIZACION ||--o{ FICHA : fk_ficha_sede
+  USUARIO ||--o{ FICHA : fk_ficha_creador
+  USUARIO ||--o{ FICHA : fk_ficha_editor
+  FICHA ||--o{ GRUPO_CRECER : fk_gc_ficha_tipo
+  SESION ||--o{ AUDITORIA_EVENTO : fk_audit_sesion
+  USUARIO ||--o{ AUDITORIA_EVENTO : fk_audit_usuario
+  USUARIO ||--o{ IDEMPOTENCIA : fk_idem_usuario
