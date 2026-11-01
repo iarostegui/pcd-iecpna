@@ -14,3 +14,5 @@ La referencia de atributos y claves es el [modelo lógico](../modelo-logico.md) 
 
 ## Modelo físico editable
 [er-pcd-fisico.mmd](er-pcd-fisico.mmd) muestra las tablas y campos desde el script SQL; se publica con el [Anexo 01](../anexos/anexo-01-diagrama-fisico.md) y [Anexo 02](../anexos/anexo-02-diccionario-fisico.md). El anterior `er-pcd.mmd` queda como representación conceptual resumida.
+
+**Modelo vigente V4:** [ER físico de 11 tablas](er-pcd-fisico.mmd) con [Anexo 01](../anexos/anexo-01-diagrama-fisico.md) y [Anexo 02](../anexos/anexo-02-diccionario-fisico.md). Todo SQL previo de 17 tablas reemplazado.

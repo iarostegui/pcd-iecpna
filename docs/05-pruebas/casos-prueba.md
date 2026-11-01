@@ -111,19 +111,35 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 ## Etapa 3 — casos adicionales diseñados, NO ejecutados
 | ID | Caso de prueba | Iteración |
 |---|---|---|
-| CA-77 | GET /personas con GENERAL devuelve registros nacionales autorizados, DIGITADOR no edita ajenos | I04 |
-| CA-78 | GET /personas con PRESBITERIO filtra solo asociaciones usuario_presbiterio, evita IDOR | I04 |
-| CA-79 | Cambio de alcance por ADMIN revoca sesiones y audita actor/antes/después | I05 |
+| CA-77 | Acceso a Consulta: sin filtro devuelve página general (todos los presbiterios); DIGITADOR no puede editar ficha ajena | I04 | RN-29 |
+| CA-78 | Filtros Presbiterio y/o Sede son opcionales, combinables y no modifican el permiso de consulta; validar relación sede/presbiterio | I04 | RN-29 |
+| CA-79 | No existe ajuste ADMIN de ámbito de consulta por usuario; cambio de presbiterio operativo se audita sin ampliar permiso de edición | I05 | RN-29 |
 | CA-80 | GET /grupos/{id} entrega grupo, líder derivado y version_ficha sin GPS | I03 |
 | CA-81 | PATCH grupo con versión obsoleta de ficha GC → 409, sin modificación parcial | I03 |
 | CA-82 | Idempotency-Key repetida con mismo payload → resultado original; distinta carga → 409 | I02 |
 | CA-83 | GET /reportes/avance filtros presbiterio/sede/digitador/fecha y ediciones atribuidas al actor | I05 |
 | CA-84 | Error 401/403/409/422 utiliza mismo DTO Error con request_id, sin revelar PII | I01–I05 |
-| CA-85 | ADMIN cambia ámbito de consulta de usuario vía PATCH; REPORTES no puede hacerlo | I05 |
+| CA-85 | Administración permite presbiterio operativo del digitador, NO campo alcance_consulta ni tabla usuario_presbiterio | I05 | RN-29 |
 | CA-86 | Prototipo muestra GPS/usuarios, pero producción omite GPS en consulta y no enumera cuentas en login | I01/I04 |
 | CA-87 | Tras GPS denegado, refrescar/cambiar sede no vuelve a solicitar geolocalización | I01 |
 | CA-88 | Reporte calidad recalcula faltantes al cambiar parámetros; sin aprobación de supervisor | I05 |
 | CA-89 | Nuevo registro GC no crea miembros nominales aunque tenga cantidad aproximada | I03 |
-| CA-90 | GET/personas y /reportes con filtros fuera de permisos: 403 o sin resultados según política explícita | I04/I05 |
+| CA-90 | GET /personas y /reportes sin filtros se pagina globalmente; sede/presbiterio filtros de búsqueda, no restricciones de permiso | I04/I05 | RN-29 |
 
 **Estado:** 14 pruebas diseñadas, **ninguna ejecutada**. H-23/H-24 requieren casos adicionales tras decisión funcional.
+
+## Regresión adicional modelo PCD V4.0 — casos NO EJECUTADOS
+| ID | Caso | Iteración |
+|---|---|---|
+| **CA-91** | SQL nuevo crea exactamente **11 tablas** y FKs válidas; ninguna de las tablas consolidadas permanece. | I00 |
+| **CA-92** | ORGANIZACION permite presbiterio y sede hija; impide guardar ficha en sede de otro presbiterio operativo. | I01/I02 |
+| **CA-93** | CATALOGO almacena sexos, tipo documento y campos críticos en misma tabla; cambios no desactivan relaciones técnicas. | I00/I05 |
+| **CA-94** | SESION guarda un estado GPS (incluyendo denegado) y no vuelve a solicitar ubicación en el mismo login. | I01 |
+| **CA-95** | Datos cónyuge/responsabilidades quedan dentro de FICHA.datos_fuente_json con estructura validada y auditoría; sin tablas independientes. | I02 |
+| **CA-96** | Persona tipo OTRO y mismo número en varias fichas recibe aviso de coincidencia pero NO fusión exacta automática; sin campo subtipo. | I02 |
+| **CA-97** | GET /personas sin filtros consulta alcance total de la funcionalidad; filtros separados y combinados por presbiterio/sede mantienen paginación, sin GPS. | I04 |
+| **CA-98** | DIGITADOR con acceso a Consulta puede leer ficha de otro presbiterio pero PATCH de ficha creada por otro devuelve 403. | I04 |
+| **CA-99** | Importación INEI carga código/tipo/padre válidos (2/4/6 caracteres) en una tabla UBIGEO y no códigos inventados. | I02 |
+| **CA-100** | Restauración BD y rollback de API/build funcionan con un respaldo de prueba y controles de datos sensibles. | I06 |
+
+**Los casos CA-91…CA-100 son propuestas de aceptación**, sin resultados. Ante contradicción con casos históricos, prevalece V4 y se debe corregir el caso antes de ejecutarlo.

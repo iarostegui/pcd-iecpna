@@ -49,3 +49,9 @@ Se generan [Anexo 01](../03-base-datos/anexos/anexo-01-diagrama-fisico.md) y [An
 
 ## Ajuste RN-29 aprobado
 La consulta `GENERAL/PRESBITERIO` es un atributo explícito de cuenta (`usuario.alcance_consulta`), independiente de la edición. [Spec REP-09](../../openspec/specs/reportes/spec.md) y [ADM-06](../../openspec/specs/administracion/spec.md). I04 debe probar CA-77/78; I05 cambia permisos de lectura, audita y revalida sesiones.
+
+## **Prioridad absoluta V4.0 — revisar antes de cualquier iteración**
+- Arquitectura física **11 tablas**, SQL [`001_initial.sql`](../../database/migrations/001_initial.sql), [anexos](../03-base-datos/anexos/README.md), [justificación](../03-base-datos/anexos/justificacion-11-tablas.md).
+- Documento solo tipo+número, sin subtipo. Consulta **total por funcionalidad**, filtros opcionales presbiterio/sede, no ACL territorial. Modificación DIGITADOR solo propias.
+- I00 validar SQL nuevo y seeds; I01 sesión integrada con GPS; I02 Persona/Ficha/GC en JSON más ubigeo INEI; I03 solo líder GC; I04 consulta global; I05 catálogo crítico; I06 [checklist](../06-despliegue/checklist-produccion.md) y H-40.
+- Las referencias históricas V3 a 17 tablas y autorización territorial quedan **anuladas**, no deben convertirse en prompts de código.

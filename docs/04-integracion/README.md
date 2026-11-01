@@ -19,3 +19,6 @@ Define la frontera **React ↔ PHP** dentro de PCD y documenta la eventual migra
 
 ## Etapa 3
 La [especificación OpenAPI 3.2](openapi.yaml) y el [levantamiento E3](../07-auditorias/etapa-3-contratos-pruebas.md) contienen los esquemas de respuesta/filtros. La conformidad formal de YAML y las pruebas reales siguen pendientes.
+
+## Contrato vigente PCD V4
+[OpenAPI 4.0](openapi.yaml) utiliza **11 tablas**, consulta general con filtros de presbiterio/sede, documentos solo tipo+número y tabla de catálogos única. [Contratos explicados](contratos-api.md) y [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md). Documentos históricos de E2/E3 incompatibles quedan reemplazados.

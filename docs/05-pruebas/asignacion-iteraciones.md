@@ -12,6 +12,16 @@
 | I06 — Pruebas/despliegue | CA-40, CA-46…50, CA-51 (repetición) y todos P0 de regresión | Auditoría, seguridad, rendimiento, restauración, UAT. |
 
 ## Casos E3 adicionales (ver matriz principal)
-CA-77…CA-90 cubren contratos de éxito/error, consulta configurable, conflicto de versión, idempotencia con payload distinto, métricas, edición admin y no replicar funciones de supervisor. Están **diseñados, no ejecutados**.
+CA-77…CA-100 cubren contratos de éxito/error, consulta configurable, conflicto de versión, idempotencia con payload distinto, métricas, edición admin y no replicar funciones de supervisor. Están **diseñados, no ejecutados**.
 
 **Regla:** los casos con decisión funcional pendiente (E1-D01/D02; H-23/H-24) se marcan `BLOQUEADO` hasta aprobar sus requisitos, en lugar de falsear un PASS.
+
+
+## Ajuste V4
+- **I00:** CA-91/93 y validación SQL 11 tablas.
+- **I01:** CA-92/94, login sin enumeración y GPS en SESION.
+- **I02:** CA-95/96/99; documento solo tipo/número, ubigeo INEI como insumo.
+- **I04:** CA-77/78/97/98 (consulta general con filtros, edición solo propia).
+- **I05:** CA-79/85 (NO administrar ámbitos de consulta, solo presbiterio de digitación).
+- **I06:** CA-100 (restore y reversión).
+Los casos de E2/E3 incompatibles se consideran reemplazados por V4, no PASS.

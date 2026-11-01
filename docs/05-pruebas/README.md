@@ -15,3 +15,6 @@ Contiene el **diseño de las pruebas** para comprobar requisitos de PCD y el ren
 Casos CA-56…CA-76 agregados para H-03/04/07/12/13/18/28/32/35. Son **especificaciones de prueba**, no resultados. GO de I01 requiere acordar E2-D02 y controlar riesgo E2-D03 antes de publicar con datos reales.
 
 Para ejecutar las nuevas pruebas, usar [Asignación por iteración](asignacion-iteraciones.md) y [Matriz principal](casos-prueba.md). Las pruebas están diseñadas, no ejecutadas.
+
+## Pruebas V4
+[Casos completos](casos-prueba.md), [asignación por iteraciones](asignacion-iteraciones.md) y [Etapa 4 / checklist productivo](../07-auditorias/etapa-4-produccion-y-privacidad.md). **CA-91…CA-100** prueban 11 tablas, consulta total, tipo/número sin subtipo y respaldo. Ningún caso está ejecutado.
