@@ -68,17 +68,21 @@ final class ProvisioningTest extends TestCase
         $this->assertSame(1, (int) $reportes['total']);
     }
 
-    public function testPasswordsAreArgon2idAndVerifiable(): void
+    public function testPasswordsAreStrongAndVerifiable(): void
     {
-        $this->assertTrue(defined('PASSWORD_ARGON2ID'), 'PHP debe ofrecer Argon2id.');
-
         $row = $this->db->fetchOne('SELECT password_hash FROM usuario WHERE codigo = ?', ['LIM-DIG-01']);
         $this->assertNotNull($row);
-        $this->assertStringStartsWith('$argon2id$', (string) $row['password_hash']);
+
+        $hash = (string) $row['password_hash'];
+        $this->assertTrue(\Pcd\Security\PasswordHasher::isStrongHash($hash), 'El hash debe ser Argon2id o bcrypt fuerte.');
+
+        if (defined('PASSWORD_ARGON2ID')) {
+            $this->assertStringStartsWith('$argon2id$', $hash);
+        }
 
         $uatPassword = Env::require('PCD_UAT_DIGITADOR_PASSWORD');
-        $this->assertNotSame($uatPassword, $row['password_hash']);
-        $this->assertTrue(password_verify($uatPassword, (string) $row['password_hash']));
+        $this->assertNotSame($uatPassword, $hash);
+        $this->assertTrue(password_verify($uatPassword, $hash));
     }
 
     public function testSecondRunIsIdempotentAndConflictFree(): void

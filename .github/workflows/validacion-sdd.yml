@@ -57,7 +57,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: pdo_mysql, mbstring, curl
+          extensions: pdo_mysql, mbstring, curl, intl
           tools: composer:v2
           coverage: none
 
@@ -95,7 +95,7 @@ jobs:
 
       - name: Arrancar API y comprobar salud
         run: |
-          php -S 127.0.0.1:8081 -t backend/public backend/public/router.php > /tmp/pcd-api.log 2>&1 &
+          PHP_CLI_SERVER_WORKERS=4 php -S 127.0.0.1:8081 -t backend/public backend/public/router.php > /tmp/pcd-api.log 2>&1 &
           echo $! > /tmp/pcd-api.pid
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:8081/api/v1/health >/dev/null 2>&1; then break; fi
@@ -103,8 +103,19 @@ jobs:
           done
           curl -fsS http://127.0.0.1:8081/api/v1/health
 
-      - name: Runner HTTP (23 verificaciones)
+      - name: Runner HTTP P01 (23 verificaciones)
         run: php tests/api/run.php --base-url=http://127.0.0.1:8081/api/v1
+
+      - name: Runner HTTP I01 (MySQL real, CA obligatorios)
+        run: php tests/api/i01.php --base-url=http://127.0.0.1:8081/api/v1 --json=i01-evidencia.json
+
+      - name: Publicar evidencia I01
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: i01-evidencia
+          path: i01-evidencia.json
+          if-no-files-found: warn
 
       - name: Log del servidor
         if: always()
@@ -131,6 +142,10 @@ jobs:
       - name: Dependencias frontend (lockfile)
         working-directory: frontend
         run: npm ci --no-audit --no-fund
+
+      - name: Pruebas UX automatizadas (Vitest/Testing Library)
+        working-directory: frontend
+        run: npm test
 
       - name: Compilar React/TS/Vite
         working-directory: frontend
@@ -174,7 +189,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: pdo_mysql, mbstring, curl
+          extensions: pdo_mysql, mbstring, curl, intl
           tools: composer:v2
           coverage: none
 

@@ -1,4 +1,4 @@
-# PCD — Estado documental vigente 01/11/2026 (V4.1)
+# PCD — Estado documental vigente 02/11/2026 (V4.1 + I01)
 
 ## Decisiones funcionales y estructura vigentes
 - [Alcance oficial](../01-analisis/alcance-funcional.md): plataforma **temporal** de captura de fichas Persona/Líder GC, no SGSP.
@@ -10,11 +10,18 @@
 - Calidad: reportes de faltantes automáticos, revisión de fidelidad papel↔transcripción manual externa por presbiterios.
 - Líder GC único y resumen agregado, sin integrantes nominales.
 
+## I01 implementado en desarrollo/CI (02/11/2026)
+- Autenticación real contra MySQL con `password_verify`, presbiterio + código tecleado, bloqueo 5/cuenta y 20/IP en 15 min, `login_evento`.
+- Sesión persistida en `sesion` (hash de cookie, `last_seen`, `auth_version`, GPS), cookie HttpOnly/SameSite/Secure, CSRF, inactividad 45 min y absoluta 12 h, logout y revocación.
+- `GET /presbiterios` público y mínimo; sedes del presbiterio, alta normalizada RN-33 con 409 e idempotencia; contexto ADMIN explícito; REPORTES solo lectura.
+- React I01: login sin listado de cuentas, selección/alta de sede, contexto autenticado, expiración, GPS opcional una vez por sesión y ausencia de `localStorage`.
+- Evidencia local: `npm test` (SDD), PHPUnit 64/154, runner I01 36/36 PASS y build React; CI con MySQL 8 quedará registrado en el PR. **No es GO productivo; E-07, H-14, H-40 y revisión del especialista siguen abiertos.**
+
 ## Etapa 4 preparada, no ejecutada
 [Informe E4](../07-auditorias/etapa-4-produccion-y-privacidad.md), [checklist productivo](../06-despliegue/checklist-produccion.md). PR-01…08 de datos personales/sensibles quedan sin decisión institucional. No se han ejecutado pruebas MySQL/Apache/PHP, recuperación de backups, E2E ni carga real.
 
 ## Pendientes
-E1-D02, H-23, H-24; H-14 Excel binario; fuente/corte INEI durante I02; ambiente cPanel real; H-40 privacidad/retención. **P01 dejó un andamiaje ejecutable (API PHP 8.2 + React/TS/Vite) con salud, errores, PDO, CSRF/CORS y aprovisionamiento; no hay procesos funcionales ni backend/frontend productivos.**
+E1-D02, H-23, H-24; H-14 Excel binario; fuente/corte INEI durante I02; ambiente cPanel real; H-40 privacidad/retención. **P01 dejó el andamiaje (API PHP 8.2 + React/TS/Vite); I01 añade autenticación, sesiones y contexto operativo en desarrollo/CI. I02–I05 siguen pendientes y no existe backend/frontend productivo.**
 
 ## Documentación histórica
 Textos de análisis/auditorías y cambios E1/E2/E3 de fecha 31/10/2026 se preservan como **antecedentes**; cualquier mención a 17 tablas, `alcance_consulta`, subtipo documental o permisos territoriales **ha sido anulada** por decisiones V4.1. El prototipo V2.2 no se modificó.

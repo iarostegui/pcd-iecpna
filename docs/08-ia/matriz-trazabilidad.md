@@ -1,6 +1,6 @@
 # Matriz de trazabilidad integral PCD V4.1 — RN → Spec → CU → UI → API → SQL → CA
 
-**Alcance:** [ALC-PCD-4.0](../01-analisis/alcance-funcional.md). **Estado:** contratos diseñados; E1-D01 aprobada mediante endpoint existente, E1-D02 pendiente; frontend/backend productivos aún no implementados.
+**Alcance:** [ALC-PCD-4.0](../01-analisis/alcance-funcional.md). **Estado:** contratos diseñados; E1-D01 aprobada mediante endpoint existente, E1-D02 pendiente. **I01 implementado en desarrollo/CI**; I02–I05 pendientes; no existe GO productivo.
 
 | RN | Spec/EXC | Caso de uso | Pantalla | Endpoint | Persistencia | Pruebas |
 |---|---|---|---|---|---|---|
@@ -48,3 +48,20 @@
 | RN-34 | Clave común solo UAT; rotación antes producción | usuario.password_hash, sesion.auth_version | CA-120 |
 | RN-35 | Vincular ficha a Persona existente cross-presbiterio | persona, ficha | CA-119 |
 **Prioridad al generar código:** reglas aprobadas V4.1, no cambios históricos E1-E3.
+
+
+## I01 — implementación verificada en desarrollo/CI (02/11/2026)
+| Requisito | Implementación backend | UI React | Persistencia | Evidencia |
+|---|---|---|---|---|
+| AUTH-01/02 | `AuthController`, `AuthService`, hashing y límites | Login I01 | `usuario`, `login_evento` | CA-01/02/03/04/05/06/57/58 |
+| AUTH-03/04 | `PhpSession`, `Csrf`, `SesionRepository`, revocación | Expiración y logout | `sesion` | CA-61/62/63/64/94/113 |
+| AUTH-05 | `GET /presbiterios` público | Selector de login | `organizacion` | CA-56/115 |
+| AUTH-06/07 | Bloqueo por cuenta/IP y CSRF | Mensajes 401/403/429 | `login_evento` | CA-07/59/60 |
+| AUTH-09 | `PUT /contexto/presbiterio` ADMIN | Cambio de presbiterio | `sesion`; `auditoria_evento` | CA-66/67 |
+| CAT-01/02/03/09 | `SedeService`, normalización NFKD, idempotencia | Contexto, búsqueda y alta | `organizacion`; `idempotencia` | CA-08…14/112/116/123 |
+| ALC-10 | `AuthService::storeLocation` | GPS opcional único | `sesion.geo_*` | CA-94/109/110 |
+| Modelo físico | Sin cambios de esquema | — | 11 tablas/146 columnas/23 FK | CA-91/92/122 |
+
+**Evidencia local ejecutada:** `npm test` (validadores SDD), PHPUnit 64 pruebas/154 aserciones, runner
+HTTP I01 36 PASS/0 FAIL/0 BLOCKED y build React. La ejecución CI con MySQL 8 se registra en el PR.
+**No sustituye** la revisión del especialista ni el GO productivo (E-07/H-14/H-40).

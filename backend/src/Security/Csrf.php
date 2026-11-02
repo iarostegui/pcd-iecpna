@@ -4,36 +4,16 @@ declare(strict_types=1);
 
 namespace Pcd\Security;
 
-use Pcd\Config\Env;
-
 /**
- * Preparación de CSRF: token por sesión, cookie HttpOnly/SameSite y
- * comparación en tiempo constante. La emisión del token al cliente
- * corresponde al flujo de autenticación (I01).
+ * Token CSRF por sesión de servidor. Se recupera mediante GET /auth/me y se
+ * envía en X-CSRF-Token para escrituras autenticadas. Nunca se persiste en
+ * localStorage ni se registra en logs.
  */
 final class Csrf
 {
     public static function startSession(): void
     {
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            return;
-        }
-
-        $name = Env::get('PCD_SESSION_NAME', '__Host-pcd_sid') ?? '__Host-pcd_sid';
-        $https = strtolower((string) ($_SERVER['HTTPS'] ?? '')) ;
-        $secure = ($https !== '' && $https !== 'off') || Env::get('PCD_ENV') === 'production';
-
-        session_name($name);
-        session_set_cookie_params([
-            'lifetime' => 0,
-            'path' => '/',
-            'domain' => '',
-            'secure' => $secure,
-            'httponly' => true,
-            'samesite' => 'Lax',
-        ]);
-
-        session_start();
+        PhpSession::start();
     }
 
     public static function token(): string
@@ -43,6 +23,14 @@ final class Csrf
         if (!isset($_SESSION['csrf_token']) || !is_string($_SESSION['csrf_token']) || $_SESSION['csrf_token'] === '') {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
+
+        return $_SESSION['csrf_token'];
+    }
+
+    public static function rotateToken(): string
+    {
+        self::startSession();
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
         return $_SESSION['csrf_token'];
     }

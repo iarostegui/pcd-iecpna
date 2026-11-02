@@ -3,7 +3,7 @@
 >
 > **Fuente vigente para construcción:** **SDD V4.1**, [ALC-PCD-4.0](docs/01-analisis/alcance-funcional.md), [decisiones](docs/01-analisis/decisiones-pendientes.md), [aprobaciones](docs/08-ia/APROBACIONES.md), [OpenSpec](openspec/specs/README.md), [API](docs/04-integracion/openapi.yaml), [SQL de 11 tablas](database/migrations/001_initial.sql).
 >
-> **Estado:** P00 consolidó la especificación V4.1. **P01 aporta un andamiaje ejecutable** (API PHP 8.2 + React/TS/Vite) con salud, errores, PDO, CSRF/CORS y aprovisionamiento; **los procesos funcionales I01–I05 siguen pendientes**. El SQL no está probado en el hosting.
+> **Estado:** P00 consolidó la especificación V4.1. **P01 aportó el andamiaje ejecutable** (API PHP 8.2 + React/TS/Vite). **I01 está implementado en desarrollo/CI** con login real contra MySQL, sesiones, CSRF, presbiterios/sedes, contexto ADMIN y GPS opcional de una captura por sesión; **I02–I05 siguen pendientes**. El SQL no está probado en el hosting ni existe GO productivo.
 
 ## Para empezar
 1. Leer [AGENTS.md](AGENTS.md) antes de usar una IA para implementar o revisar.
@@ -22,7 +22,7 @@ php -S 127.0.0.1:8080 -t backend/public backend/public/router.php
 # Frontend React/TS/Vite
 (cd frontend && npm ci && npm run dev)
 ```
-Pruebas: `(cd backend && vendor/bin/phpunit)` y `php tests/api/run.php --base-url=http://127.0.0.1:8080/api/v1`.
+Pruebas: `(cd backend && vendor/bin/phpunit)`, `php tests/api/run.php --base-url=http://127.0.0.1:8080/api/v1`, `php tests/api/i01.php --base-url=http://127.0.0.1:8080/api/v1 --json=i01-evidencia.json` y `(cd frontend && npm test)`.
 
 ## Directorios
 | Carpeta | Uso |
@@ -32,8 +32,8 @@ Pruebas: `(cd backend && vendor/bin/phpunit)` y `php tests/api/run.php --base-ur
 | [openspec/changes/](openspec/changes/README.md) | Cambios históricos y decisiones de ingeniería. No implementar versiones antiguas sin comprobación. |
 | [database/](database/README.md) | SQL/semillas; cuatro presbiterios precargados, sedes editables. |
 | [prototypes/](prototypes/README.md) | V2.3 = UI vigente; V2.2 = histórico. |
-| [frontend/](frontend/README.md) | React/TS/Vite: andamiaje P01, sin formularios funcionales. |
-| [backend/](backend/README.md) | API PHP 8.2/PDO: andamiaje P01, placeholders 501. |
+| [frontend/](frontend/README.md) | React/TS/Vite: login, contexto de sede, alta de sede y sesión I01; captura I02–I05 pendiente. |
+| [backend/](backend/README.md) | API PHP 8.2/PDO: autenticación, sesión, organización y contexto I01. |
 | [tests/](tests/README.md) | PHPUnit y runner HTTP con estados verificables. |
 | [scripts/](scripts/README.md) | Validadores documentales y aprovisionamiento de cuentas. |
 

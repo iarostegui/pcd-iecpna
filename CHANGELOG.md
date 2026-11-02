@@ -1,4 +1,14 @@
 # Changelog documental y técnico — PCD
+## 2026-11-02 — I01: autenticación, sesiones y contexto operativo
+- Backend PHP 8.2: login real con presbiterio + código tecleado + contraseña verificada en MySQL; límites 5/cuenta y 20/IP en 15 min; `login_evento` sin secretos.
+- Sesión persistida en `sesion` con hash de cookie, `HttpOnly/SameSite/Secure`, CSRF, regeneración al autenticar, inactividad 45 min, absoluta 12 h, revocación por `auth_version` y logout real.
+- `GET /presbiterios` público mínimo; `GET/POST /sedes` por presbiterio, normalización NFKD RN-33, 409 exacto, advertencia por similitud, idempotencia y concurrencia; `PUT /contexto/sede` y `PUT /contexto/presbiterio` (solo ADMIN, con auditoría).
+- `POST /auth/ubicacion`: una captura por sesión con estados OK/DENEGADA/ERROR/NO_DISPONIBLE, sin coordenadas en `/auth/me`, sin bloqueo de operaciones y sin uso probatorio.
+- React/TS: login sin listado de cuentas, contexto y alta de sede, identidad/perfil/contexto, logout, expiración por 401 y GPS opcional una vez; sin `localStorage` para sesión/credenciales/coordenadas.
+- Pruebas: PHPUnit 64/154; runner HTTP I01 con CA-01…CA-14, CA-56…CA-60, CA-61…CA-67, CA-76, CA-84, CA-91/92/94, CA-110/112/113/114; Vitest/Testing Library y build Vite.
+- OpenAPI con extensiones aditivas y documentadas en `AuthMe`/`Sede`; sin cambios de SQL, tablas, columnas ni rutas de I02–I06.
+- **Límites:** E-07/cPanel, H-14, H-40, revisión del especialista y GO productivo siguen pendientes; solo datos sintéticos.
+
 ## 2026-11-02 — I00: verificación técnica
 - `scripts/i00/verificar.php`: 32 controles de entorno, MySQL, enforcement y seguridad con salida JSON.
 - Job CI `i00` con MySQL 8: migraciones, seed, bootstrap UAT idempotente, build del frontend y artefacto de evidencia.

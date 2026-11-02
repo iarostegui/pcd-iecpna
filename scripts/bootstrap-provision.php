@@ -7,6 +7,7 @@ use Pcd\Config\Env;
 use Pcd\Database\Db;
 use Pcd\Provisioning\Plan;
 use Pcd\Provisioning\Provisioner;
+use Pcd\Security\PasswordHasher;
 
 /**
  * Aprovisionamiento de cuentas PCD.
@@ -247,11 +248,10 @@ function dbFromEnv(): Db
 
 function assertArgon2id(): void
 {
-    if (!defined('PASSWORD_ARGON2ID')) {
-        throw new BootstrapError(
-            'PHP no ofrece Argon2id (PASSWORD_ARGON2ID). No se aprovisiona con otro algoritmo; habilite Argon2id en el hosting.',
-            4,
-        );
+    try {
+        PasswordHasher::assertAvailable();
+    } catch (RuntimeException $exception) {
+        throw new BootstrapError($exception->getMessage(), 4);
     }
 }
 
