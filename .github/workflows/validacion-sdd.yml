@@ -1,8 +1,10 @@
 name: Validacion SDD PCD
+
 on:
   push:
     branches: [main]
   pull_request:
+
 jobs:
   documentos:
     runs-on: ubuntu-latest
@@ -15,4 +17,121 @@ jobs:
           node-version: '22'
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm test
-# Validación estática; NO acredita SQL/MariaDB ni backend implementado.
+    # Validación estática; NO acredita SQL/MariaDB ni backend implementado.
+
+  backend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: pcd_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    env:
+      PCD_ENV: testing
+      PCD_API_BASE_PATH: /api/v1
+      PCD_DB_HOST: 127.0.0.1
+      PCD_DB_PORT: 3306
+      PCD_DB_NAME: pcd_test
+      PCD_DB_USER: root
+      PCD_DB_PASSWORD: root
+      PCD_SESSION_NAME: pcd_test_sid
+      PCD_ALLOWED_ORIGINS: http://localhost:5173
+      # Credenciales sintéticas exclusivas de CI; no son secretos reales.
+      PCD_UAT_DIGITADOR_PASSWORD: uat-digitador-ci
+      PCD_ADMIN_PASSWORD: admin-ci-only
+      PCD_REPORTES_PASSWORD: reportes-ci-only
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql, mbstring, curl
+          tools: composer:v2
+          coverage: none
+
+      - name: Dependencias backend (lockfile)
+        working-directory: backend
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Esquema y seed en MySQL 8 real
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq mysql-client
+          mysql -h127.0.0.1 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS pcd_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+          mysql -h127.0.0.1 -uroot -proot pcd_test < database/migrations/001_initial.sql
+          mysql -h127.0.0.1 -uroot -proot pcd_test < database/seeds/002_catalogos_calidad.sql
+
+      - name: Aprovisionamiento UAT (primera ejecución)
+        run: php scripts/bootstrap-provision.php --mode=uat
+
+      - name: Aprovisionamiento UAT (segunda ejecución idempotente)
+        run: php scripts/bootstrap-provision.php --mode=uat
+
+      - name: Verificar cuentas y Argon2id en MySQL
+        run: |
+          total=$(mysql -h127.0.0.1 -uroot -proot pcd_test -N -e "SELECT COUNT(*) FROM usuario")
+          dig=$(mysql -h127.0.0.1 -uroot -proot pcd_test -N -e "SELECT COUNT(*) FROM usuario WHERE perfil = 'DIGITADOR'")
+          argon=$(mysql -h127.0.0.1 -uroot -proot pcd_test -N -e "SELECT COUNT(*) FROM usuario WHERE password_hash LIKE '\$argon2id\$%'")
+          echo "total=$total digitadores=$dig argon2id=$argon"
+          test "$total" = "26"
+          test "$dig" = "24"
+          test "$argon" = "26"
+
+      - name: PHPUnit (unitarias + integración MySQL)
+        working-directory: backend
+        run: vendor/bin/phpunit --configuration phpunit.xml --testdox
+
+      - name: Arrancar API y comprobar salud
+        run: |
+          php -S 127.0.0.1:8081 -t backend/public backend/public/router.php > /tmp/pcd-api.log 2>&1 &
+          echo $! > /tmp/pcd-api.pid
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8081/api/v1/health >/dev/null 2>&1; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8081/api/v1/health
+
+      - name: Runner HTTP (22 verificaciones)
+        run: php tests/api/run.php --base-url=http://127.0.0.1:8081/api/v1
+
+      - name: Log del servidor
+        if: always()
+        run: cat /tmp/pcd-api.log || true
+
+      - name: Detener API
+        if: always()
+        run: kill "$(cat /tmp/pcd-api.pid)" 2>/dev/null || true
+
+  frontend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Dependencias frontend (lockfile)
+        working-directory: frontend
+        run: npm ci --no-audit --no-fund
+
+      - name: Compilar React/TS/Vite
+        working-directory: frontend
+        run: npm run build

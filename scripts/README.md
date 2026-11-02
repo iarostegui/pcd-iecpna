@@ -1,5 +1,8 @@
-# Verificación automatizable PCD V4.1
+# scripts — Validadores y aprovisionamiento
 
+[↑ Índice principal](../README.md)
+
+## Validación documental
 Desde la raíz del repositorio, con dependencias reproducibles:
 
 ```bash
@@ -8,10 +11,28 @@ node scripts/validar-sdd-i00.cjs
 node scripts/validar-prototipo-v2.3.cjs
 ```
 
-`validar-prototipo-v2.3.cjs` no requiere paquetes; `validar-sdd-i00.cjs` usa `js-yaml` como parser formal y el `package-lock.json` fija la versión instalada.
+`validar-prototipo-v2.3.cjs` no requiere paquetes; `validar-sdd-i00.cjs` usa `js-yaml` como parser formal y el `package-lock.json` fija la versión. Comprueban **sintaxis/estructura**, no MySQL ni E2E.
 
-La verificación usa exclusivamente Node.js y comprueba **sintaxis JavaScript del HTML**, estructura del login, ausencia de ACL territorial en consulta, preservación de edición por autor, GC sin selector de conciliación, GPS único, fechas inválidas y separación de datos de demostración.
+El prototipo [V2.2](../prototypes/PCD_v2.2.html) se preserva y [V2.3](../prototypes/PCD_v2.3.html) es la UI vigente.
 
-**No es una prueba E2E.** Después deben ejecutarse los escenarios [CA-101…111](../docs/05-pruebas/validacion-prototipo-v2.3.md) en el navegador para roles, navegación móvil, formularios, duplicados, filtros y reporte. **No afirmar PASS sin ejecución**; si falla el script, detener generación de React hasta corregir.
+## Aprovisionamiento de cuentas — `bootstrap-provision.php`
+```bash
+# Plan sin BD (no escribe nada)
+php scripts/bootstrap-provision.php --mode=uat --dry-run
 
-El prototipo [V2.2](../prototypes/PCD_v2.2.html) se preserva, y [V2.3](../prototypes/PCD_v2.3.html) es la versión activa de UI.
+# UAT: ADMIN, REPORTES y 6 DIGITADORES por presbiterio
+php scripts/bootstrap-provision.php --mode=uat
+
+# Primer ADMIN productivo (exige PCD_ENV=production)
+php scripts/bootstrap-provision.php --mode=admin-prod
+php scripts/bootstrap-provision.php --mode=admin-prod --rotate
+```
+
+Variables: `PCD_DB_HOST`, `PCD_DB_PORT`, `PCD_DB_NAME`, `PCD_DB_USER`, `PCD_DB_PASSWORD`, `PCD_UAT_DIGITADOR_PASSWORD`, `PCD_ADMIN_PASSWORD`, `PCD_REPORTES_PASSWORD`.
+
+Reglas:
+- Idempotente por `usuario.codigo`; no duplica cuentas ni sobrescribe hashes existentes.
+- **Argon2id obligatorio**; si PHP no lo ofrece, aborta (código 4) y no usa otro algoritmo.
+- La clave común de DIGITADOR es **solo UAT**; antes de producción se rota a credenciales individuales.
+- No imprime contraseñas ni hashes; las credenciales se leen del entorno.
+- Códigos de salida: `0` correcto, `2` configuración, `3` BD, `4` Argon2id ausente.

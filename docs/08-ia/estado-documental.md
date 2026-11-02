@@ -14,7 +14,7 @@
 [Informe E4](../07-auditorias/etapa-4-produccion-y-privacidad.md), [checklist productivo](../06-despliegue/checklist-produccion.md). PR-01…08 de datos personales/sensibles quedan sin decisión institucional. No se han ejecutado pruebas MySQL/Apache/PHP, recuperación de backups, E2E ni carga real.
 
 ## Pendientes
-E1-D02, H-23, H-24; H-14 Excel binario; fuente/corte INEI durante I02; ambiente cPanel real; H-40 privacidad/retención. **No hay frontend React ni backend PHP productivos implementados**.
+E1-D02, H-23, H-24; H-14 Excel binario; fuente/corte INEI durante I02; ambiente cPanel real; H-40 privacidad/retención. **P01 dejó un andamiaje ejecutable (API PHP 8.2 + React/TS/Vite) con salud, errores, PDO, CSRF/CORS y aprovisionamiento; no hay procesos funcionales ni backend/frontend productivos.**
 
 ## Documentación histórica
 Textos de análisis/auditorías y cambios E1/E2/E3 de fecha 31/10/2026 se preservan como **antecedentes**; cualquier mención a 17 tablas, `alcance_consulta`, subtipo documental o permisos territoriales **ha sido anulada** por decisiones V4.1. El prototipo V2.2 no se modificó.
