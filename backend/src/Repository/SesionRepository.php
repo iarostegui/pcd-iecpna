@@ -149,19 +149,25 @@ final class SesionRepository
         return $row === false ? null : $row;
     }
 
-    public function storeLocation(
+    /**
+     * Captura condicional y atómica: solo la primera solicitud que encuentre
+     * geo_estado NULL modifica la fila. Devuelve true si esta solicitud ganó.
+     */
+    public function storeLocationIfEmpty(
         int $sessionId,
         string $estado,
         ?float $latitud,
         ?float $longitud,
         ?float $precision,
         string $receivedAt,
-    ): void {
+    ): bool {
         $statement = $this->pdo->prepare(
             'UPDATE sesion
              SET geo_estado = ?, geo_latitud = ?, geo_longitud = ?, geo_precision_m = ?, geo_capturada_en = ?
              WHERE id = ? AND geo_estado IS NULL',
         );
         $statement->execute([$estado, $latitud, $longitud, $precision, $receivedAt, $sessionId]);
+
+        return $statement->rowCount() === 1;
     }
 }

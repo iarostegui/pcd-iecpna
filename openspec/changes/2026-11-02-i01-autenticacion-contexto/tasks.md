@@ -69,8 +69,8 @@
 | Comando / entorno | Resultado | Estado |
 |---|---|---|
 | `npm test` (raíz) | validadores SDD y prototipo | PASS |
-| `cd backend && vendor/bin/phpunit` | 64 pruebas / 154 aserciones; integración con MariaDB 11.8 local | PASS |
-| `php tests/api/i01.php --json=...` | 39 PASS / 0 FAIL / 0 BLOCKED; CA obligatorios y cobertura I01 | PASS |
+| `cd backend && vendor/bin/phpunit` | 70 pruebas / 179 aserciones; integración con MariaDB 11.8 local | PASS |
+| `php tests/api/i01.php --json=...` | 42 PASS / 0 FAIL / 0 BLOCKED; CA obligatorios, cobertura I01 y O01–O03 | PASS |
 | `php tests/api/run.php` | 23 PASS / 0 FAIL / 0 BLOCKED | PASS |
 | `cd frontend && npm test` | 8 pruebas UX (login, contexto, expiración, GPS, 409, REPORTES) | PASS |
 | `cd frontend && npm run build` | Vite build correcto | PASS |
@@ -81,3 +81,14 @@
 desarrollo). La evidencia de motor exigida se obtuvo en GitHub Actions con MySQL 8.0.46/PHP 8.2.35
 (run 41451546914); los jobs `backend`, `frontend`, `i00` y `documentos` quedaron en verde. Las
 restricciones de cPanel/H-40 y el GO productivo siguen abiertas.
+
+## 7. Correcciones técnicas I01-O01…O03 (02/11/2026)
+
+- [x] O01: `failedCountByAccount` por usuario/código + presbiterio; `AuthService` resuelve la cuenta antes del límite.
+- [x] O01: pruebas de aislamiento HTTP y de repositorio (`I01-O01`, `LoginEventoScopeTest`).
+- [x] O02: `storeLocationIfEmpty` atómico con `rowCount`; 409 para la solicitud perdedora.
+- [x] O02: prueba HTTP concurrente (`I01-O02`) y prueba de dos conexiones (`SesionLocationTest`).
+- [x] O03: `cookieName()`/`cookieOptions()`, guardia `__Host-` + `Secure`, sin confianza en proxy headers.
+- [x] O03: pruebas de contrato de cookie, HTTPS directo y `X-Forwarded-Proto` no confiable (`I01-O03`).
+- [ ] Verificación TLS/cPanel real: **BLOCKED (E-07)**.
+- [ ] Evidencia CI MySQL 8 de esta ronda y actualización de conteos: pendiente.

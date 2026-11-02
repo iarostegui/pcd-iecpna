@@ -1,4 +1,10 @@
 # Changelog documental y técnico — PCD
+## 2026-11-02 — Correcciones técnicas I01-O01…O03
+- **O01:** el límite de 5 fallos por cuenta ahora usa `usuario_id` (o `codigo_intentado` si no existe) + `presbiterio_id`; intentos en un presbiterio no bloquean el login legítimo en otro. IP sigue global (20/15 min). Pruebas HTTP de aislamiento y de repositorio.
+- **O02:** `SesionRepository::storeLocationIfEmpty()` usa un `UPDATE ... WHERE geo_estado IS NULL` atómico y `rowCount`; dos POST concurrentes producen 200 + 409 y no sobrescriben la primera ubicación. Pruebas HTTP concurrentes y de dos conexiones MySQL.
+- **O03:** `PhpSession::cookieName()/cookieOptions()` centralizan `__Host-pcd_sid`, `Secure`, `HttpOnly`, `SameSite=Lax`, `Path=/` y sin `Domain`; guardia `__Host-`+`Secure`; no se confía en `X-Forwarded-Proto`. Pruebas de producción/HTTPS; cPanel/TLS real BLOCKED (E-07).
+- Sin cambios de tablas/columnas ni de reglas funcionales; PR #4 se mantiene Draft.
+
 ## 2026-11-02 — I01: autenticación, sesiones y contexto operativo
 - Backend PHP 8.2: login real con presbiterio + código tecleado + contraseña verificada en MySQL; límites 5/cuenta y 20/IP en 15 min; `login_evento` sin secretos.
 - Sesión persistida en `sesion` con hash de cookie, `HttpOnly/SameSite/Secure`, CSRF, regeneración al autenticar, inactividad 45 min, absoluta 12 h, revocación por `auth_version` y logout real.

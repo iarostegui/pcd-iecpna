@@ -71,3 +71,16 @@ I01 se considera verificable cuando:
 5. el commit se publica en la rama y se abre PR Draft hacia `main`, sin merge.
 
 Cualquier imposibilidad de ejecutar un caso se reporta `BLOCKED`, nunca `PASS`.
+
+## 7. Ronda de correcciones técnicas I01-O01…O03 (02/11/2026)
+
+Evaluación independiente de I01; no cambia decisiones funcionales ni alcance.
+
+| ID | Observación | Corrección |
+|---|---|---|
+| **I01-O01** | El conteo de fallos usaba solo `codigo_intentado`, permitiendo que intentos en un presbiterio bloquearan la cuenta en otro. | Cubo por `(usuario_id o codigo_intentado) + presbiterio_id`; IP global. Pruebas de aislamiento. |
+| **I01-O02** | La captura GPS tenía lectura previa + `UPDATE ... WHERE geo_estado IS NULL`; dos solicitudes concurrentes podían devolver 200 la perdedora. | `UPDATE` condicional atómico con `rowCount`; una gana (200), la otra recibe 409 con la primera. Pruebas HTTP concurrentes y de dos conexiones. |
+| **I01-O03** | La configuración de cookie estaba embebida y faltaba una verificación explícita de `__Host-`, `Secure`, `Path=/`, sin `Domain` y sin confiar en cabeceras de proxy. | `PhpSession::cookieName()/cookieOptions()`, guardia `__Host-` + `Secure`, pruebas de producción/HTTPS y de no confianza en `X-Forwarded-Proto`. cPanel/TLS real: BLOCKED. |
+
+Se mantienen 5 fallos/cuenta por contexto de presbiterio, 20/IP en 15 min, respuestas sin enumeración,
+sin bloqueos permanentes, sin tablas/columnas nuevas y GPS opcional/no probatorio.

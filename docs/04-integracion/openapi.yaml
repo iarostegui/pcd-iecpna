@@ -370,7 +370,7 @@ paths:
     post:
       tags: [auth]
       security: [{ cookieAuth: [], csrf: [] }]
-      description: 'Ubicacion autodeclarada por cliente; no constituye prueba fisica. Un intento por sesion. Servidor registra hora de recepcion.'
+      description: 'Ubicacion autodeclarada por cliente; no constituye prueba fisica. Un intento por sesion: la primera actualizacion condicional gana y las concurrentes reciben 409 con la ubicacion original. Servidor registra hora de recepcion.'
       requestBody:
         required: true
         content:
@@ -380,7 +380,7 @@ paths:
         '200': { description: 'Ubicación de sesión original o recién guardada', content: { application/json: { schema: { $ref: '#/components/schemas/Location' } } } }
         '401': { description: 'No autenticado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
         '403': { description: 'Token CSRF ausente o inválido', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
-        '409': { description: 'Ubicación ya capturada (se devuelve la primera en details.ubicacion)', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '409': { description: 'Ubicación ya capturada; dos solicitudes concurrentes no sobrescriben la primera (se devuelve en details.ubicacion)', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
         '422': { description: 'Estado o coordenadas inválidas', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /presbiterios:
     get:

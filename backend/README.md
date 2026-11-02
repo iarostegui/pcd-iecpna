@@ -44,10 +44,12 @@ Las rutas de I02–I06 (`/catalogos`, `/ubigeos`, personas, GC, reportes, admin)
 ## Sesión y seguridad
 - Cookie `__Host-pcd_sid` en producción; `HttpOnly`, `SameSite=Lax`, `Secure` con HTTPS/producción y `Path=/`.
 - `session_ref_hash = SHA-256(cookie)` en `sesion`; el valor de cookie no se almacena en claro.
+- `POST /auth/ubicacion` usa un `UPDATE ... WHERE geo_estado IS NULL` atómico: la primera captura gana y la concurrente recibe 409 sin sobrescribir.
+- La cookie `__Host-` exige `Secure`; no se confía en `X-Forwarded-Proto`. cPanel con TLS en proxy debe declarar `PCD_ENV=production` o `PCD_COOKIE_SECURE=true`.
 - Regeneración de ID al autenticar, CSRF en memoria recuperado de `/auth/me`, rotación al login y logout real.
 - Inactividad 45 min y vida absoluta 12 h configurables; `last_seen` se actualiza como máximo cada 60 s.
 - Revocación por `auth_version`, cuenta inactiva o logout. Login genérico para no enumerar cuentas.
-- 5 fallos por cuenta y 20 por IP en 15 min; `login_evento` registra OK/FALLIDO/BLOQUEADO/LOGOUT sin contraseñas.
+- 5 fallos por cuenta **y presbiterio** (usuario/código + `presbiterio_id`) y 20 por IP en 15 min; `login_evento` registra OK/FALLIDO/BLOQUEADO/LOGOUT sin contraseñas. Intentos en un presbiterio no bloquean el login legítimo en otro.
 
 ## Variables principales
 `PCD_DB_*`, `PCD_SESSION_NAME`, `PCD_COOKIE_SECURE`, `PCD_SESSION_IDLE_MINUTES`,

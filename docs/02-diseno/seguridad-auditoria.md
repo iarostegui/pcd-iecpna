@@ -13,11 +13,11 @@ El permiso de **acceso a la funcionalidad de consulta** permite ver el conjunto 
 **Escritura:** DIGITADOR crea fichas en su presbiterio/sede y edita solo sus fichas; ADMIN edita según facultades nacionales; REPORTES ninguna. Prohibido inferir permiso de edición a partir de acceso a consulta o de un ID suministrado por el cliente.
 
 ## Sesiones y GPS
-`sesion` almacena fecha login/logout, versión de credenciales, revocación, última actividad y **geolocalización única opcional** (`geo_estado` + coordenadas/precisión/fecha). Tras DENEGADA/ERROR/NO_DISPONIBLE se conserva el estado y no se vuelve a pedir GPS en esa sesión. La ausencia no bloquea. No existe tabla `geo_sesion`.
+`sesion` almacena fecha login/logout, versión de credenciales, revocación, última actividad y **geolocalización única opcional** (`geo_estado` + coordenadas/precisión/fecha). La primera actualización condicional gana; dos solicitudes concurrentes no sobrescriben el estado inicial (la perdedora recibe 409). Tras DENEGADA/ERROR/NO_DISPONIBLE se conserva el estado y no se vuelve a pedir GPS en esa sesión. La ausencia no bloquea. No existe tabla `geo_sesion`.
 
-- Cookie `HttpOnly; Secure; SameSite=Lax`, regenerar ID PHP al autenticar; HTTPS. CSRF por sesión recuperable en `GET /auth/me`, nunca en localStorage.
+- Cookie `__Host-pcd_sid` en producción, `HttpOnly; Secure; SameSite=Lax; Path=/` y sin `Domain`, regenerar ID PHP al autenticar; HTTPS/TLS en cPanel. No se confía en `X-Forwarded-Proto` de clientes; con terminación TLS en proxy se exige `PCD_ENV=production` o `PCD_COOKIE_SECURE=true`. CSRF por sesión recuperable en `GET /auth/me`, nunca en localStorage.
 - Propuesta operativa: 45 minutos inactividad y 12 horas vida absoluta, configurables; revocar sesiones tras logout, desactivar cuenta o reset (comparar `usuario.auth_version`).
-- Mitigación de abuso inicial: 5 fallos por cuenta y 20 por IP en 15 minutos, bloqueo temporal sin enumerar usuarios, registrando `login_evento`; revisar en pruebas que no produzca DoS a usuarios tras IP compartida.
+- Mitigación de abuso inicial: 5 fallos por cuenta **y presbiterio** y 20 por IP en 15 minutos, bloqueo temporal sin enumerar usuarios, registrando `login_evento`; revisar en pruebas que no produzca DoS a usuarios tras IP compartida. El cubo por cuenta usa `usuario_id` (o `codigo_intentado` si no existe) + `presbiterio_id` para evitar que intentos en un contexto bloqueen el login legítimo en otro; la IP se cuenta globalmente.
 - Guardar `session_ref_hash`, no identificador de cookie en claro. No registrar contraseñas, tokens, PII ni GPS completo en URLs, consola o logs ordinarios.
 
 ## Auditoría e integridad

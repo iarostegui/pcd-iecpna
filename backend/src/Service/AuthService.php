@@ -52,9 +52,15 @@ final class AuthService
             throw new HttpException(422, 'validation_error', 'El código de usuario es obligatorio.', ['campo' => 'usuario']);
         }
 
-        $this->assertRateLimit($codigo, $presbiterioId, $ip, $userAgent);
-
         $usuario = $this->usuarios->findByCodigo($codigo);
+        $this->assertRateLimit(
+            $codigo,
+            $usuario === null ? null : (int) $usuario['id'],
+            $presbiterioId,
+            $ip,
+            $userAgent,
+        );
+
         $hash = $usuario === null ? PasswordHasher::dummyHash() : (string) $usuario['password_hash'];
         $passwordOk = PasswordHasher::verify($password, $hash);
 
@@ -243,17 +249,6 @@ final class AuthService
      */
     public function storeLocation(SessionContext $context, array $payload): array
     {
-        $existing = $this->sesiones->location($context->sesionId);
-
-        if ($existing !== null && $existing['geo_estado'] !== null) {
-            throw new HttpException(
-                409,
-                'ubicacion_ya_capturada',
-                'La ubicación de esta sesión ya fue registrada.',
-                ['ubicacion' => self::locationPayload($existing)],
-            );
-        }
-
         $estado = (string) $payload['estado'];
         $latitud = $payload['latitud'] ?? null;
         $longitud = $payload['longitud'] ?? null;
@@ -265,20 +260,28 @@ final class AuthService
             $precision = null;
         }
 
-        $receivedAt = Clock::sql();
-        $this->sesiones->storeLocation(
+        $won = $this->sesiones->storeLocationIfEmpty(
             $context->sesionId,
             $estado,
             $latitud === null ? null : (float) $latitud,
             $longitud === null ? null : (float) $longitud,
             $precision === null ? null : (float) $precision,
-            $receivedAt,
+            Clock::sql(),
         );
 
         $stored = $this->sesiones->location($context->sesionId);
 
         if ($stored === null) {
             throw new HttpException(500, 'internal_error', 'No se pudo recuperar la ubicación guardada.');
+        }
+
+        if (!$won) {
+            throw new HttpException(
+                409,
+                'ubicacion_ya_capturada',
+                'La ubicación de esta sesión ya fue registrada.',
+                ['ubicacion' => self::locationPayload($stored)],
+            );
         }
 
         return self::locationPayload($stored);
@@ -300,24 +303,32 @@ final class AuthService
         ];
     }
 
-    private function assertRateLimit(string $codigo, int $presbiterioId, ?string $ip, ?string $userAgent): void
-    {
+    private function assertRateLimit(
+        string $codigo,
+        ?int $usuarioId,
+        int $presbiterioId,
+        ?string $ip,
+        ?string $userAgent,
+    ): void {
         $windowMinutes = Env::int('PCD_LOGIN_WINDOW_MINUTES', 15);
         $maxAccount = Env::int('PCD_LOGIN_MAX_ACCOUNT', 5);
         $maxIp = Env::int('PCD_LOGIN_MAX_IP', 20);
         $since = Clock::sql(Clock::now()->modify('-' . $windowMinutes . ' minutes'));
 
-        $accountFailures = $this->loginEventos->failedCountByCode($codigo, $since);
+        $accountFailures = $this->loginEventos->failedCountByAccount(
+            $usuarioId,
+            $codigo,
+            $presbiterioId,
+            $since,
+        );
         $ipFailures = $this->loginEventos->failedCountByIp($ip, $since);
 
         if ($accountFailures < $maxAccount && $ipFailures < $maxIp) {
             return;
         }
 
-        $usuario = $this->usuarios->findByCodigo($codigo);
-
         $this->loginEventos->record([
-            'usuario_id' => $usuario === null ? null : (int) $usuario['id'],
+            'usuario_id' => $usuarioId,
             'presbiterio_id' => $presbiterioId,
             'codigo' => $codigo,
             'resultado' => 'BLOQUEADO',

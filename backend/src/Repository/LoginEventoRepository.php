@@ -31,13 +31,35 @@ final class LoginEventoRepository
         ]);
     }
 
-    public function failedCountByCode(string $codigo, string $since): int
-    {
-        $statement = $this->pdo->prepare(
-            "SELECT COUNT(*) AS total FROM login_evento
-             WHERE codigo_intentado = ? AND resultado = 'FALLIDO' AND created_at >= ?",
-        );
-        $statement->execute([$codigo, $since]);
+    /**
+     * Cubo de intentos por cuenta y presbiterio.
+     *
+     * La cuenta se identifica por usuario_id cuando la cuenta existe; si el
+     * código no corresponde a una cuenta, se usa codigo_intentado. El
+     * presbiterio forma parte de la clave para que intentos fallidos en un
+     * contexto no bloqueen el acceso legítimo en otro (aislamiento CA-59/O01).
+     */
+    public function failedCountByAccount(
+        ?int $usuarioId,
+        string $codigo,
+        int $presbiterioId,
+        string $since,
+    ): int {
+        if ($usuarioId !== null) {
+            $statement = $this->pdo->prepare(
+                "SELECT COUNT(*) AS total FROM login_evento
+                 WHERE usuario_id = ? AND presbiterio_id = ?
+                   AND resultado = 'FALLIDO' AND created_at >= ?",
+            );
+            $statement->execute([$usuarioId, $presbiterioId, $since]);
+        } else {
+            $statement = $this->pdo->prepare(
+                "SELECT COUNT(*) AS total FROM login_evento
+                 WHERE usuario_id IS NULL AND codigo_intentado = ? AND presbiterio_id = ?
+                   AND resultado = 'FALLIDO' AND created_at >= ?",
+            );
+            $statement->execute([$codigo, $presbiterioId, $since]);
+        }
 
         return (int) $statement->fetch()['total'];
     }

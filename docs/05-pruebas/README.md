@@ -26,8 +26,8 @@ La implementación I01 ejecuta los casos obligatorios con automatización real:
 
 | Bloque | Comando | Resultado local |
 |---|---|---|
-| Casos CA-01…14, CA-56…60, CA-61…67, CA-76, CA-84, CA-91/92/94, CA-110/112/113/114 | `php tests/api/i01.php --base-url=... --json=i01-evidencia.json` | 39 PASS / 0 FAIL / 0 BLOCKED |
-| Unitarias e integración MySQL | `cd backend && vendor/bin/phpunit` | 64 pruebas / 154 aserciones |
+| Casos CA-01…14, CA-56…60, CA-61…67, CA-76, CA-84, CA-91/92/94, CA-110/112/113/114 | `php tests/api/i01.php --base-url=... --json=i01-evidencia.json` | 42 PASS / 0 FAIL / 0 BLOCKED |
+| Unitarias e integración MySQL | `cd backend && vendor/bin/phpunit` | 70 pruebas / 179 aserciones |
 | UX React I01 | `cd frontend && npm test` | 8 pruebas (login, contexto, expiración, GPS, 409, REPORTES) |
 | Validadores SDD | `npm test` | OK |
 | Build React | `cd frontend && npm run build` | OK |
@@ -36,3 +36,10 @@ La implementación I01 ejecuta los casos obligatorios con automatización real:
 Los estados son de ejecución local con datos sintéticos y MySQL de prueba; la evidencia CI con
 MySQL 8 se adjunta al PR. **No constituyen GO productivo** ni sustituyen E-07, H-14, H-40 ni la
 revisión del especialista. Consultar [tests/README](../../tests/README.md) para comandos y variables.
+
+## Correcciones técnicas I01-O01…O03 (02/11/2026)
+| Caso | Comando / prueba | Resultado local |
+|---|---|---|
+| **I01-O01** | `tests/api/i01.php` + `LoginEventoScopeTest` | PASS: 5 fallos en TRU no bloquean LIM-DIG-06 en LIM; cubo por cuenta+presbiterio |
+| **I01-O02** | `tests/api/i01.php` (dos POST concurrentes) + `SesionLocationTest` | PASS: 200 + 409, sin sobrescritura |
+| **I01-O03** | `tests/api/i01.php` + `PhpSessionTest` | PASS en flags y producción; cPanel/TLS real **BLOCKED (E-07)** |

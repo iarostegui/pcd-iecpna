@@ -23,8 +23,9 @@ php tests/api/i01.php --base-url=http://127.0.0.1:8081/api/v1 --json=i01-evidenc
 Requiere MySQL real con `001_initial.sql`, `002_catalogos_calidad.sql`, aprovisionamiento UAT y las
 variables `PCD_UAT_DIGITADOR_PASSWORD`, `PCD_ADMIN_PASSWORD`, `PCD_REPORTES_PASSWORD` (nunca en Git).
 Cubre CA-01…CA-14, CA-56…CA-60, CA-61…CA-67, CA-76, CA-84, CA-91, CA-92, CA-94, CA-110,
-CA-112, CA-113, CA-114 y los escenarios negativos de sesión, CSRF, revocación, sede ajena,
-concurrencia e idempotencia. Escribe evidencia JSON con estados `PASS/FAIL/BLOCKED` y sale con
+CA-112…CA-115, CA-123 y los escenarios negativos de sesión, CSRF, revocación, sede ajena,
+concurrencia e idempotencia. Incluye las correcciones I01-O01 (aislamiento por presbiterio),
+I01-O02 (GPS concurrente 200/409) e I01-O03 (flags de cookie). Escribe evidencia JSON con estados `PASS/FAIL/BLOCKED` y sale con
 código 1 si existe un fallo o bloqueo.
 
 ## Runner HTTP P01

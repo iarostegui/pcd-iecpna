@@ -140,3 +140,24 @@
 - **I01-CT-02** No se agregan tablas/columnas; se mantienen 11 tablas, 146 columnas y 23 FK (CA-91, CA-122).
 - **I01-CT-03** No se implementan I02–I06, SGSP, E1-D02/H-23/H-24 ni CRUD de presbiterios.
 - **I01-CT-04** Las pruebas obligatorias se ejecutan contra MySQL 8 real; sin ejecución no se declara PASS.
+
+## Correcciones técnicas I01-O01…O03
+
+### I01-O01 — aislamiento de intentos por cuenta y presbiterio
+GIVEN una cuenta DIGITADOR con 5 fallos registrados bajo el presbiterio B WHEN intenta login correcto
+bajo su presbiterio A THEN responde 200 y no hereda el bloqueo de B.
+GIVEN 5 fallos bajo B WHEN insiste en B THEN responde 429; otro usuario de B no queda afectado.
+MUST conservar 20 fallos por IP en 15 min y respuestas indistinguibles para cuentas existentes/inexistentes.
+
+### I01-O02 — concurrencia de ubicación
+GIVEN una sesión sin `geo_estado` WHEN dos POST `/auth/ubicacion` concurrentes envían estados distintos
+THEN exactamente uno responde 200, el otro 409, y `sesion.geo_*` conserva el estado/coordenadas del 200.
+MUST usar una actualización condicional atómica, sin sobrescritura y sin tabla/columna nueva.
+
+### I01-O03 — cookie segura y HTTPS/cPanel
+GIVEN producción WHEN se construye la cookie THEN nombre `__Host-pcd_sid`, `Secure`, `HttpOnly`,
+`SameSite=Lax`, `Path=/` y sin `Domain`.
+GIVEN `X-Forwarded-Proto: https` desde un cliente no confiable WHEN no hay señal directa de HTTPS ni
+configuración de producción THEN la cookie NO se marca `Secure` por esa cabecera.
+GIVEN un `__Host-` sin `Secure` WHEN se inicia sesión THEN el servidor falla explícitamente.
+La comprobación de TLS/DocumentRoot reales de cPanel queda BLOCKED hasta acceso al hosting (E-07).

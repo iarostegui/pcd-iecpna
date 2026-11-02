@@ -15,7 +15,13 @@
 - Sesión persistida en `sesion` (hash de cookie, `last_seen`, `auth_version`, GPS), cookie HttpOnly/SameSite/Secure, CSRF, inactividad 45 min y absoluta 12 h, logout y revocación.
 - `GET /presbiterios` público y mínimo; sedes del presbiterio, alta normalizada RN-33 con 409 e idempotencia; contexto ADMIN explícito; REPORTES solo lectura.
 - React I01: login sin listado de cuentas, selección/alta de sede, contexto autenticado, expiración, GPS opcional una vez por sesión y ausencia de `localStorage`.
-- Evidencia: `npm test` (SDD), PHPUnit 64/154 local (64/153 con 1 omitida por Argon2id en CI), runner I01 39/39 PASS y build React. CI [run 41451546914](https://github.com/iarostegui/pcd-iecpna/actions/runs/41451546914): jobs `documentos`, `backend`, `frontend` e `i00` en verde, MySQL 8.0.46/PHP 8.2.35. **No es GO productivo; E-07, H-14, H-40 y revisión del especialista siguen abiertos.**
+- Evidencia: `npm test` (SDD), PHPUnit 70/179 local (la CI de la ronda se registra en el PR), runner I01 42/42 PASS y build React. CI [run 41451546914](https://github.com/iarostegui/pcd-iecpna/actions/runs/41451546914): jobs `documentos`, `backend`, `frontend` e `i00` en verde, MySQL 8.0.46/PHP 8.2.35. **No es GO productivo; E-07, H-14, H-40 y revisión del especialista siguen abiertos.**
+
+## Correcciones técnicas I01-O01…O03 (02/11/2026)
+- **O01:** cubo de intentos por `(usuario_id o codigo_intentado) + presbiterio_id`; los fallos en un presbiterio no bloquean la cuenta en otro. IP sigue global. Pruebas HTTP y de repositorio.
+- **O02:** captura GPS con `UPDATE ... WHERE geo_estado IS NULL` atómico; concurrencia 200/409 sin sobrescritura. Pruebas HTTP concurrentes y de dos conexiones MySQL.
+- **O03:** `PhpSession::cookieName()`/`cookieOptions()`, `__Host-pcd_sid` + `Secure` en producción, `HttpOnly`, `SameSite=Lax`, `Path=/`, sin `Domain`; no se confía en cabeceras de proxy. TLS/cPanel real: BLOCKED (E-07).
+- Evidencia local de la ronda: PHPUnit 70/179, runner I01 42/42 PASS, frontend 8/8 y build; CI MySQL 8 se registra en el PR.
 
 ## Etapa 4 preparada, no ejecutada
 [Informe E4](../07-auditorias/etapa-4-produccion-y-privacidad.md), [checklist productivo](../06-despliegue/checklist-produccion.md). PR-01…08 de datos personales/sensibles quedan sin decisión institucional. No se han ejecutado pruebas MySQL/Apache/PHP, recuperación de backups, E2E ni carga real.

@@ -141,3 +141,24 @@ Las rutas de I02–I06 permanecen en 501 y no se amplían.
 - La sesión PHP usa el almacenamiento de sesiones del hosting (filesystem). No se crean tablas adicionales.
 - No se valida cPanel, TLS ni backups (E-07/H-40); I01 queda en desarrollo/CI con datos sintéticos.
 - No se implementan I02–I06 ni se resuelven E1-D02/H-23/H-24.
+
+## 11. Correcciones técnicas I01-O01…O03 (02/11/2026)
+
+### O01 — cubo de intentos
+`LoginEventoRepository::failedCountByAccount()` usa `usuario_id` + `presbiterio_id` cuando la cuenta
+existe; si no existe, `codigo_intentado` + `presbiterio_id` con `usuario_id IS NULL`. Los fallos en un
+presbiterio no bloquean el login legítimo en otro. El límite por IP sigue siendo global (20/15 min).
+`AuthService` resuelve el usuario antes de evaluar el límite para usar la identidad real de la cuenta.
+
+### O02 — captura GPS atómica
+`SesionRepository::storeLocationIfEmpty()` ejecuta un único `UPDATE ... WHERE geo_estado IS NULL` y
+devuelve `rowCount() === 1`. `AuthService::storeLocation()` no hace lectura previa: si perdió la carrera,
+recupera la ubicación ganadora y responde 409. Dos POST concurrentes producen exactamente 200 + 409 y
+nunca sobrescriben el primer estado.
+
+### O03 — cookie y HTTPS/cPanel
+`PhpSession::cookieName()` y `cookieOptions()` centralizan `__Host-pcd_sid` (producción), `Path=/`,
+`Domain=''`, `HttpOnly`, `SameSite=Lax` y `Secure`. `Secure` se activa con `PCD_ENV=production`,
+`PCD_COOKIE_SECURE=true` o señales directas del servidor. No se consultan `X-Forwarded-Proto` ni
+`Forwarded`; cPanel con terminación TLS en proxy debe declarar producción/secure. Una cookie `__Host-`
+sin `Secure` falla explícitamente. La verificación en cPanel real queda BLOCKED (E-07).

@@ -330,6 +330,14 @@ function cleanup_login_events(?PDO $pdo, string $like = 'I01QA%'): void
     db_exec($pdo, 'DELETE FROM login_evento WHERE codigo_intentado LIKE ?', [$like]);
 }
 
+function cleanup_code_events(?PDO $pdo, string $codigo): void
+{
+    if ($pdo === null) {
+        return;
+    }
+    db_exec($pdo, 'DELETE FROM login_evento WHERE codigo_intentado = ?', [$codigo]);
+}
+
 function cleanup_ip_events(?PDO $pdo, ?string $ip): void
 {
     if ($pdo === null || $ip === null) {
@@ -716,6 +724,26 @@ $run('CA-63_csrf_y_me', 'CA-63', static function () use ($lim, $passwords, $suff
         : ['FAIL', 'me=' . $me['status'] . ' sinToken=' . $noToken['status'] . ' conToken=' . $withToken['status']];
 });
 
+$run('I01-O03_cookie_flags', 'I01-O03', static function () use ($lim, $passwords, $sessionName): array {
+    $session = login($lim, 'LIM-DIG-04', $passwords['DIGITADOR'], 'o03-' . bin2hex(random_bytes(3)));
+    $cookie = header_value($session['response'], 'set-cookie');
+    $lower = strtolower($cookie);
+    $expectedSecure = getenv('PCD_ENV') === 'production'
+        || in_array(strtolower((string) getenv('PCD_COOKIE_SECURE')), ['1', 'true', 'yes', 'on'], true);
+
+    $ok = $cookie !== ''
+        && str_starts_with($cookie, $sessionName . '=')
+        && str_contains($lower, 'httponly')
+        && str_contains($lower, 'samesite=lax')
+        && str_contains($lower, 'path=/')
+        && !str_contains($lower, 'domain=')
+        && (!$expectedSecure || str_contains($lower, 'secure'));
+
+    return $ok
+        ? ['PASS', 'cookie HttpOnly/SameSite=Lax/Path=/ sin Domain; Secure ' . ($expectedSecure ? 'verificado' : 'cubierto por prueba de producción')]
+        : ['FAIL', 'atributos incompletos: ' . $cookie];
+});
+
 $run('CA-14_cambio_sede_conserva_presbiterio', 'CA-14', static function () use ($lim, $passwords, $suffix): array {
     $session = login($lim, 'LIM-DIG-05', $passwords['DIGITADOR'], 'ctx-' . bin2hex(random_bytes(3)));
     $a = auth_write('POST', '/sedes', $session, ['nombre_oficial' => 'I01QA Contexto A ' . $suffix], ['Idempotency-Key: ctx-a-' . $suffix]);
@@ -778,6 +806,83 @@ $run('CA-76_nueva_sesion_gps', 'CA-76', static function () use ($lim, $passwords
         && $geoSecond['status'] === 200
         ? ['PASS', 'nuevo login inicia sesión GPS nueva; la revocación no duplica la anterior']
         : ['FAIL', 'estados ' . $geoFirst['status'] . '/' . $logout['status'] . '/' . $geoSecond['status']];
+});
+
+$run('I01-O02_gps_concurrente', 'I01-O02', static function () use ($lim, $passwords, $db, $sessionName): array {
+    if ($db === null) {
+        return ['BLOCKED', 'MySQL ausente'];
+    }
+
+    $session = login($lim, 'LIM-DIG-03', $passwords['DIGITADOR'], 'o02-' . bin2hex(random_bytes(3)));
+    $token = csrf_token($session);
+    $sid = cookie_value($session['jar'], $sessionName);
+    if ($sid === null) {
+        return ['FAIL', 'cookie de sesión ausente'];
+    }
+    $capturada = gmdate('Y-m-d\TH:i:s\Z');
+    $cookieHeader = 'Cookie: ' . $sessionName . '=' . $sid;
+
+    $requests = [
+        [
+            'method' => 'POST',
+            'url' => $GLOBALS['baseUrl'] . '/auth/ubicacion',
+            'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . (string) $token, $cookieHeader],
+            'body' => (string) json_encode([
+                'estado' => 'OK',
+                'latitud' => -12.10,
+                'longitud' => -77.10,
+                'precision_m' => 10,
+                'capturada_en' => $capturada,
+            ]),
+        ],
+        [
+            'method' => 'POST',
+            'url' => $GLOBALS['baseUrl'] . '/auth/ubicacion',
+            'headers' => ['Content-Type: application/json', 'X-CSRF-Token: ' . (string) $token, $cookieHeader],
+            'body' => (string) json_encode([
+                'estado' => 'DENEGADA',
+                'capturada_en' => $capturada,
+            ]),
+        ],
+    ];
+
+    $results = http_parallel($requests);
+    $statuses = array_map(static fn (array $r): int => $r['status'], $results);
+    sort($statuses);
+    $winner = null;
+    foreach ($results as $result) {
+        if ($result['status'] === 200) {
+            $winner = $result;
+            break;
+        }
+    }
+
+    $row = $sid === null ? null : db_one(
+        $db,
+        'SELECT geo_estado, geo_latitud, geo_longitud, geo_precision_m, geo_capturada_en
+         FROM sesion WHERE session_ref_hash = ?',
+        [hash('sha256', $sid)],
+    );
+
+    $winnerState = is_array($winner['json'] ?? null) ? ($winner['json']['estado'] ?? null) : null;
+    $dbState = $row['geo_estado'] ?? null;
+    $stateMatches = $winnerState !== null && $winnerState === $dbState;
+    $coordsMatch = true;
+    if ($winnerState === 'OK') {
+        $coordsMatch = $row !== null
+            && $row['geo_latitud'] !== null
+            && abs((float) $row['geo_latitud'] - (-12.10)) < 0.0000001
+            && abs((float) $row['geo_longitud'] - (-77.10)) < 0.0000001;
+    } elseif ($winnerState === 'DENEGADA') {
+        $coordsMatch = $row !== null && $row['geo_latitud'] === null && $row['geo_longitud'] === null;
+    }
+
+    return $statuses === [200, 409]
+        && $stateMatches
+        && $coordsMatch
+        && ($row['geo_capturada_en'] ?? null) !== null
+        ? ['PASS', 'dos POST concurrentes: 200/409 y estado ganador ' . (string) $winnerState . ' sin sobrescritura']
+        : ['FAIL', 'estados=' . implode('/', $statuses) . ' ganador=' . (string) $winnerState . ' db=' . (string) $dbState];
 });
 
 $run('CA-115_presbiterios_fijos', 'CA-115', static function () use ($baseUrl): array {
@@ -1084,6 +1189,46 @@ $run('CA-60_throttle_ip', 'CA-60', static function () use ($chi, $lim, $password
         && json_path($blocked, 'error.code') === 'too_many_attempts'
         ? ['PASS', '20 fallos por IP -> 429 temporal; se limpia la ventana de prueba']
         : ['FAIL', 'fallos=' . count(array_filter($statuses, static fn (int $s): bool => $s === 401)) . ' bloqueo=' . $blocked['status']];
+});
+
+$run('I01-O01_aislamiento_presbiterios', 'I01-O01', static function () use ($lim, $tru, $passwords, $db): array {
+    if ($db === null) {
+        return ['BLOCKED', 'MySQL ausente'];
+    }
+
+    cleanup_ip_events($db, '127.0.0.1');
+    cleanup_code_events($db, 'LIM-DIG-06');
+
+    $wrongContextStatuses = [];
+    for ($i = 0; $i < 5; $i++) {
+        $response = http_request(
+            'POST',
+            $GLOBALS['baseUrl'] . '/auth/login',
+            ['Content-Type: application/json'],
+            (string) json_encode(['presbiterio_id' => $tru, 'usuario' => 'LIM-DIG-06', 'password' => 'mala-contexto-' . $i]),
+        );
+        $wrongContextStatuses[] = $response['status'];
+    }
+
+    $sixthWrongContext = http_request(
+        'POST',
+        $GLOBALS['baseUrl'] . '/auth/login',
+        ['Content-Type: application/json'],
+        (string) json_encode(['presbiterio_id' => $tru, 'usuario' => 'LIM-DIG-06', 'password' => 'mala-contexto-final']),
+    );
+    $validInOwnContext = login($lim, 'LIM-DIG-06', $passwords['DIGITADOR'], 'o01-limit-' . bin2hex(random_bytes(3)));
+    $otherUserInOtherContext = login($tru, 'TRU-DIG-01', $passwords['DIGITADOR'], 'o01-tru-' . bin2hex(random_bytes(3)));
+
+    cleanup_code_events($db, 'LIM-DIG-06');
+    cleanup_ip_events($db, '127.0.0.1');
+
+    return $wrongContextStatuses === [401, 401, 401, 401, 401]
+        && $sixthWrongContext['status'] === 429
+        && $validInOwnContext['response']['status'] === 200
+        && $otherUserInOtherContext['response']['status'] === 200
+        ? ['PASS', '5 fallos en TRU no bloquean LIM-DIG-06 en LIM; otro usuario TRU tampoco se afecta']
+        : ['FAIL', 'TRU=' . implode('/', $wrongContextStatuses) . ' sexto=' . $sixthWrongContext['status']
+            . ' LIM=' . $validInOwnContext['response']['status'] . ' TRU=' . $otherUserInOtherContext['response']['status']];
 });
 
 $run('CA-91_esquema_11_tablas', 'CA-91', static function () use ($db): array {
