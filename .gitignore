@@ -9,6 +9,7 @@
 credentials*.json
 # Dependencias y compilados
 node_modules/
+.npm-cache/
 vendor/
 dist/
 frontend/dist/

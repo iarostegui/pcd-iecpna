@@ -1,4 +1,4 @@
-# PCD V4.0 — Decisiones pendientes y aprobadas
+# PCD V4.1 — Decisiones pendientes y aprobadas
 
 **Norma de alcance:** [ALC-PCD-4.0](alcance-funcional.md) actualizada con el modelo de 11 tablas. La documentación de las Etapas 1–3 anterior es **histórica** donde contradice estas decisiones.
 

@@ -2,7 +2,7 @@
 **Producto:** PCD — Plataforma de Captura de Datos IECPNA (NO SGSP).  
 **Tipo:** aplicación web **temporal** para la digitación de fichas impresas de la campaña de levantamiento IECPNA.  
 **Estado:** definición de alcance vigente para diseño, auditoría y desarrollo; las decisiones pendientes están identificadas explícitamente.  
-**Referencias:** [fichas Excel e inventario](fuentes/inventario-excel-original.md), [reglas de negocio](reglas-negocio.md), [procesos](procesos-negocio.md), [prototipo V2.3](../../prototypes/PCD_v2.2.html), [criterios de auditoría](../07-auditorias/protocolo-auditoria-alcance.md).
+**Referencias:** [fichas Excel e inventario](fuentes/inventario-excel-original.md), [reglas de negocio](reglas-negocio.md), [procesos](procesos-negocio.md), [prototipo V2.3](../../prototypes/PCD_v2.3.html), [criterios de auditoría](../07-auditorias/protocolo-auditoria-alcance.md).
 
 > **Límite rector:** PCD registra, preserva, consulta y reporta datos de fichas físicas. **No reemplaza las operaciones pastorales del SGSP, ni automatiza la revisión humana de fidelidad entre papel y digitación, ni construye procesos administrativos permanentes.** Una auditoría puede advertir insuficiencias o **cuestionar este límite**, pero no transformarlo unilateralmente en un nuevo requisito.
 
@@ -104,7 +104,7 @@ La auditoría debe contrastar cada requisito **contra ALC-01…ALC-12**, las fue
 
 **Regla final:** toda observación/auditoría/implementación debe partir de **este alcance oficial**. Si se considera insuficiente, se plantea una propuesta formal para decisión, sin alterar por iniciativa propia el alcance ni la versión del prototipo.
 
-## 9. Decisiones normativas de construcción V4.0
+## 10. Decisiones normativas de construcción V4.1
 **Presbiterios fijos de instalación** (preparados en `002_catalogos_calidad.sql`): `LIM` Lima; `TRU` La Libertad – Trujillo; `CHI` Chimbote; `IQU` Iquitos. Estos códigos son identificadores internos iniciales del prototipo, no certificados como códigos oficiales externos. **No hay CRUD de presbiterios en la aplicación**; nuevas incorporaciones solo por responsable autorizado mediante SQL y revisión de usuarios/sedes asociados. Las sedes sí se crean desde su funcionalidad.
 **Autenticación:** clave inicial común para digitadores **solo durante pruebas/aceptación**. Antes del pase a producción se cambian las credenciales (individuales y protegidas, provistas fuera de Git); ADMIN/REPORTES siempre usan credenciales propias. No permitir GO si persiste la contraseña común de pruebas.
 **Identidad E1-D01 APROBADA:** coincidencia documental exacta confiable (tipo+numero) reutiliza `persona.id` y adjunta nueva `ficha` incluso si proviene de otro presbiterio; nunca sobrescribe automáticamente atributos de Persona, ni altera la autoría de otras fichas. Se mantiene el endpoint `POST /personas/{id}/fichas` y respuesta `persona_reutilizada`.

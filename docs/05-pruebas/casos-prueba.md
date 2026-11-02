@@ -1,5 +1,7 @@
-# PCD V3.1 — Matriz de casos de prueba
+# PCD V4.1 — Matriz de casos de prueba
 Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia real, comando, fecha, usuario de prueba y entorno. **No dar por ejecutado sin hacerlo.**
+
+**Vigencia:** los casos redactados antes de V4.1 se actualizan a la decisión vigente sin renumerar su ID; la redacción anterior queda en el historial Git (CA-06, CA-25, CA-48, CA-68, CA-69 y CA-72).
 
 | ID | Prueba GIVEN / WHEN / THEN | Prioridad |
 |---|---|---|
@@ -8,7 +10,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-03 | Seis digitadores por presbiterio configurado → existen activos | P0 |
 | CA-04 | ADMIN y REPORTES → cobertura nacional según rol | P0 |
 | CA-05 | Usuario inactivo → login rechazado | P0 |
-| CA-06 | Contraseña inicial común hash en BD → sin texto claro ni cambio forzado | P0 |
+| CA-06 | Clave inicial común solo en UAT → hash en BD, sin texto claro en BD/Git/logs; en UAT no se fuerza cambio y antes de producción la rotación individual es obligatoria (gate CA-120) | P0 |
 | CA-07 | Exceso intentos login → throttling y auditoría | P0 |
 | CA-08 | Selección de sede → solo sedes de presbiterio | P0 |
 | CA-09 | Intentar sede fuera del presbiterio vía API → 403 | P0 |
@@ -25,9 +27,9 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-20 | Persona con críticos incompletos → guardar y reportar faltantes | P0 |
 | CA-21 | Configurar criticidad vía ADMIN → cambia reporte no validez del guardado | P0 |
 | CA-22 | Documento existente → alerta, no segunda Persona | P0 |
-| CA-23 | Dos POST simultáneos documento → UNIQUE impide segundo registro | P0 |
+| CA-23 | Dos POST simultáneos mismo documento → UNIQUE impide segunda Persona; la ficha continúa sobre la Persona ganadora | P0 |
 | CA-24 | Persona sin documento y nombre parecido → avisar posible duplicado, permitir | P1 |
-| CA-25 | Duplicado entre presbiterios → no exponer datos fuera de ámbito | P0 |
+| CA-25 | Duplicado documental entre presbiterios → reutiliza Persona (E1-D01) y crea ficha nueva sin sobrescribir consolidado ni fusionar fichas; visibilidad según consulta general (H-12) | P0 |
 | CA-26 | Doble clic guardar / timeout reintento misma clave → una sola ficha | P0 |
 | CA-27 | Persona marcada líder GC antes de guardarla → no crea GC | P0 |
 | CA-28 | Persona guardada → abrir GC ya vinculado | P0 |
@@ -41,8 +43,8 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-36 | Iniciar sesión → 1 solicitud GPS opcional, datos/estado en UNA fila sesion (sin tabla geo_sesion) | P0 |
 | CA-37 | Guardar 10 Personas+GC → misma ubicación de sesión sin nuevos prompts | P0 |
 | CA-38 | Refrescar página → misma ubicación almacenada, no nuevo prompt | P0 |
-| CA-39 | Denegar GPS → guardar, auditoría indica DENEGADA | P0 |
-| CA-40 | Cada alta/edición → auditoría con sesión, IP, actor y geo/estado | P0 |
+| CA-39 | Denegar GPS → guardar sin bloqueo; `sesion` conserva `geo_estado` DENEGADA y no se vuelve a pedir | P0 |
+| CA-40 | Edición con cambios → un evento con solo campos alterados, actor/sesión/IP; alta de ficha sin evento (solo `created_at/created_by`); GPS no se duplica | P0 |
 | CA-41 | Login exitoso/fallido → log separado, sin contraseña | P0 |
 | CA-42 | Falla auditoría durante escritura → rollback transacción | P0 |
 | CA-43 | Consulta con 5.000 fichas → paginación, filtros y permiso | P1 |
@@ -50,7 +52,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | CA-45 | Reporte calidad identifica campos críticos faltantes y duplicidad | P0 |
 | CA-46 | React DOM XSS/SQL injection/CSRF/IDOR → no vulnerabilidades básicas | P0 |
 | CA-47 | localStorage/URL/logs → no documentos, credenciales ni coordenadas | P0 |
-| CA-48 | HTML V2.2 y React en 320/390/768/1440px → sin pérdida de controles | P1 |
+| CA-48 | HTML V2.3 y React en 320/390/768/1440px → sin pérdida de controles | P1 |
 | CA-49 | Backup y restauración a BD aislada → datos íntegros | P0 |
 | CA-50 | Prueba carga y baseline web actual → informe p95 sin degradación no aceptable | P0 |
 | CA-51 | Scripts SQL se ejecutan sin error en MySQL/MariaDB real | P0 |
@@ -86,7 +88,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 |---|---|---|---|
 | **CA-56** | GET /presbiterios anónimo devuelve solo ID/código/nombre activos; sin PII ni usuarios | I01 | H-04 |
 | **CA-57** | Login productivo pide usuario tecleado y no permite enumerar cuentas | I01 | H-03 |
-| **CA-58** | ADMIN/REPORTES tienen secretos distintos de contraseña común de digitadores | I01 | H-03 / E2-D03 |
+| **CA-58** | ADMIN/REPORTES tienen secretos distintos de contraseña común de digitadores | I01 | H-03 (aprobada; rotación antes de producción) |
 | **CA-59** | 5 fallos por cuenta en 15 min provocan mitigación temporal sin revelar existencia | I01 | H-03 |
 | **CA-60** | 20 fallos por IP en 15 min provocan mitigación y no bloquean permanentemente una IP compartida | I01 | H-03 |
 | **CA-61** | Sesión con inactividad >45 min rechaza request y requiere login | I01 | H-32 |
@@ -94,13 +96,13 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | **CA-63** | Refresh + GET /auth/me entrega nuevo contexto/CSRF; POST con CSRF inválido rechaza | I01 | H-32 |
 | **CA-64** | ADMIN desactiva usuario → todas sus sesiones dejan de autorizar inmediatamente | I01/I05 | H-32 |
 | **CA-65** | Cambio/reset credencial incrementa auth_version y revoca sesiones antiguas | I01/I05 | H-32 |
-| **CA-66** | ADMIN puede cambiar explícitamente presbiterio; invalida sede del contexto previo | I01 | **E2-D02 pendiente** |
-| **CA-67** | REPORTES consulta nacional sin sede y nunca crea ni edita registros | I01/I05 | **E2-D02 pendiente** |
-| **CA-68** | DIGITADOR consulta fichas de su presbiterio y edita solo las propias | I04 | **E2-D01 pendiente** |
-| **CA-69** | Persona en dos presbiterios → usuario A no ve la ficha ni PII de B | I02/I04 | H-12 / E1-D01 |
+| **CA-66** | ADMIN puede cambiar explícitamente presbiterio entre los cuatro precargados; invalida sede del contexto previo | I01 | E2-D02 aprobada (ALC-03) |
+| **CA-67** | REPORTES consulta nacional sin sede y nunca crea ni edita registros | I01/I05 | E2-D02 aprobada (ALC-03) |
+| **CA-68** | DIGITADOR accede a la consulta general con filtros opcionales y edita solo sus fichas; PATCH ajeno → 403 | I04 | H-12/RN-29 |
+| **CA-69** | Persona en dos presbiterios → dos fichas con autoría propia, sin fusionar Personas ni sobrescribir; consulta general muestra ambas y la edición sigue al autor | I02/I04 | H-12 / E1-D01 aprobada |
 | **CA-70** | GET /catalogos lista dominios/códigos confirmados, sin valores inventados de ubigeo | I01/I02 | H-07 |
 | **CA-71** | DNI con ceros no pierde ceros; DNI incompleto no se deduplica como válido | I02 | H-13 |
-| **CA-72** | Dos documentos OTRO con igual número y distinto subtipo NO colisionan; OTRO sin subtipo no genera clave exacta | I02 | H-13 |
+| **CA-72** | Documento OTRO (sin subtipo) con igual número → solo alerta de coincidencia, sin clave exacta ni fusión; DNI/C.E. confiables sí generan clave | I02 | H-13 |
 | **CA-73** | Cambiar campo crítico desactivable recalcula reporte sin reescribir fichas; relación estructural no desactivable | I05 | H-18 |
 | **CA-74** | GC en ficha PERSONA → error y sin inserción; líder derivado de ficha.persona_id | I03 | H-35 |
 | **CA-75** | Cónyuge/responsabilidad en ficha GC o de persona equivocada → FK/CHECK rechaza | I02/I03 | H-35 |
@@ -128,7 +130,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 
 **Estado:** 14 pruebas diseñadas, **ninguna ejecutada**. H-23/H-24 requieren casos adicionales tras decisión funcional.
 
-## Regresión adicional modelo PCD V4.0 — casos NO EJECUTADOS
+## Regresión adicional modelo PCD V4.1 — casos NO EJECUTADOS
 | ID | Caso | Iteración |
 |---|---|---|
 | **CA-91** | SQL nuevo crea exactamente **11 tablas** y FKs válidas; ninguna de las tablas consolidadas permanece. | I00 |
@@ -142,7 +144,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 | **CA-99** | Importación INEI carga código/tipo/padre válidos (2/4/6 caracteres) en una tabla UBIGEO y no códigos inventados. | I02 |
 | **CA-100** | Restauración BD y rollback de API/build funcionan con un respaldo de prueba y controles de datos sensibles. | I06 |
 
-**Los casos CA-91…CA-100 son propuestas de aceptación**, sin resultados. Ante contradicción con casos históricos, prevalece V4 y se debe corregir el caso antes de ejecutarlo.
+**Los casos CA-91…CA-100 son propuestas de aceptación**, sin resultados. Ante contradicción con casos históricos, prevalece V4.1 y se debe corregir el caso antes de ejecutarlo.
 
 ## Actualización V2.3 de la referencia de interfaz
 Los casos **CA-101…CA-111** se detallan en [validacion-prototipo-v2.3.md](validacion-prototipo-v2.3.md) y tienen prioridad sobre las expectativas históricas de V2.2 cuando exista contradicción. Requieren pruebas **demostrativas en HTML** y nuevamente en **React+API real**. No se han ejecutado aquí.

@@ -1,4 +1,4 @@
-# Diseño de datos PCD V4.0 — índice
+# Diseño de datos PCD V4.1 — índice
 **Fuente de verdad:** [001_initial.sql](../../database/migrations/001_initial.sql) con **11 tablas y 146 columnas** (pendiente ejecutar en hosting).
 
 | Documento | Uso |

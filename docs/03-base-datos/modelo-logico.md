@@ -1,4 +1,4 @@
-# PCD V4.0 — Modelo lógico vigente: 11 tablas
+# PCD V4.1 — Modelo lógico vigente: 11 tablas
 
 **Fuente física:** [001_initial.sql](../../database/migrations/001_initial.sql). [Anexo ER](anexos/anexo-01-diagrama-fisico.md) · [Diccionario por columna](anexos/anexo-02-diccionario-fisico.md) · [Justificación tabla por tabla](anexos/justificacion-11-tablas.md).
 
@@ -26,7 +26,7 @@
 - **Ubigeo:** códigos en Persona, con validación de nivel y jerarquía en PHP; catálogo INEI cargado durante I02. No inventar códigos.
 - **Calidad:** valores en CATALOGO categorías `CAMPO_CRITICO_PERSONA` y `CAMPO_CRITICO_GC`. No marcar ficha incompleta como error bloqueante ni comparar automáticamente con papel.
 - **GC:** una ficha GC puede originar un registro GC y su líder es la Persona de esa ficha; prohibido crear miembros nominales.
-- **Pendientes:** E1-D01 vínculo cross-presbiterio; E1-D02 grupo preexistente; H-23/H-24 reglas operativas, H-40 retención y privacidad. No asumir aprobaciones.
+- **Pendientes:** E1-D02 grupo preexistente; H-23/H-24 reglas operativas, H-40 retención y privacidad. **E1-D01 está aprobada** (vínculo cross-presbiterio, ver reglas V4.1 abajo); no asumir otras aprobaciones.
 
 **Estado:** esquema nuevo inicial para construcción; **no ejecutado** contra MySQL/MariaDB. El diseño anterior de 17 tablas queda reemplazado y **no** debe utilizarse en código nuevo.
 

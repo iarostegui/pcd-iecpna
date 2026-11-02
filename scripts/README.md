@@ -1,10 +1,14 @@
-# Verificación automatizable PCD V2.3
+# Verificación automatizable PCD V4.1
 
-Ejecutar en la raíz del repositorio, sin instalar paquetes:
+Desde la raíz del repositorio, con dependencias reproducibles:
 
 ```bash
+npm ci
+node scripts/validar-sdd-i00.cjs
 node scripts/validar-prototipo-v2.3.cjs
 ```
+
+`validar-prototipo-v2.3.cjs` no requiere paquetes; `validar-sdd-i00.cjs` usa `js-yaml` como parser formal y el `package-lock.json` fija la versión instalada.
 
 La verificación usa exclusivamente Node.js y comprueba **sintaxis JavaScript del HTML**, estructura del login, ausencia de ACL territorial en consulta, preservación de edición por autor, GC sin selector de conciliación, GPS único, fechas inválidas y separación de datos de demostración.
 

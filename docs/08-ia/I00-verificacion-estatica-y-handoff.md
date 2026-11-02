@@ -35,13 +35,13 @@ La primera verificación debe fallar cuando el SQL tenga un número distinto de 
 - Revisión documental **no prueba** creación de FK compuestas ni jerarquías referenciales. El PHP valida tipos y relaciones de organización/ubigeo; los CHECK no garantizan por sí solos que el padre de una sede sea presbiterio.
 - `UBIGEO` oficial se importa durante **I02**, no llenar filas sintéticas como si fueran INEI.
 - Datos de fichas, incluyendo atributos religiosos, requieren controles H-40 antes de producción con datos reales. No crear roles/supervisores ni tablas nuevas.
-- E1-D01, E1-D02, H-23 y H-24 continúan abiertos; **no impedir I00/I01 por una regla propia de I02/I03**.
+- E1-D01 está **aprobada**; E1-D02, H-23 y H-24 continúan abiertos; **no impedir I00/I01 por una regla propia de I02/I03**.
 
 ## 5. Resultado
 El entregable documental de I00 identifica herramientas, controles, bloqueos y ruta de verificación. **No existe evidencia de ejecución en hosting**, código PHP/React productivo, restauración de backups ni GO operativo. La siguiente actividad técnica se ejecuta al disponer del entorno y de los secretos por vía segura.
 
 ## Comprobador V4.1
-Después de `npm install`, ejecutar `npm test` (`js-yaml` analizador formal y comparación de columnas/tipos SQL↔diccionario). Se incluye workflow CI en cada push/PR. Se requiere **prueba SQL real** de `nombre_raiz_norm`, `created_at/updated_at`, índices y CHECK antes de marcar I00 completo. [Entrega al especialista](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md).
+Después de `npm ci` (instalación reproducible desde `package-lock.json`), ejecutar `npm test` (`js-yaml` analizador formal y comparación de columnas/tipos SQL↔diccionario). Se incluye workflow CI en cada push/PR. Se requiere **prueba SQL real** de `nombre_raiz_norm`, `created_at/updated_at`, índices y CHECK antes de marcar I00 completo. [Entrega al especialista](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md).
 
 ## Evidencia de CI
 `npm test` se ejecutó en Actions [run 41368871153](https://github.com/iarostegui/pcd-iecpna/actions/runs/41368871153) y pasó; incluye parser real `js-yaml` y comparación SQL↔diccionario con 11 tablas, 146 columnas y 23 FK. Esta evidencia cierra solo la comprobación estática automatizada, no `I00-03…I00-09` ni pruebas reales MySQL/PHP.

@@ -1,4 +1,4 @@
-# Diccionario de datos — resumen ejecutivo PCD V4.0
+# Diccionario de datos — resumen ejecutivo PCD V4.1
 
 **Diccionario físico exhaustivo vigente:** [Anexo 02](anexos/anexo-02-diccionario-fisico.md), generado desde [SQL de 11 tablas](../../database/migrations/001_initial.sql). Este archivo es un **resumen** y no sustituye las 146 definiciones de columna.
 

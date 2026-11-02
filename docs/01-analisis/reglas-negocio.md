@@ -1,4 +1,4 @@
-# Reglas vigentes PCD V4.0 (fuente normativa de producto)
+# Reglas vigentes PCD V4.1 (fuente normativa de producto)
 | ID | Regla | Prioridad |
 |---|---|---|
 | RN-01 | Login exige presbiterio del catálogo y credenciales válidas; ámbito autorizado verificado en servidor. | Crítica |

@@ -35,9 +35,9 @@ El prototipo bloquea un documento duplicado y no representa fichas fuente múlti
 ## Etapa 2 — diferencias productivo / demostración
 **H-03/H-04:** el prototipo V2.2 muestra cuentas seleccionables; **NO replicar listado de usuarios en login productivo**. Mantener selección pública de presbiterio activo (solo código/nombre) y control de texto para usuario + contraseña segura. ADMIN/REPORTES con secretos propios distintos de digitadores.
 
-**H-28:** rol ADMIN nacional puede cambiar **explícitamente** presbiterio/sede; REPORTES ve informes agregados nacionales sin sede seleccionada. El prototipo que cambia contexto automáticamente al editar **no es regla productiva**. E2-D02 pendiente de ratificación.
+**H-28:** rol ADMIN nacional puede cambiar **explícitamente** presbiterio/sede; REPORTES ve informes agregados nacionales sin sede seleccionada. El prototipo que cambia contexto automáticamente al editar **no es regla productiva**. E2-D02 **aprobada** por ALC-03.
 
-**H-12:** como base del prototipo se propone que DIGITADOR consulte fichas de su presbiterio pero edite solo sus registros. La Persona compartida entre presbiterios solo revela fuente de su ámbito, sin PII de otros. E2-D01 pendiente de ratificación.
+**H-12:** DIGITADOR consulta el conjunto general de la funcionalidad con filtros opcionales y edita solo sus registros; ADMIN edita según rol y REPORTES no escribe. La Persona compartida entre presbiterios conserva su ID sin sobrescribir el consolidado. E2-D01 **resuelta** por V4 (H-12).
 
 **H-18:** críticos iniciales se toman del prototipo, pero relaciones técnicas no desactivables; no se guardan estados fijos de completitud. Ver [Matriz](../03-base-datos/campos-criticos.md). **HTML V2.2 no modificado**.
 

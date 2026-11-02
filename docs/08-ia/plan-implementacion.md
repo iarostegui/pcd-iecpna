@@ -1,4 +1,4 @@
-# Plan de implementación PCD V4.0 — fuente vigente para SDD
+# Plan de implementación PCD V4.1 — fuente vigente para SDD
 
 **Alcance:** [ALC-PCD](../01-analisis/alcance-funcional.md), aplicación **temporal** independiente de SGSP. Base física [11 tablas SQL](../../database/migrations/001_initial.sql), [anexos](../03-base-datos/anexos/README.md) y [specs](../../openspec/specs/README.md). El prototipo HTML V2.3 es la referencia de UX, y V2.2 queda histórico e inalterado.
 
@@ -35,7 +35,7 @@
 **Estado real:** SQL, OpenAPI, anotaciones y anexos están en GitHub; **NO hay frontend/backend productivos**, ni pruebas de motor, integración, restore o carga ejecutadas.
 
 ## Gate V2.3 (UX aprobada como referencia, no implementación)
-**Referencia interactiva vigente:** [PCD_v2.3.html](../../prototypes/PCD_v2.3.html). [Cambios por pantalla](../02-diseno/pcd-v2.3-alineacion.md). I01 login por usuario escrito, claves separadas en producción, GPS único; I02 Persona tipo+número, fecha imposible rechazada, calidad externa; I03 GC sin selector adicional; I04 consulta nacional con filtros, lectura independiente de edición; I05 reportes generales. Probar **CA-101…111**. E1-D01/E1-D02/H-23/H-24 siguen pendientes, no quedan resueltos por la maqueta.
+**Referencia interactiva vigente:** [PCD_v2.3.html](../../prototypes/PCD_v2.3.html). [Cambios por pantalla](../02-diseno/pcd-v2.3-alineacion.md). I01 login por usuario escrito, claves separadas en producción, GPS único; I02 Persona tipo+número, fecha imposible rechazada, calidad externa; I03 GC sin selector adicional; I04 consulta nacional con filtros, lectura independiente de edición; I05 reportes generales. Probar **CA-101…111**. **E1-D01 está aprobada**; E1-D02/H-23/H-24 siguen pendientes y no quedan resueltos por la maqueta.
 
 **H-46 integrado en I01/I06:** controlar frecuencia de actualización de sesión, validación de hashing PHP, limpieza acotada de idempotencia y métricas p95 sin servicio adicional ni tablas. [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md) · [CA-112…114](../05-pruebas/casos-prueba.md).
 

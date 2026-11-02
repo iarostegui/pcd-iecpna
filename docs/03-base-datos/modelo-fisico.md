@@ -1,4 +1,4 @@
-# PCD V4.0 — Modelo físico vigente
+# PCD V4.1 — Modelo físico vigente
 
 **Único SQL inicial autorizado para una base nueva:** [database/migrations/001_initial.sql](../../database/migrations/001_initial.sql). **11 tablas y 146 columnas**. El SQL anterior de 17 tablas fue sustituido antes de desplegarse; si se descubre una BD ya creada, **no** ejecutar 001 encima: preparar migración/backup específico.
 

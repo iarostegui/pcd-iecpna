@@ -20,7 +20,7 @@
 ## ADR-007 — Seguridad mínima de una clave operativa común
 Mantener decisión de clave común **solo para digitadores**; usuarios se escriben, nacionales con contraseñas independientes, bloqueo temporal, sesiones con expiración/revocación y auditoría; no cambiar automáticamente la contraseña inicial. Riesgo residual conocido y aceptado funcionalmente; controles y H-40 deben comprobarse antes de producción. [Detalle](seguridad-auditoria.md).
 
-## ADR-008 — Ámbito nacional por perfil (propuesta E2-D02)
+## ADR-008 — Ámbito nacional por perfil (E2-D02 aprobada, ALC-03)
 ADMIN/REPORTES nacionales sin filas por todos los presbiterios; ADMIN cambia contexto explícitamente, REPORTES informes nacionales sin sede. Consulta general dentro de la funcionalidad con filtros opcionales Presbiterio/Sede. H-12 vigente V4. No implementar aprobación de supervisores.
 
 ## ADR-009 — Integridad GC y calidad derivada

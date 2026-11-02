@@ -1,4 +1,4 @@
-# Checklist de aceptación antes de producción PCD V4.0
+# Checklist de aceptación antes de producción PCD V4.1
 
 **No marcar PASS por existencia de documentos**. Registrar `PASS/FAIL/BLOQUEADO`, fecha, responsable, enlace a evidencia y entorno. La app temporal contiene datos personales y puede tratar información religiosa sensible.
 

@@ -25,26 +25,26 @@ La **revisión de fidelidad del texto con el papel** corresponde a cada presbite
 | Iteración | Preparación lograda | Pendiente antes de GO / ejecución |
 |---|---|---|
 | I00 | SQL inicial E2, catálogos/semillas y OpenAPI documentados. | Verificar versión MySQL/MariaDB real, ejecutar `001_initial.sql` y semillas en BD **de prueba**, lint API y pruebas de CHECK/FK. |
-| I01 | Login/contexto/sesiones/roles/auditoría documentados con CA-56…65/66/67/76. | E2-D02 contexto nacional, mitigación clave compartida, pruebas de SQL/API; producción requiere credenciales cambiadas respecto a UAT y H-40. |
+| I01 | Login/contexto/sesiones/roles/auditoría documentados con CA-56…65/66/67/76. | E2-D02 aprobada (ALC-03), mitigación clave compartida, pruebas de SQL/API; producción requiere credenciales cambiadas respecto a UAT y H-40. |
 | I02 | Normalización DNI/OTRO y catálogo, criticidad, esquema fuente. | E1-D01 aprobada, E2-D01 resuelta, ubigeo/CE si aplica, API de fichas y control de acceso; tests. |
 | I03 | Líder GC solo vía ficha; FK/CHECK propuestas. | E1-D02 y prueba física; contratos/test funcionales. |
-| I04 | Consulta por presbiterio como base del prototipo. | E2-D01 y pruebas de no exposición cross-scope. |
+| I04 | Consulta general por funcionalidad como base del prototipo. | E2-D01 resuelta (consulta general) y pruebas de edición propia. |
 | I05 | Matriz críticos y cálculo dinámico. | Prueba de informes con cambios ADMIN y control nacional. |
 | I06 | Sesiones/seguridad técnica previstas. | Privacidad H-40, hosting/backup/carga y pruebas de restauración. |
 **Estado global:** no existen pruebas productivas ejecutadas; propuestas no equivalen a decisiones aprobadas ni release.
 
 ## Actualización tras decisiones Etapa 2
 - **I00:** preparar y conservar dos anexos técnicos **generados del SQL**: diagrama físico detallado y diccionario físico por columna; verificar concordancia con versión de esquema y ejecutar SQL en motor real cuando esté disponible.
-- **I01:** ámbito nacional ADMIN/REPORTES **aprobado** y credenciales separadas; `GENERAL/PRESBITERIO` se gestiona desde Administración, pero la lectura nacional no habilita edición. Hacer pruebas por matriz de roles.
-- **I02:** **ubigeo INEI como entrada de construcción obligatoria**, con fuente y versión verificadas; H-13 aprobado, persistencia tipo/subtipo/número sin ceros perdidos.
-- **I04:** probar que GENERAL muestra todos los presbiterios autorizados para consulta, PRESBITERIO solo los asociados, ambos con edición DIGITADOR restringida a propias fichas.
+- **I01:** ADMIN/REPORTES nacionales **aprobados** (ALC-03) y credenciales separadas; **no existe** selector GENERAL/PRESBITERIO ni `alcance_consulta`; la lectura nacional no habilita edición. Hacer pruebas por matriz de roles.
+- **I02:** **ubigeo INEI como entrada de construcción obligatoria**, con fuente y versión verificadas; H-13 aprobado, persistencia tipo+número sin ceros perdidos y **sin subtipo**.
+- **I04:** probar consulta general con filtros opcionales de presbiterio/sede y edición del DIGITADOR restringida a sus propias fichas.
 - **I06:** la aceptación funcional de clave compartida no elimina la revisión de privacidad y pruebas de controles antes de operar con datos reales.
 
 ## Etapa 3 — puertas de entrada
-- I01: los contratos de login, permisos nacionales y scope configurable están definidos, pero faltan lint formal y pruebas PHP/MySQL.
+- I01: los contratos de login, permisos nacionales y contexto están definidos, pero faltan lint formal y pruebas PHP/MySQL.
 - I02: DTO de Persona/ficha y filtros preparados; H-24 requiere decisión (E1-D01 ya aprobada), además del Excel binario y ubigeo en la construcción.
 - I03: el control 409 usa la versión de ficha GC; E1-D02/H-23 y pruebas FK bloquean GO.
-- I04: ámbito GENERAL/PRESBITERIO **aprobado**; falta implementar API y tests de edición solo propia.
+- I04: consulta general con filtros opcionales **aprobada**; falta implementar API y tests de edición solo propia.
 - I05: reportes por actor de auditoría, filtros y parametrización aprobados, sin resultados probados.
 - I06: H-40 protección de datos/retención y validación de hosting son parte de la siguiente etapa.
 

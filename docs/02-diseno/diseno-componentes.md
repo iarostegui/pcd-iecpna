@@ -1,4 +1,4 @@
-# Diseño de componentes PCD V4.0
+# Diseño de componentes PCD V4.1
 ## Frontend React/TypeScript/Vite
 ```text
 src/
