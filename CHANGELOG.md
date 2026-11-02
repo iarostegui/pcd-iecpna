@@ -1,4 +1,10 @@
 # Changelog documental y técnico — PCD
+## 2026-11-02 — I00: verificación técnica
+- `scripts/i00/verificar.php`: 32 controles de entorno, MySQL, enforcement y seguridad con salida JSON.
+- Job CI `i00` con MySQL 8: migraciones, seed, bootstrap UAT idempotente, build del frontend y artefacto de evidencia.
+- Resultado CI: MySQL 8.0.46, 11 tablas/146 columnas/23 FK/11 UNIQUE/4 CHECK, 26 cuentas Argon2id; `PASS=30 FAIL=0 BLOCKED=1 NOT_IMPLEMENTED=1`.
+- [Matriz](docs/08-ia/i00/MATRIZ-I00.md) y [acta preliminar](docs/08-ia/i00/ACTA-PRELIMINAR-I00.md): **NO-GO de cierre** por cPanel (E-07), H-14, H-40 y revisión del especialista.
+- Sin cambios en SQL, OpenAPI, prototipo ni decisiones funcionales.
 ## 2026-11-02 — P01: andamiaje ejecutable
 - Backend PHP 8.2 (Composer/PSR-4 `Pcd\`), router explícito, manejo centralizado de errores, PDO utf8mb4, CSRF/CORS y `GET /api/v1/health`.
 - Placeholders 501 para rutas de I01; no se implementan login, captura, consulta ni reportes.

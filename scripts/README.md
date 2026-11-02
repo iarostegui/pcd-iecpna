@@ -13,6 +13,14 @@ node scripts/validar-prototipo-v2.3.cjs
 
 `validar-prototipo-v2.3.cjs` no requiere paquetes; `validar-sdd-i00.cjs` usa `js-yaml` como parser formal y el `package-lock.json` fija la versión. Comprueban **sintaxis/estructura**, no MySQL ni E2E.
 
+## Verificación técnica I00 — `scripts/i00/verificar.php`
+Con una BD MySQL 8 de pruebas ya migrada (001 + 002) y aprovisionada:
+```bash
+PCD_DB_HOST=127.0.0.1 PCD_DB_NAME=pcd_test PCD_DB_USER=root PCD_DB_PASSWORD=... \
+  php scripts/i00/verificar.php --json=.tmp/i00-evidencia.json
+```
+Comprueba 32 controles: entorno, 11 tablas/146 columnas/23 FK, UNIQUE/CHECK, columna generada, idempotencia, utf8mb4, timestamps, seed, enforcement FK/CHECK/UNIQUE, Argon2id, secretos y sesión. Las pruebas negativas usan transacción + rollback; no modifica el esquema. Estados: PASS/FAIL/BLOCKED/NOT_IMPLEMENTED.
+
 El prototipo [V2.2](../prototypes/PCD_v2.2.html) se preserva y [V2.3](../prototypes/PCD_v2.3.html) es la UI vigente.
 
 ## Aprovisionamiento de cuentas — `bootstrap-provision.php`

@@ -11,6 +11,7 @@ Organiza el **contrato de trabajo** para una IA que implemente PCD respetando SD
 | [matriz-trazabilidad.md](matriz-trazabilidad.md) | Relación requisito ↔ pantalla ↔ API ↔ tabla ↔ prueba. |
 | [definicion-terminado.md](definicion-terminado.md) | Condiciones obligatorias antes de declarar terminada una función. |
 | [estado-documental.md](estado-documental.md) | Inventario del estado documental, limitaciones y riesgos abiertos. |
+| [i00/](i00/MATRIZ-I00.md) | Evidencia técnica I00: matriz de 32 controles, acta preliminar GO/NO-GO y restricciones del hosting. |
 
 **Modo de trabajo:** leer fuentes → preparar cambio OpenSpec → implementar solo el alcance → probar → documentar evidencia → corregir. No implementar SGSP ni su proceso futuro de migración.
 

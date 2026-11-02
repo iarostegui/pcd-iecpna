@@ -1,5 +1,5 @@
 # I00 — Verificación estática y entrega a implementación
-**Fecha:** 01/11/2026 · **Estado:** documentación lista para comprobar en un clon; **NO** equivale a SQL ejecutado ni entorno habilitado.
+**Fecha:** 02/11/2026 · **Estado:** verificación técnica ejecutada sobre **MySQL 8 (CI)**; hosting cPanel, H-14 y H-40 mantienen el cierre **NO-GO**. Ver [matriz](i00/MATRIZ-I00.md) y [acta preliminar](i00/ACTA-PRELIMINAR-I00.md).
 
 ## 1. Línea base vigente
 1. [Alcance PCD](../01-analisis/alcance-funcional.md): app temporal, no SGSP.
@@ -20,29 +20,28 @@ La primera verificación debe fallar cuando el SQL tenga un número distinto de 
 ## 3. Tareas reales I00 todavía necesarias
 | ID | Actividad | Evidencia exigida | Estado |
 |---|---|---|---|
-| I00-01 | Clonar repo privado y ejecutar ambos scripts | Salida/versión Node + commit SHA | **PENDIENTE DE EJECUCIÓN EN CLON** |
-| I00-02 | Versionar el **XLSX original de fichas** con SHA declarado H-14, preservando hojas de ejemplo separadas de producción | Archivo y hash verificado | **PENDIENTE** |
-| I00-03 | Verificar versión PHP, MariaDB/MySQL, HTTPS y PDO en cPanel | Captura/registro sin secretos | **PENDIENTE** |
-| I00-04 | Crear una BD **de prueba** vacía; ejecutar 001 y luego 002 | Logs de aplicación sin PII | **PENDIENTE** |
-| I00-05 | Probar 11 tablas, 146 columnas, 23 FK y restricciones CHECK bajo motor real | Consultas information_schema, tests de FK/CHECK | **PENDIENTE** |
-| I00-06 | Ejecutar lint OpenAPI 3.0.3 con parser formal y revisar rutas/DTO | Reporte de parser | **PENDIENTE** |
-| I00-07 | Verificar integridad de sedes: tipo SEDE, padre PRESBITERIO; ubigeo por nivel | Casos SQL/PHP de rechazo | **PENDIENTE** |
-| I00-08 | Verificar recuperación/rollback ante reintento y conflicto de creación | CA-26, CA-42 y evidencia | **PENDIENTE DE IMPLEMENTACIÓN** |
-| I00-09 | Registrar línea base I00 para I01 y riesgos residuales | ACTA GO/NO-GO con responsables | **PENDIENTE** |
+| I00-01 | Clonar repo privado y ejecutar ambos scripts | Salida/versión Node + commit SHA | **PASS** — validadores local y CI (run 41443882284) |
+| I00-02 | Versionar el **XLSX original de fichas** con SHA declarado H-14, preservando hojas de ejemplo separadas de producción | Archivo y hash verificado | **PENDIENTE H-14** |
+| I00-03 | Verificar versión PHP, MariaDB/MySQL, HTTPS y PDO en cPanel | Captura/registro sin secretos | **BLOCKED** — sin acceso a cPanel |
+| I00-04 | Crear una BD **de prueba** vacía; ejecutar 001 y luego 002 | Logs de aplicación sin PII | **PASS** — MySQL 8.0.46 en CI |
+| I00-05 | Probar 11 tablas, 146 columnas, 23 FK y restricciones CHECK bajo motor real | Consultas information_schema, tests de FK/CHECK | **PASS** — D-01…D-16 |
+| I00-06 | Ejecutar lint OpenAPI 3.0.3 con parser formal y revisar rutas/DTO | Reporte de parser | **PARCIAL** — sintaxis/refs validadas; lint 3.0.3 estricto NOT_IMPLEMENTED |
+| I00-07 | Verificar integridad de sedes: tipo SEDE, padre PRESBITERIO; ubigeo por nivel | Casos SQL/PHP de rechazo | **PARCIAL** — CHECK y 0 sedes PASS; validación PHP del tipo padre en I01 |
+| I00-08 | Verificar recuperación/rollback ante reintento y conflicto de creación | CA-26, CA-42 y evidencia | **NOT_IMPLEMENTED** — requiere I02 (fichas) |
+| I00-09 | Registrar línea base I00 para I01 y riesgos residuales | ACTA GO/NO-GO con responsables | **PRELIMINAR** — acta emitida; cierre NO-GO por E-07/H-40 |
 
 ## 4. Riesgos y fronteras
 - **No** desplegar 001 sobre una base existente con datos; requerir migración propia.
-- Revisión documental **no prueba** creación de FK compuestas ni jerarquías referenciales. El PHP valida tipos y relaciones de organización/ubigeo; los CHECK no garantizan por sí solos que el padre de una sede sea presbiterio.
+- Revisión documental **no prueba** creación de FK compuestas ni jerarquías referenciales. El CI ya verifica FK/CHECK/UNIQUE en MySQL 8; la validación PHP del tipo de padre de sede pertenece a I01.
 - `UBIGEO` oficial se importa durante **I02**, no llenar filas sintéticas como si fueran INEI.
 - Datos de fichas, incluyendo atributos religiosos, requieren controles H-40 antes de producción con datos reales. No crear roles/supervisores ni tablas nuevas.
 - E1-D01 está **aprobada**; E1-D02, H-23 y H-24 continúan abiertos; **no impedir I00/I01 por una regla propia de I02/I03**.
 
 ## 5. Resultado
-El entregable documental de I00 identifica herramientas, controles, bloqueos y ruta de verificación. **No existe evidencia de ejecución en hosting**, código PHP/React productivo, restauración de backups ni GO operativo. La siguiente actividad técnica se ejecuta al disponer del entorno y de los secretos por vía segura.
+I00 tiene **evidencia técnica reproducible en MySQL 8** (run 41443882284): esquema, restricciones, seed, aprovisionamiento Argon2id, PHPUnit, runner HTTP y build del frontend. **El cierre formal sigue NO-GO** por cPanel no verificado (E-07), H-14, H-40 y la revisión del especialista. No existe GO operativo ni autorización para I01; ver [acta](i00/ACTA-PRELIMINAR-I00.md).
 
 ## Comprobador V4.1
 Después de `npm ci` (instalación reproducible desde `package-lock.json`), ejecutar `npm test` (`js-yaml` analizador formal y comparación de columnas/tipos SQL↔diccionario). Se incluye workflow CI en cada push/PR. Se requiere **prueba SQL real** de `nombre_raiz_norm`, `created_at/updated_at`, índices y CHECK antes de marcar I00 completo. [Entrega al especialista](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md).
 
 ## Evidencia de CI
-`npm test` se ejecutó en Actions [run 41368871153](https://github.com/iarostegui/pcd-iecpna/actions/runs/41368871153) y pasó; incluye parser real `js-yaml` y comparación SQL↔diccionario con 11 tablas, 146 columnas y 23 FK. Esta evidencia cierra solo la comprobación estática automatizada, no `I00-03…I00-09` ni pruebas reales MySQL/PHP.
-[Algoritmos obligatorios para IA](CONTRATO-EJECUCION-V4.1.md).
+Run [41443882284](https://github.com/iarostegui/pcd-iecpna/actions/runs/41443882284): jobs `documentos`, `backend` (MySQL 8), `frontend` e `i00` en verde. El verificador I00 reporta `PASS=30, FAIL=0, BLOCKED=1 (E-07), NOT_IMPLEMENTED=1 (S-08)`; PHPUnit 43/115, runner 20/0/0/3 y aprovisionamiento 26 cuentas Argon2id. Esta evidencia **no** cubre cPanel, H-40 ni backups. [Algoritmos obligatorios para IA](CONTRATO-EJECUCION-V4.1.md).
