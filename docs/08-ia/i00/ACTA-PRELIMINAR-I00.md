@@ -15,6 +15,10 @@ Las verificaciones técnicas ejecutables están en verde, pero **permanecen bloq
 4. **H-40 — privacidad/retención:** decisión institucional previa a datos reales.
 5. **Revisión del especialista:** pendiente según AGENTS; no abrir nueva auditoría formal antes de su evaluación.
 
+## 1.1. Autorización posterior, limitada al desarrollo
+
+Por instrucción expresa del responsable funcional de 02/11/2026 se registra un **GO DE DESARROLLO CONDICIONADO** para ejecutar I01 exclusivamente con datos sintéticos y en entornos aislados. **NO altera el NO-GO de cierre formal de I00 ni autoriza despliegue o datos reales.** Véase [autorización condicionada](AUTORIZACION-DESARROLLO-CONDICIONADA.md).
+
 ## 2. Comprobaciones técnicas completadas (CI)
 
 | Grupo | Resultado |
