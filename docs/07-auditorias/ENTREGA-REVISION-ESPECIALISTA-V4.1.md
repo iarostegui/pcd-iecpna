@@ -24,3 +24,7 @@ Verificar correspondencia entre alcance, OpenSpec, OpenAPI, SQL, diagrama, dicci
 - Repositorio público: no subir información sensible. La visibilidad/licencia requieren decisión del propietario.
 
 **Próximo hito después de esta revisión:** implementar I00/I01 con transacciones, login real, sede y ficha sintética; comprobar en base de prueba y registrar evidencias, no seguir acumulando documentos.
+
+## Evidencia de validación automatizada
+En GitHub Actions [ejecución 41368871153](https://github.com/iarostegui/pcd-iecpna/actions/runs/41368871153) se completaron **con éxito** los dos scripts: `check:sdd` (11 tablas, 146 columnas, 23 FK, tipos/nulabilidad del diccionario, referencias YAML, cuatro presbiterios, JSON Schema) y `check:prototype` (inspección sintáctica/estructura V2.3). **Esta evidencia solo valida consistencia estática:** no hay pruebas ejecutadas en MySQL/MariaDB, backend PHP ni navegadores E2E.
+**Instrucción para especialista:** utilizar también el [contrato de ejecución](../08-ia/CONTRATO-EJECUCION-V4.1.md), que fija cómo debe construir la IA sin deducir reglas nuevas. La revisión profesional precede a cualquier reauditoría formal.

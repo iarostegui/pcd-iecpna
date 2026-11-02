@@ -42,3 +42,7 @@ El entregable documental de I00 identifica herramientas, controles, bloqueos y r
 
 ## Comprobador V4.1
 Después de `npm install`, ejecutar `npm test` (`js-yaml` analizador formal y comparación de columnas/tipos SQL↔diccionario). Se incluye workflow CI en cada push/PR. Se requiere **prueba SQL real** de `nombre_raiz_norm`, `created_at/updated_at`, índices y CHECK antes de marcar I00 completo. [Entrega al especialista](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md).
+
+## Evidencia de CI
+`npm test` se ejecutó en Actions [run 41368871153](https://github.com/iarostegui/pcd-iecpna/actions/runs/41368871153) y pasó; incluye parser real `js-yaml` y comparación SQL↔diccionario con 11 tablas, 146 columnas y 23 FK. Esta evidencia cierra solo la comprobación estática automatizada, no `I00-03…I00-09` ni pruebas reales MySQL/PHP.
+[Algoritmos obligatorios para IA](CONTRATO-EJECUCION-V4.1.md).

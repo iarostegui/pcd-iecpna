@@ -77,3 +77,5 @@ Ejecutar `node scripts/validar-sdd-i00.cjs` y `node scripts/validar-prototipo-v2
 **Índices:** no sumar índices de reportes hasta disponer de consultas/EXPLAIN verificables.
 **H-40:** privacidad, retención y visibilidad del repositorio aún requieren decisión institucional; prohibido datos reales antes del GO.
 **Estado de revisión:** [entrega al especialista](docs/07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md). No iniciar nueva auditoría formal hasta su evaluación.
+
+**PARA PROGRAMAR:** leer [Contrato de ejecución V4.1](docs/08-ia/CONTRATO-EJECUCION-V4.1.md) **antes del primer prompt de generación**. Las reglas de alta, edición, E1-D01, claves UAT, presbiterios fijos, datos JSON y reportes se explican como algoritmo transaccional. No improvisar comportamientos desde los cambios históricos.

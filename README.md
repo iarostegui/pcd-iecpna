@@ -28,3 +28,5 @@
 **Cambios:** [CHANGELOG](CHANGELOG.md). **Estado real:** [estado-documental](docs/08-ia/estado-documental.md). **Protocolo de auditoría:** [AUD-PCD-01](docs/07-auditorias/protocolo-auditoria-alcance.md).
 
 **Seguridad:** el repositorio es actualmente público; no subir PII ni contraseñas. [SECURITY.md](SECURITY.md). La decisión institucional H-40 debe cerrarse antes de datos reales.
+
+**Contrato para construir sin interpretaciones:** [CONTRATO-EJECUCION-V4.1](docs/08-ia/CONTRATO-EJECUCION-V4.1.md). Contiene pasos transaccionales de alta/vinculación E1-D01, validación de sede, auditoría por cambios y restricciones de producción.

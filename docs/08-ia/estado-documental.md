@@ -28,3 +28,6 @@ Textos de análisis/auditorías y cambios E1/E2/E3 de fecha 31/10/2026 se preser
 ## Alineamiento para revisión profesional V4.1
 [Entrega resumida](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md). E1-D01 **aprobada**; presbiterios de seed fijos y no administrables desde la app; contraseña común solo aceptación, rotación individual para producción; creación de ficha sin evento auditoría y edición solo campos alterados; nombres sin tildes para duplicados; JSON Schema estricto; 11 tablas, 146 columnas, 23 FK. [Aprobaciones](APROBACIONES.md) son criterios funcionales, no firmas jurídicas.
 CI y validador SDD son revisión estructural, no acreditan motor MySQL/PHP/React. H-40 y visibilidad/LICENCIA del repositorio requieren decisión institucional/propietario.
+
+## Verificación SDD automatizada — evidencia
+Ejecución GitHub Actions [41368871153](https://github.com/iarostegui/pcd-iecpna/actions/runs/41368871153): **PASS estático** de modelo 11/146/23 y prototipo V2.3. Esta comprobación no demuestra instalación de SQL, funcionamiento de permisos PHP, respaldo/restauración ni cumplimiento H-40. [Contrato IA](CONTRATO-EJECUCION-V4.1.md); [paquete especialista](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md).

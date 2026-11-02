@@ -19,3 +19,6 @@ Organiza el **contrato de trabajo** para una IA que implemente PCD respetando SD
 **Versión V4 vigente:** [modelo de 11 tablas](../03-base-datos/anexos/justificacion-11-tablas.md), [OpenSpec](../../openspec/specs/README.md), [OpenAPI](../04-integracion/openapi.yaml), [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md). Nunca generar código desde un delta histórico E1/E2/E3 que contradiga V4.
 
 [Registro de aprobaciones](APROBACIONES.md) y [entrega al especialista](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md). No se deben ejecutar cambios históricos E1–E3 que contradigan V4.1.
+
+- [Contrato de ejecución V4.1](CONTRATO-EJECUCION-V4.1.md) — secuencia concreta para implementadores IA; altas sin eventos de auditoría y edición solo diferencias.
+- [Aprobaciones](APROBACIONES.md) — decisiones funcionales vigentes, sin equivaler a firma institucional.

@@ -18,3 +18,5 @@
 | H-40 PR-01…08 | Privacidad y retención institucional | PENDIENTE, GATE PRODUCTIVO |
 | Visibilidad Github/Licencia | Repositorio público observado; cambio de visibilidad y licencia dependen del propietario | PENDIENTE DECISIÓN DEL PROPIETARIO |
 **Nota:** no inventar nombres de personas aprobadoras ni firmas. La aceptación institucional se adjuntará solo cuando exista autorización explícita.
+
+Los algoritmos aprobados están consolidados en [CONTRATO-EJECUCION-V4.1](CONTRATO-EJECUCION-V4.1.md); esta lista no sustituye la revisión del especialista ni actas institucionales H-40.

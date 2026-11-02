@@ -50,3 +50,5 @@ La [guía I00](I00-verificacion-estatica-y-handoff.md) incluye script [`validar-
 - E1-D01 está **aprobado**, conservar endpoint `POST /personas/{id}/fichas` y `persona_reutilizada`; no sobrescribir consolidado al anexar.
 - Validación JSON Schema estricta de secciones opcionales de ficha; no crear tablas de cónyuge.
 - El objetivo del próximo especialista es **evitar ambigüedades para generar código**, no completar más etapas documentales.
+
+**Guía directa para IA:** [Contrato de ejecución V4.1](CONTRATO-EJECUCION-V4.1.md) y [entrega al especialista](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md), antes de desarrollar. La CI estática ha pasado al menos en ejecución 41368871153, pero no se ha probado el motor ni el producto.

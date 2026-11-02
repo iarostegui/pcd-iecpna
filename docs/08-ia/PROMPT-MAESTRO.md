@@ -34,3 +34,5 @@ Usar **prototypes/PCD_v2.3.html** (no V2.2) como autoridad actual de UX, junto a
 
 ## Prohibiciones para el próximo agente de implementación
 No crear gestión de presbiterios ni permisos territoriales de lectura; no registrar auditoría por INSERT de ficha ni copiar ficha completa en cambios; no copiar contraseñas de UAT a producción. Comparación de nombres de sede en forma NFKD sin tildes, mayúsculas y espacios compactados. Usar [JSON Schema](../03-base-datos/esquemas-json/README.md) para datos opcionales del papel, sin JSON abierto. E1-D01 aprobada; E1-D02 y H-23/H-24 pendientes. Primero implementar y probar un recorrido vertical mínimo; no crear sexta etapa de documentación.
+
+**Lectura adicional obligatoria de la IA:** [Contrato de ejecución V4.1](CONTRATO-EJECUCION-V4.1.md) antes de producir React/PHP/SQL. Enfatiza validaciones en servidor, transacciones, idempotencia y campos distintos en auditoría.
