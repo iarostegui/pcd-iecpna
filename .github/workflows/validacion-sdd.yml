@@ -135,3 +135,86 @@ jobs:
       - name: Compilar React/TS/Vite
         working-directory: frontend
         run: npm run build
+
+  i00:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: pcd_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    env:
+      PCD_ENV: testing
+      PCD_API_BASE_PATH: /api/v1
+      PCD_DB_HOST: 127.0.0.1
+      PCD_DB_PORT: 3306
+      PCD_DB_NAME: pcd_test
+      PCD_DB_USER: root
+      PCD_DB_PASSWORD: root
+      PCD_SESSION_NAME: pcd_test_sid
+      PCD_ALLOWED_ORIGINS: http://localhost:5173
+      # Credenciales sintéticas exclusivas de CI; no son secretos reales.
+      PCD_UAT_DIGITADOR_PASSWORD: uat-digitador-ci
+      PCD_ADMIN_PASSWORD: admin-ci-only
+      PCD_REPORTES_PASSWORD: reportes-ci-only
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql, mbstring, curl
+          tools: composer:v2
+          coverage: none
+
+      - name: Dependencias backend (lockfile)
+        working-directory: backend
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Esquema y seed en MySQL 8 real
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq mysql-client
+          mysql -h127.0.0.1 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS pcd_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+          mysql -h127.0.0.1 -uroot -proot pcd_test < database/migrations/001_initial.sql
+          mysql -h127.0.0.1 -uroot -proot pcd_test < database/seeds/002_catalogos_calidad.sql
+
+      - name: Aprovisionamiento UAT (idempotente)
+        run: |
+          php scripts/bootstrap-provision.php --mode=uat
+          php scripts/bootstrap-provision.php --mode=uat
+
+      - name: Node 22 y build frontend
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Compilar frontend
+        working-directory: frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Verificación técnica I00
+        run: php scripts/i00/verificar.php --json=i00-evidencia.json
+
+      - name: Publicar evidencia I00
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: i00-evidencia
+          path: i00-evidencia.json
+          if-no-files-found: warn
