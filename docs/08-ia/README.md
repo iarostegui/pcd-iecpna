@@ -23,3 +23,5 @@ Organiza el **contrato de trabajo** para una IA que implemente PCD respetando SD
 
 - [Contrato de ejecución V4.1](CONTRATO-EJECUCION-V4.1.md) — secuencia concreta para implementadores IA; altas sin eventos de auditoría y edición solo diferencias.
 - [Aprobaciones](APROBACIONES.md) — decisiones funcionales vigentes, sin equivaler a firma institucional.
+
+- [I00 — Autorización condicionada para desarrollo I01 con datos sintéticos](i00/AUTORIZACION-DESARROLLO-CONDICIONADA.md) (no es GO productivo).
