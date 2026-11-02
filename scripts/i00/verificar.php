@@ -485,7 +485,7 @@ run_check($results, 'S-05', 'Seguridad', 'Sesión preparada (HttpOnly/SameSite/S
 run_check($results, 'S-06', 'Seguridad', 'HTTPS previsto en producción', static function () use ($root): array {
     $ok = source_contains(
         $root . '/backend/src/Security/PhpSession.php',
-        ["=== 'production'", "'secure' => \$secure", 'isHttps'],
+        ["=== 'production'", "'secure' => self::secure()", 'isHttps'],
     );
 
     return $ok
