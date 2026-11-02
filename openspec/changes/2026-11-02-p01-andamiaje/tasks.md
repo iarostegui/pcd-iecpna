@@ -11,16 +11,16 @@
 - [x] CI con MySQL 8, PHPUnit, runner y build de frontend.
 - [x] READMEs, AGENTS simplificado y CHANGELOG actualizados.
 
-## Verificación exigida
-| Evidencia | Cómo se comprueba | Estado |
+## Verificación ejecutada
+| Evidencia | Resultado | Estado |
 |---|---|---|
-| Backend por HTTP | `GET /api/v1/health` con servidor PHP | Pendiente de ejecución |
-| Frontend compila | `npm ci && npm run build` | Pendiente |
-| Dependencias reproducibles | `composer install` (lock) y `npm ci` (lock) | Pendiente |
-| PHPUnit | `backend/vendor/bin/phpunit` | Pendiente |
-| Runner HTTP | `php tests/api/run.php` | Pendiente |
-| Aprovisionamiento real | Bootstrap + consultas en MySQL 8 (CI) | Pendiente |
-| SQL/OpenAPI intactos | `git diff main -- database docs/04-integracion/openapi.yaml` | Pendiente |
-| Sin alcance indebido | Revisión de rutas y archivos | Pendiente |
+| Backend por HTTP | `GET /api/v1/health` → 200 con `request_id` y `database.status=up` en CI | Verificado |
+| Frontend compila | `npm ci && npm run build` (local y CI) → `dist/` | Verificado |
+| Dependencias reproducibles | `composer install` desde `composer.lock`; `npm ci` desde `package-lock.json` | Verificado |
+| PHPUnit | 28 pruebas, 65 aserciones (integración MySQL incluida) en CI | Verificado |
+| Runner HTTP | 22 verificaciones: CI 19 PASS / 0 FAIL / 0 BLOCKED / 3 NOT_IMPLEMENTED; local 18 PASS / 1 BLOCKED (sin MySQL) | Verificado |
+| Aprovisionamiento real | MySQL 8: 26 usuarios (24 DIGITADORES + ADMIN + REPORTES), 26 hashes Argon2id; segunda ejecución creados=0, existentes=26 | Verificado |
+| SQL/OpenAPI intactos | `git diff main -- database docs/04-integracion/openapi.yaml prototypes` vacío | Verificado |
+| Sin alcance indebido | Rutas solo salud/placeholder; sin login, captura, consulta, reportes ni SGSP | Verificado |
 
-**Regla:** este archivo no se marca completo por código generado; solo por ejecución verificable. Los estados finales se registran en el PR.
+**Evidencia CI:** ejecución [41438002349](https://github.com/iarostegui/pcd-iecpna/actions/runs/41438002349) (jobs `documentos`, `backend` con MySQL 8 y `frontend`). Los estados locales sin MySQL se reportan como BLOCKED, nunca como PASS.
