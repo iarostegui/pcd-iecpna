@@ -15,16 +15,19 @@ CREATE TABLE IF NOT EXISTS organizacion (
  codigo VARCHAR(50) NULL,
  nombre VARCHAR(200) NOT NULL,
  nombre_norm VARCHAR(200) NOT NULL,
+ nombre_raiz_norm VARCHAR(200) GENERATED ALWAYS AS (CASE WHEN tipo='PRESBITERIO' THEN nombre_norm ELSE NULL END) STORED,
  referencia VARCHAR(300) NULL,
  activo TINYINT(1) NOT NULL DEFAULT 1,
- created_at DATETIME(6) NOT NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
  UNIQUE KEY uq_org_codigo(codigo),
+ UNIQUE KEY uq_org_presb_nombre(nombre_raiz_norm),
  UNIQUE KEY uq_org_sede_nombre(padre_id,nombre_norm),
  UNIQUE KEY uq_org_id_padre(id,padre_id),
  KEY ix_org_tipo_padre(tipo,padre_id,activo),
  CONSTRAINT fk_org_padre FOREIGN KEY(padre_id) REFERENCES organizacion(id),
  CONSTRAINT chk_org_jerarquia CHECK (
-   (tipo='PRESBITERIO' AND padre_id IS NULL) OR
+   (tipo='PRESBITERIO' AND padre_id IS NULL AND codigo IS NOT NULL) OR
    (tipo='SEDE' AND padre_id IS NOT NULL)
  )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -41,8 +44,8 @@ CREATE TABLE IF NOT EXISTS usuario (
  password_hash VARCHAR(255) NOT NULL,
  activo TINYINT(1) NOT NULL DEFAULT 1,
  auth_version INT UNSIGNED NOT NULL DEFAULT 1,
- created_at DATETIME(6) NOT NULL,
- updated_at DATETIME(6) NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  UNIQUE KEY uq_usuario_codigo(codigo),
  KEY ix_user_presb(presbiterio_id),
  CONSTRAINT fk_usuario_presb FOREIGN KEY(presbiterio_id) REFERENCES organizacion(id)
@@ -67,6 +70,8 @@ CREATE TABLE IF NOT EXISTS sesion (
  geo_longitud DECIMAL(10,7) NULL,
  geo_precision_m DECIMAL(10,2) NULL,
  geo_capturada_en DATETIME(6) NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
  UNIQUE KEY uq_sesion_hash(session_ref_hash),
  KEY ix_sesion_user_fecha(usuario_id,fecha_login),
  CONSTRAINT fk_sesion_usuario FOREIGN KEY(usuario_id) REFERENCES usuario(id),
@@ -87,7 +92,8 @@ CREATE TABLE IF NOT EXISTS login_evento (
  resultado ENUM('OK','FALLIDO','BLOQUEADO','LOGOUT') NOT NULL,
  ip VARBINARY(16) NULL,
  user_agent VARCHAR(255) NULL,
- created_at DATETIME(6) NOT NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
  KEY ix_login_codigo_fecha(codigo_intentado,created_at),
  KEY ix_login_ip_fecha(ip,created_at),
  CONSTRAINT fk_login_usuario FOREIGN KEY(usuario_id) REFERENCES usuario(id),
@@ -106,7 +112,8 @@ CREATE TABLE IF NOT EXISTS catalogo (
  activo TINYINT(1) NOT NULL DEFAULT 1,
  config_json JSON NULL,
  updated_by BIGINT UNSIGNED NULL,
- updated_at DATETIME(6) NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  UNIQUE KEY uq_catalogo_categoria_codigo(categoria,codigo),
  CONSTRAINT fk_catalogo_editor FOREIGN KEY(updated_by) REFERENCES usuario(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -119,6 +126,8 @@ CREATE TABLE IF NOT EXISTS ubigeo (
  padre_codigo VARCHAR(6) NULL,
  nombre VARCHAR(160) NOT NULL,
  activo TINYINT(1) NOT NULL DEFAULT 1,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
  KEY ix_ubigeo_padre(padre_codigo,tipo,nombre),
  CONSTRAINT fk_ubigeo_padre FOREIGN KEY(padre_codigo) REFERENCES ubigeo(codigo),
  CONSTRAINT chk_ubigeo_nivel CHECK (
@@ -155,8 +164,8 @@ CREATE TABLE IF NOT EXISTS persona (
  es_lider_gc_intencion TINYINT(1) NOT NULL DEFAULT 0,
  created_by BIGINT UNSIGNED NOT NULL,
  updated_by BIGINT UNSIGNED NULL,
- created_at DATETIME(6) NOT NULL,
- updated_at DATETIME(6) NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  version INT UNSIGNED NOT NULL DEFAULT 1,
  UNIQUE KEY uq_persona_identidad(clave_identidad),
  KEY ix_persona_documento(tipo_documento,numero_documento_norm),
@@ -186,8 +195,8 @@ CREATE TABLE IF NOT EXISTS ficha (
  posible_duplicado TINYINT(1) NOT NULL DEFAULT 0,
  created_by BIGINT UNSIGNED NOT NULL,
  updated_by BIGINT UNSIGNED NULL,
- created_at DATETIME(6) NOT NULL,
- updated_at DATETIME(6) NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  version INT UNSIGNED NOT NULL DEFAULT 1,
  UNIQUE KEY uq_ficha_id_tipo(id,tipo_ficha),
  KEY ix_ficha_presb_tipo(presbiterio_id,tipo_ficha,created_at),
@@ -217,26 +226,30 @@ CREATE TABLE IF NOT EXISTS grupo_crecer (
  direccion_lugar VARCHAR(500) NULL,
  referencia VARCHAR(350) NULL,
  es_matrimonios TINYINT(1) NULL,
- created_at DATETIME(6) NOT NULL,
- updated_at DATETIME(6) NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  UNIQUE KEY uq_gc_ficha(ficha_id),
  CONSTRAINT fk_gc_ficha_tipo FOREIGN KEY(ficha_id,ficha_tipo) REFERENCES ficha(id,tipo_ficha),
  CONSTRAINT chk_gc_tipo CHECK (ficha_tipo='GC')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 10. AUDITORIA_EVENTO: responsable real, operación y antes/después.
+-- 10. AUDITORIA_EVENTO: solo CAMBIOS, sin fila para alta de nueva ficha. Antes/despues incluyen exclusivamente campos alterados.
+-- actor_codigo y actor_perfil conservan snapshot aun si la cuenta cambia de nombre/rol.
 CREATE TABLE IF NOT EXISTS auditoria_evento (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  request_id VARCHAR(75) NOT NULL,
  sesion_id BIGINT UNSIGNED NULL,
  usuario_id BIGINT UNSIGNED NOT NULL,
+ actor_codigo VARCHAR(80) NOT NULL,
+ actor_perfil ENUM('DIGITADOR','ADMIN','REPORTES') NOT NULL,
  accion VARCHAR(60) NOT NULL,
  recurso_tipo VARCHAR(60) NOT NULL,
  recurso_id BIGINT UNSIGNED NULL,
  ip VARBINARY(16) NULL,
  antes_json JSON NULL,
  despues_json JSON NULL,
- created_at DATETIME(6) NOT NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
  KEY ix_auditoria_recurso(recurso_tipo,recurso_id,created_at),
  KEY ix_auditoria_actor(usuario_id,created_at),
  CONSTRAINT fk_audit_sesion FOREIGN KEY(sesion_id) REFERENCES sesion(id),
@@ -251,8 +264,10 @@ CREATE TABLE IF NOT EXISTS idempotencia (
  payload_hash CHAR(64) NOT NULL,
  response_status SMALLINT UNSIGNED NULL,
  response_json JSON NULL,
- created_at DATETIME(6) NOT NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
  UNIQUE KEY uq_idem_usuario_clave(usuario_id,clave),
+ KEY ix_idem_created_at(created_at),
  CONSTRAINT fk_idem_usuario FOREIGN KEY(usuario_id) REFERENCES usuario(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -263,3 +278,10 @@ CREATE TABLE IF NOT EXISTS idempotencia (
 -- La CONSULTA no habilita escritura: DIGITADOR edita solo fichas propias.
 -- Clave común solo digitadores; ADMIN/REPORTES secretos independientes.
 -- No integrar SGSP, supervisores, miembros nominales GC ni conciliación del papel.
+
+-- Reglas aprobadas: presbiterios precargados (LIM/TRU/CHI/IQU) y NO administrables desde la API.
+-- Altas/renombres de PRESBITERIO solo mantenimiento SQL por responsable; sí se permite crear SEDE.
+-- nombre_norm = Unicode NFKD, retirar marcas diacríticas, trim, mayúsculas y espacios internos normalizados.
+-- Ej.: 'Jesús María' y 'JESUS MARIA' colisionan en el mismo presbiterio; sedes legítimamente diferentes pueden advertirse sin bloqueo de semejanza no exacta.
+-- Registración FICHA: created_at en FICHA, sin AUDITORIA_EVENTO de INSERT; al editar registrar SOLO campos efectivamente modificados.
+-- Todos los registros guardan created_at/updated_at (timestamps servidor); índices adicionales de reportes solo tras EXPLAIN y datos sintéticos.

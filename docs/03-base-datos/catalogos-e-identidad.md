@@ -28,3 +28,14 @@ La **descripción libre de “Otro”** que aparece en el Excel, si está presen
 
 ## Pruebas
 DNI con ceros, 7/8/9 dígitos, CE con separadores, Otro con número común a DNI sin fusión, dos fichas sin documento, colisión documental concurrente; catálogos por categoría y cambios de criticidad; árbol y códigos INEI I02.
+
+## Presbiterios de instalación — catálogo fijo (APROBADO)
+| Código interno | Nombre inicial | Fuente de la denominación |
+|---|---|---|
+| LIM | Lima | Prototipo V2.3; la maqueta advierte homologación del nombre |
+| TRU | La Libertad – Trujillo | Prototipo V2.3 |
+| CHI | Chimbote | Prototipo V2.3 |
+| IQU | Iquitos | Prototipo V2.3 |
+Estos cuatro nodos `organizacion.tipo=PRESBITERIO` se incluyen en el seed. Los códigos son **internos de PCD**, no códigos oficiales externos de IECPNA. **No exponer POST/PATCH/DELETE de presbiterio** en API. Nuevos presbiterios solo los agrega un administrador técnico de BD mediante script autorizado, nunca por UI; no confundir con alta de sede.
+
+**Normalización:** al comparar nombres, quitar diacríticos (p. ej. `Jesús` → `JESUS`), normalizar espacios/caso; almacenar nombre original intacto para mostrar. Validar también con UNIQUE y transacción en SQL.

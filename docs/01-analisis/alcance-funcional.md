@@ -1,8 +1,8 @@
-# ALC-PCD-3.1 — Alcance oficial y límites del producto
+# ALC-PCD-4.0 — Alcance oficial y límites del producto
 **Producto:** PCD — Plataforma de Captura de Datos IECPNA (NO SGSP).  
 **Tipo:** aplicación web **temporal** para la digitación de fichas impresas de la campaña de levantamiento IECPNA.  
 **Estado:** definición de alcance vigente para diseño, auditoría y desarrollo; las decisiones pendientes están identificadas explícitamente.  
-**Referencias:** [fichas Excel e inventario](fuentes/inventario-excel-original.md), [reglas de negocio](reglas-negocio.md), [procesos](procesos-negocio.md), [prototipo V2.2](../../prototypes/PCD_v2.2.html), [criterios de auditoría](../07-auditorias/protocolo-auditoria-alcance.md).
+**Referencias:** [fichas Excel e inventario](fuentes/inventario-excel-original.md), [reglas de negocio](reglas-negocio.md), [procesos](procesos-negocio.md), [prototipo V2.3](../../prototypes/PCD_v2.2.html), [criterios de auditoría](../07-auditorias/protocolo-auditoria-alcance.md).
 
 > **Límite rector:** PCD registra, preserva, consulta y reporta datos de fichas físicas. **No reemplaza las operaciones pastorales del SGSP, ni automatiza la revisión humana de fidelidad entre papel y digitación, ni construye procesos administrativos permanentes.** Una auditoría puede advertir insuficiencias o **cuestionar este límite**, pero no transformarlo unilateralmente en un nuevo requisito.
 
@@ -16,8 +16,8 @@ PCD permite que digitadores capturen centralizadamente la información de las **
 
 - **Únicos formularios del levantamiento en alcance:** `Ficha_Persona` y `Ficha_Lider_GC`, con las hojas de ejemplo como referencia. El archivo original conserva su nombre histórico, que incluye la palabra SGSP, sin que eso cambie el producto.
 - El **Excel original** es fuente de campos y opciones impresas; el [inventario](fuentes/inventario-excel-original.md) y [diccionario](diccionario-captura.md) documentan la correspondencia. El **binario XLSX aún no está en GitHub** (pendiente H-14); no se debe dar por resuelto.
-- El **prototipo PCD HTML V2.2** es referencia de flujos y aspecto visual, pero contiene mecanismos demostrativos: no es autoridad para reemplazar reglas funcionales aprobadas ni para autenticación/almacenamiento reales.
-- Los catálogos reales de sedes/presbiterios se completarán con fuentes verificadas o altas autorizadas. **No inventar sedes ni datos reales** para satisfacer una auditoría.
+- El **prototipo PCD HTML V2.3** es referencia de flujos y aspecto visual, pero contiene mecanismos demostrativos: no es autoridad para reemplazar reglas funcionales aprobadas ni para autenticación/almacenamiento reales.
+- Los **presbiterios se precargan** desde el inventario fijo de cuatro; no se crean ni editan desde la aplicación (solo mantenimiento SQL autorizado). Las sedes se completarán con fuentes verificadas o altas autorizadas. **No inventar sedes ni datos reales** para satisfacer una auditoría.
 
 ## 3. Funcionalidades que SÍ pertenecen a PCD
 
@@ -25,18 +25,18 @@ PCD permite que digitadores capturen centralizadamente la información de las **
 |---|---|---|
 | ALC-01 | **Inicio/cierre de sesión** con presbiterio, cuenta de usuario y contraseña; trazabilidad de accesos. | Autenticación y permisos del backend obligatorios; no crear usuarios pastorales SGSP. |
 | ALC-02 | **Usuarios operativos:** seis digitadores iniciales por presbiterio existente; una cuenta ADMIN nacional y una de REPORTES nacional; administración de usuarios. | Digitador modifica solo sus registros de origen; ADMIN modifica todos; REPORTES es de lectura. |
-| ALC-03 | **Selección de sede** del presbiterio autenticado, recordar contexto y **crear sedes** durante digitación con comprobación de repetición. | No hay aprobación de alta de sede ni cambio arbitrario de presbiterio. |
+| ALC-03 | **Selección de sede** del presbiterio autenticado, recordar contexto y **crear sedes** durante digitación con comprobación de repetición. | No hay aprobación de alta de sede ni alta de presbiterios; ADMIN puede cambiar contexto entre los cuatro predefinidos. |
 | ALC-04 | **Digitación de ficha Persona** siguiendo los campos disponibles en el papel, fechas y opciones, con navegación por teclado. | Número impreso de ficha **opcional**, no es clave única; no inventar información no disponible. |
 | ALC-05 | **Guardado de fichas incompletas**, con validación de tipos, formatos, estructura e integridad. | Campo crítico faltante **no bloquea** la captura; valor de tipo inválido (p. ej. 31/02/1998 en fecha) **no se acepta**: el digitador corrige en origen o deja el campo vacío. |
 | ALC-06 | **Ficha Líder GC** después de guardar una Persona (o desde su consulta): captura al **líder** y resumen del grupo: identificación del grupo, tipo/estado, lugar, fecha, capacidad y cantidad **aproximada** de integrantes. | **No se registran ni vinculan integrantes nominales**: no hay fichas que contengan sus datos. No se gestiona pertenencia, actividades ni seguimiento de grupos. |
-| ALC-07 | **Consultas y correcciones autorizadas** sobre registros digitados, con filtros y búsqueda; control de coincidencias documentales/posibles duplicados dentro de lo técnicamente definido. | No resolver automáticamente identidades inciertas, no revelar datos personales fuera del ámbito autorizado, conservar origen y autoría. |
+| ALC-07 | **Consultas y correcciones autorizadas** sobre registros digitados, con filtros y búsqueda; control de coincidencias documentales/posibles duplicados dentro de lo técnicamente definido. | No resolver automáticamente identidades inciertas, consulta general dentro de funcionalidad autorizada y filtros por presbiterio/sede, conservar origen y autoría. |
 | ALC-08 | **Calidad objetiva de los datos**: parámetros de campos críticos, indicadores de faltantes, reglas de tipos y detección de coincidencias posibles. | **No verifica fidelidad al papel** (JUANA por Juan; JU4N4); esa revisión es **manual, responsabilidad de cada presbiterio y fuera de PCD**. |
 | ALC-09 | **Reportes y consultas nacionales**, como avance por presbiterio/sede, última digitación, volumen Persona/GC, productividad, incompletitud y posibles coincidencias. | Reporte de calidad refleja hechos computables, **no** un certificado de revisión manual ni un flujo de conciliación. |
-| ALC-10 | **Auditoría de operaciones**, autor original, usuario editor, fecha/hora, cambios, inicio de sesión, IP; **geolocalización opcional una sola vez por sesión** y reuso. | GPS denegado/no disponible no impide registrar; no usarlo como autorización ni pedirlo por cada guardado. |
+| ALC-10 | **Registro de autoría de nuevas fichas por created_at y created_by**, sin auditoría de alta de ficha; solo correcciones generan eventos de auditoría con campos efectivamente cambiados, actor, fecha/hora, IP; login en bitácora independiente; **geolocalización opcional una sola vez por sesión** y reuso. | GPS denegado/no disponible no impide registrar; no usarlo como autorización ni pedirlo por cada guardado. |
 | ALC-11 | **Persistencia propia de PCD** en MySQL/MariaDB, con identificación/autoria/fichas fuente y preparación de correspondencias futuras con SGSP. | SGSP tiene su propia BD y código; **no se implementa la migración ahora**. |
 | ALC-12 | **Despliegue temporal** en el hosting existente `pcd.unobdata.com` con interfaz compilada React/TS/Vite, API PHP y BD propia. | Sin procesos residentes nuevos, microservicios ni costos de infraestructura innecesarios; validar rendimiento en cPanel. |
 
-La definición fina de relaciones entre fichas/Persona de **distintos presbiterios** (E1-D01) y el tratamiento de un **GC ya existente** (E1-D02) siguen abiertos. No se puede inferir que las soluciones propuestas están aprobadas ni usarlas para ampliar el alcance.
+La vinculación de fichas con una misma Persona entre presbiterios **E1-D01 está APROBADA**: reutilizar Persona mediante identidad documental confiable y guardar nueva FICHA sin sobrescribir el consolidado; Grupo Crecer preexistente **E1-D02 sigue abierto**. No se puede inferir que las soluciones propuestas están aprobadas ni usarlas para ampliar el alcance.
 
 ## 4. Responsables y límites organizativos
 
@@ -90,7 +90,7 @@ La auditoría debe contrastar cada requisito **contra ALC-01…ALC-12**, las fue
 ## 8. Gobierno de cambios al alcance y preparación de iteraciones
 
 - **Autoridad de cambio:** el responsable funcional/propietario de PCD aprueba explícitamente toda ampliación. Una observación de auditoría **no cambia** el alcance por sí sola.
-- **Proceso:** registrar propuesta y valor/impacto → clasificar en alcance o fuera → revisar con responsable → si aprobada, formalizar un cambio OpenSpec y actualizar análisis, API, BD, pruebas y plan; **no modificar el HTML V2.2 automáticamente**.
+- **Proceso:** registrar propuesta y valor/impacto → clasificar en alcance o fuera → revisar con responsable → si aprobada, formalizar un cambio OpenSpec y actualizar análisis, API, BD, pruebas y plan; **no modificar el HTML V2.3 automáticamente**.
 - **Puerta de entrada de cada iteración:** requerimientos vinculados a una capacidad ALC, propuestas pendientes visibles, contratos y casos de prueba coherentes; no se bloquea por ampliaciones opcionales no aprobadas.
 - **No transferir obligaciones entre proyectos:** la preparación de la migración a SGSP pertenece a PCD; la **migración efectiva** y las funciones pastorales, no.
 
@@ -104,16 +104,12 @@ La auditoría debe contrastar cada requisito **contra ALC-01…ALC-12**, las fue
 
 **Regla final:** toda observación/auditoría/implementación debe partir de **este alcance oficial**. Si se considera insuficiente, se plantea una propuesta formal para decisión, sin alterar por iniciativa propia el alcance ni la versión del prototipo.
 
-## Etapa 2 — precisión técnica sin ampliación del alcance
-La [Etapa 2](../07-auditorias/etapa-2-arquitectura-seguridad-datos.md) define controles de contraseña/sesiones, ámbito, catálogo de campos e integridad de líder GC **dentro de ALC-01…12**. No crea roles nuevos, miembros nominales de GC ni procesos pastorales. Los comportamientos de **E2-D01/D02** (consulta/ámbito nacional) son propuestas sujetas a confirmación; **E2-D03** exige aceptación explícita del riesgo residual de la clave compartida antes de producción. SQL, OpenAPI y semillas son diseño, **no pruebas ejecutadas**.
-
-## Precisión aprobada posterior: H-12
-La **consulta** se controla por el parámetro de usuario `GENERAL` o `PRESBITERIO`; no confundir el ámbito de lectura con el presbiterio de digitación ni con el permiso de **edición solo propia** del digitador. ADMIN nacional y REPORTES de solo lectura conservan su función. Se auditan operaciones y se restringe PII/GPS según finalidad, especialmente en el reporte nacional.
-
-## Actualización vinculante V4.0 — simplificación aprobada (01/11/2026)
-
-**La consulta de una funcionalidad autorizada es GENERAL**, con filtros opcionales por Presbiterio y/o Sede; no existe autorización de lectura territorial configurable. No incorporar `alcance_consulta` ni `usuario_presbiterio`. Editar sigue limitado a autor o ADMIN, y REPORTES continúa sin escritura.
-
-**H-13:** los únicos campos de identificación documental son **tipo y número**. No existe subtipo. Las coincidencias del tipo Otro no concluyentes requieren revisión manual, no fusión.
-
-**Modelo físico vigente:** [11 tablas](../03-base-datos/anexos/justificacion-11-tablas.md), no 17. ORGANIZACION unifica presbiterio/sede; CATALOGO agrega listas y campos críticos; UBIGEO tiene entidad jerárquica propia; las secciones de cónyuge/responsabilidades están en FICHA.datos_fuente_json. **Una auditoría no puede convertir el modelo anterior en requisito vigente**.
+## 9. Decisiones normativas de construcción V4.0
+**Presbiterios fijos de instalación** (preparados en `002_catalogos_calidad.sql`): `LIM` Lima; `TRU` La Libertad – Trujillo; `CHI` Chimbote; `IQU` Iquitos. Estos códigos son identificadores internos iniciales del prototipo, no certificados como códigos oficiales externos. **No hay CRUD de presbiterios en la aplicación**; nuevas incorporaciones solo por responsable autorizado mediante SQL y revisión de usuarios/sedes asociados. Las sedes sí se crean desde su funcionalidad.
+**Autenticación:** clave inicial común para digitadores **solo durante pruebas/aceptación**. Antes del pase a producción se cambian las credenciales (individuales y protegidas, provistas fuera de Git); ADMIN/REPORTES siempre usan credenciales propias. No permitir GO si persiste la contraseña común de pruebas.
+**Identidad E1-D01 APROBADA:** coincidencia documental exacta confiable (tipo+numero) reutiliza `persona.id` y adjunta nueva `ficha` incluso si proviene de otro presbiterio; nunca sobrescribe automáticamente atributos de Persona, ni altera la autoría de otras fichas. Se mantiene el endpoint `POST /personas/{id}/fichas` y respuesta `persona_reutilizada`.
+**Auditoría:** alta de ficha solo guarda `created_at` y `created_by`, no inserta fila de alta en `auditoria_evento`; al modificar registrar solamente campos diferentes con valor anterior/nuevo (proteger datos sensibles); el usuario original no cambia. Otras operaciones de seguridad registran sus eventos en `login_evento`.
+**Fechas de sistema:** todas las tablas disponen de `created_at` y `updated_at` para trazabilidad, distintos de la fecha declarada en el papel.
+**Comparación de sedes/presbiterios:** normalizar sin tildes, en mayúsculas, espacios compactados; la igualdad normalizada dentro del mismo padre impide duplicidad exacta. Índices nuevos de reportes se incorporarán solo según EXPLAIN real.
+**Datos de fuente:** JSON estructurado por tipo de ficha y versión, validado estrictamente contra JSON Schema; no agregar tablas para cónyuge/responsabilidades.
+**Estado:** reglas para construcción. Aún no existen backend PHP ni frontend React productivos o pruebas de motor realizadas.

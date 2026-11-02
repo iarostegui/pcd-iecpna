@@ -11,7 +11,7 @@
 | RN-08 | Las fechas se ingresan DD/MM/AAAA; valores inexistentes como 31/02/1998 son rechazados como fecha. El digitador los corrige consultando la ficha o deja el campo vacío para guardar incompleto. Solo fechas reales pasan a SQL DATE. Validación en frontend y backend. | Alta |
 | RN-09 | N.º ficha impresa Persona/GC es opcional y no es clave de identidad ni bloquea guardado. | Alta |
 | RN-10 | Falta de datos críticos NO impide guardar; reportes detectan incompletitud; configuración editable por ADMIN durante la campaña. | Crítica |
-| RN-11 | Coincidencia por **clave de identidad documental confiable** (Tipo+Número normalizado) no crea segunda Persona. Conservar nueva ficha de origen sin duplicar la identidad; detalle cross-presbiterio E1-D01 pendiente. Sin clave válida, no fusionar solo por nombre. | Crítica |
+| RN-11 | Coincidencia por **clave de identidad documental confiable** (Tipo+Número normalizado) no crea segunda Persona. Conservar nueva ficha de origen sin duplicar la identidad; nueva ficha cross-presbiterio conforme a E1-D01 **aprobada**, sin sobrescribir la Persona. Sin clave válida, no fusionar solo por nombre. | Crítica |
 | RN-12 | Posibles coincidencias por nombres/apellidos/nacimiento generan **advertencia o indicador de calidad**, no fusión ni bloqueo automático; no crear circuito de conciliación dentro de PCD. | Alta |
 | RN-13 | La opción de líder GC es a demanda; abrir solo después de persistir Persona, o desde Consulta posteriormente. | Crítica |
 | RN-14 | GC vinculado al ID Persona; presbiterio y sede heredados de contexto, sin segunda digitación de líder. | Crítica |
@@ -32,12 +32,12 @@
 | RN-29 | **Consulta total por funcionalidad autorizada:** buscar sin filtro o filtrar opcionalmente por presbiterio y/o sede; **no** se parametriza permiso territorial por usuario ni se crea tabla para ello. Consultar no autoriza editar: DIGITADOR solo modifica fichas propias; ADMIN todas; REPORTES solo lectura en sus funcionalidades. | Crítica |
 
 ## Reglas de coincidencia — decisión derivada a validar en UAT
-1. Clave de identidad documental confiable coincidente: identidad existente; marcar coincidencia y conservar ficha fuente sin duplicar Persona (E1-D01 aún por ratificar para otro presbiterio).
+1. Clave de identidad documental confiable coincidente: identidad existente; marcar coincidencia y conservar ficha fuente sin duplicar Persona (E1-D01 aprobado: nueva ficha enlazada aun entre presbiterios).
 2. Sin documento, nombres+apellidos+fecha nacimiento coincidentes: señal de posible duplicado; el digitador puede continuar.
 3. Solo parecido fonético/textual: advertir, no prohibir. Los resultados solo se ofrecen dentro de la funcionalidad autorizada, con minimización y sin GPS en listas.
 
 ## Regla de contraseña compartida: límite de identidad
-La contraseña común fue solicitada expresamente; **no prueba identidad física del operador**. Deben existir cuentas personales distintas, bitácora de sesión, throttling, monitoreo y mecanismo seguro de revocación. No elevar geolocalización a prueba de identidad.
+La contraseña común fue solicitada expresamente para pruebas y aceptación y debe rotarse a credenciales individuales antes de producción; **no prueba identidad física del operador**. Deben existir cuentas personales distintas, bitácora de sesión, throttling, monitoreo y mecanismo seguro de revocación. No elevar geolocalización a prueba de identidad.
 
 ## Reglas no definidas
 No inferir cuáles son exactamente las 48 sedes ni pretender que todos los datos del papel son obligatorios para guardar; ver decisiones pendientes.
@@ -50,3 +50,13 @@ No inferir cuáles son exactamente las 48 sedes ni pretender que todos los datos
 
 ## Estructura física simplificada obligatoria
 Las reglas se implementan sobre [11 tablas](../03-base-datos/anexos/justificacion-11-tablas.md): organización jerárquica, una tabla de catálogos, ubigeo independiente, Persona+Ficha+GC, sesión con GPS, seguridad y auditoría. **Sin subtipos documentales, sin permiso de consulta por territorio y sin administración nominal de miembros de GC.**
+
+## RN-30 a RN-34 — Reglas definitivas de implementación
+| RN | Regla |
+|---|---|
+| RN-30 | Solo el seed oficial inicializa presbiterios LIM/TRU/CHI/IQU; **no existe alta/edición de presbiterio en PCD**. SQL de mantenimiento fuera de la API cuando lo autorice la institución. |
+| RN-31 | Crear ficha registra fecha/hora y autor en la propia FICHA, **sin evento de alta en AUDITORIA_EVENTO**; una modificación genera evento solo con los campos cambiados, actor y fecha. Si no hay cambio, no crear evento. |
+| RN-32 | Todas las tablas guardan `created_at` y `updated_at`; la fecha del papel se mantiene separada. |
+| RN-33 | Comparación de nombres de sedes y presbiterios utiliza normalización sin tildes, espacios normalizados y mayúsculas; coincidencia exacta normalizada bajo mismo padre previene duplicado, semejanza solo advierte. |
+| RN-34 | Las credenciales comunes de DIGITADOR están autorizadas **únicamente para pruebas y UAT**; antes de producción provisionar credenciales **individuales** y revocar sesiones de pruebas; no dar GO con clave compartida. |
+| RN-35 | E1-D01: clave documental exacta confiable vincula ficha nueva a Persona existente incluso desde otro presbiterio, sin modificar consolidado, ni autor de fichas existentes. |

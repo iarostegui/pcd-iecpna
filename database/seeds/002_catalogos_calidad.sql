@@ -1,3 +1,12 @@
+-- Presbiterios iniciales fijos: denominaciones de PCD V2.3 (códigos internos de prototipo, no códigos externos oficiales).
+-- No se crean usuarios ni sedes. No habilitar POST/PATCH/DELETE de presbiterios desde el aplicativo.
+-- El nombre Lima se conserva como etiqueta vigente de la maqueta; homologación administrativa, si cambia, se hará por SQL.
+INSERT IGNORE INTO organizacion(tipo,padre_id,codigo,nombre,nombre_norm,activo,created_at) VALUES
+('PRESBITERIO',NULL,'LIM','Lima','LIMA',1,CURRENT_TIMESTAMP(6)),
+('PRESBITERIO',NULL,'TRU','La Libertad – Trujillo','LA LIBERTAD - TRUJILLO',1,CURRENT_TIMESTAMP(6)),
+('PRESBITERIO',NULL,'CHI','Chimbote','CHIMBOTE',1,CURRENT_TIMESTAMP(6)),
+('PRESBITERIO',NULL,'IQU','Iquitos','IQUITOS',1,CURRENT_TIMESTAMP(6));
+
 -- PCD 11 tablas; ejecutar después de database/migrations/001_initial.sql.
 -- Basado en etiquetas de los formularios IECPNA y prototipo V2.2.
 -- No contiene usuarios, sedes, contraseñas, datos de prueba reales ni UBIGEO INEI.
