@@ -418,6 +418,16 @@ db_check($results, $pdo, $dbError, 'D-15', 'GPS solo en sesión', static functio
         : ['FAIL', 'geo_* en: ' . implode(', ', $tables)];
 });
 
+db_check($results, $pdo, $dbError, 'D-16', 'Motor MySQL 8.x real', static function (PDO $pdo): array {
+    $version = (string) db_value($pdo, 'SELECT VERSION()');
+
+    if (str_starts_with($version, '8.') && version_compare($version, '8.0.16', '>=')) {
+        return ['PASS', 'MySQL ' . $version];
+    }
+
+    return ['FAIL', 'motor no compatible: ' . $version];
+});
+
 // ---------------------------------------------------------------------------
 // C. Seguridad y secretos
 // ---------------------------------------------------------------------------
