@@ -39,6 +39,8 @@ Pruebas: `(cd backend && vendor/bin/phpunit)`, `php tests/api/run.php --base-url
 
 **Cambios:** [CHANGELOG](CHANGELOG.md). **Estado real:** [estado-documental](docs/08-ia/estado-documental.md). **Protocolo de auditoría:** [AUD-PCD-01](docs/07-auditorias/protocolo-auditoria-alcance.md).
 
+**CI I01:** [run 41450632188](https://github.com/iarostegui/pcd-iecpna/actions/runs/41450632188) con MySQL 8.0.46/PHP 8.2.35, I01 36/36, PHPUnit 64/153 (1 omitida), I00 31 PASS/0 FAIL/1 BLOCKED y frontend 8/8.
+
 **Seguridad:** el repositorio es actualmente público; no subir PII ni contraseñas. [SECURITY.md](SECURITY.md). La decisión institucional H-40 debe cerrarse antes de datos reales.
 
 **Contrato para construir sin interpretaciones:** [CONTRATO-EJECUCION-V4.1](docs/08-ia/CONTRATO-EJECUCION-V4.1.md). Contiene pasos transaccionales de alta/vinculación E1-D01, validación de sede, auditoría por cambios y restricciones de producción.

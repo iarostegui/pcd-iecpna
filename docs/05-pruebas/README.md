@@ -31,6 +31,7 @@ La implementación I01 ejecuta los casos obligatorios con automatización real:
 | UX React I01 | `cd frontend && npm test` | 8 pruebas (login, contexto, expiración, GPS, 409, REPORTES) |
 | Validadores SDD | `npm test` | OK |
 | Build React | `cd frontend && npm run build` | OK |
+| CI MySQL 8/PHP 8.2 | run [41450632188](https://github.com/iarostegui/pcd-iecpna/actions/runs/41450632188) | 4 jobs PASS; I01 36/36; PHPUnit 64/153 (1 skip); I00 31 PASS/0 FAIL/1 BLOCKED; frontend 8/8 |
 
 Los estados son de ejecución local con datos sintéticos y MySQL de prueba; la evidencia CI con
 MySQL 8 se adjunta al PR. **No constituyen GO productivo** ni sustituyen E-07, H-14, H-40 ni la

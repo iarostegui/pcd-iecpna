@@ -42,6 +42,9 @@ npm test
 Cubre CA-101 (sin enumeración de cuentas), flujo login/contexto/logout, expiración por 401,
 GPS denegado una sola vez y 409 de sede duplicada; comprueba que no se usa `localStorage`.
 
+## Evidencia CI I01
+Run [41450632188](https://github.com/iarostegui/pcd-iecpna/actions/runs/41450632188): `backend` con MySQL 8.0.46/PHP 8.2.35, runner I01 36/36 PASS, PHPUnit 64/153 (1 omitida por Argon2id), runner P01 23/23; `frontend` 8/8 y build; `i00` 31 PASS/0 FAIL/1 BLOCKED (E-07); artefacto `i01-evidencia`.
+
 ## Reglas de evidencia
 Cada ejecución registra comando, commit, entorno y resultado. **No marcar PASS sin ejecución** y
 nunca usar datos personales reales. El CI con MySQL 8 es la evidencia de motor; el entorno local sin

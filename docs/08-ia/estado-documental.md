@@ -15,7 +15,7 @@
 - Sesión persistida en `sesion` (hash de cookie, `last_seen`, `auth_version`, GPS), cookie HttpOnly/SameSite/Secure, CSRF, inactividad 45 min y absoluta 12 h, logout y revocación.
 - `GET /presbiterios` público y mínimo; sedes del presbiterio, alta normalizada RN-33 con 409 e idempotencia; contexto ADMIN explícito; REPORTES solo lectura.
 - React I01: login sin listado de cuentas, selección/alta de sede, contexto autenticado, expiración, GPS opcional una vez por sesión y ausencia de `localStorage`.
-- Evidencia local: `npm test` (SDD), PHPUnit 64/154, runner I01 36/36 PASS y build React; CI con MySQL 8 quedará registrado en el PR. **No es GO productivo; E-07, H-14, H-40 y revisión del especialista siguen abiertos.**
+- Evidencia: `npm test` (SDD), PHPUnit 64/154 local (64/153 con 1 omitida por Argon2id en CI), runner I01 36/36 PASS y build React. CI [run 41450632188](https://github.com/iarostegui/pcd-iecpna/actions/runs/41450632188): jobs `documentos`, `backend`, `frontend` e `i00` en verde, MySQL 8.0.46/PHP 8.2.35. **No es GO productivo; E-07, H-14, H-40 y revisión del especialista siguen abiertos.**
 
 ## Etapa 4 preparada, no ejecutada
 [Informe E4](../07-auditorias/etapa-4-produccion-y-privacidad.md), [checklist productivo](../06-despliegue/checklist-produccion.md). PR-01…08 de datos personales/sensibles quedan sin decisión institucional. No se han ejecutado pruebas MySQL/Apache/PHP, recuperación de backups, E2E ni carga real.

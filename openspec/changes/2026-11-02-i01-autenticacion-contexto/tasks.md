@@ -50,7 +50,7 @@
 - [x] Casos negativos: login incorrecto, presbiterio incorrecto, usuario inactivo, bloqueo, revocación,
       CSRF, sesión expirada, acceso sin autenticación, sede ajena, alta/duplicidad, concurrencia y GPS denegado.
 - [x] Casos UX V2.3 aplicables (CA-101, CA-109, CA-110 y flujo React login/contexto).
-- [ ] PHPUnit ejecutado contra MySQL 8 real en CI (local: MariaDB 11.8 de prueba).
+- [x] PHPUnit ejecutado contra MySQL 8 real en CI (local: MariaDB 11.8 de prueba).
 - [x] Runner HTTP I01 ejecutado contra MySQL real de prueba, con evidencia JSON.
 - [x] Vitest/Testing Library ejecutado y `npm run build` correcto.
 - [x] Validadores SDD (`npm test`) ejecutados.
@@ -59,9 +59,9 @@
 
 - [x] OpenAPI actualizado solo con extensiones aditivas y respuestas coherentes.
 - [x] READMEs, CHANGELOG, estado documental y matriz de trazabilidad actualizados.
-- [ ] Commit en `feature/i01-autenticacion-contexto`.
-- [ ] Push y evidencia de GitHub Actions.
-- [ ] Pull Request Draft hacia `main`, sin merge.
+- [x] Commit en `feature/i01-autenticacion-contexto` (`19d6f1d`).
+- [x] Push y evidencia de GitHub Actions ([run 41450632188](https://github.com/iarostegui/pcd-iecpna/actions/runs/41450632188)).
+- [x] Pull Request Draft hacia `main`, sin merge ([PR #4](https://github.com/iarostegui/pcd-iecpna/pull/4)).
 - [ ] Informe final con PASS/FAIL/BLOCKED, defectos corregidos y restricciones pendientes.
 
 ## 6. Evidencia ejecutada (local, 02/11/2026)
@@ -75,8 +75,9 @@
 | `cd frontend && npm test` | 8 pruebas UX (login, contexto, expiración, GPS, 409, REPORTES) | PASS |
 | `cd frontend && npm run build` | Vite build correcto | PASS |
 | `php -l` sobre `src/tests/scripts` | sin errores de sintaxis | PASS |
-| MySQL 8 / PHP 8.2 con Argon2id y CI | pendiente de ejecución remota | PENDIENTE |
+| MySQL 8 / PHP 8.2 con Argon2id y CI | run 41450632188: 4 jobs en verde; I01 36/36; PHPUnit 64/153 (1 skip); I00 31 PASS/0 FAIL/1 BLOCKED; frontend 8/8; build | PASS |
 
 **Nota:** el entorno local usa MariaDB 11.8 y PHP 8.2 sin Argon2id (fallback bcrypt costo 12 para
-desarrollo). La evidencia válida de MySQL 8/PHP 8.2/Argon2id debe ser la ejecución de GitHub Actions;
-no se declara PASS de motor MySQL 8 hasta obtenerla.
+desarrollo). La evidencia de motor exigida se obtuvo en GitHub Actions con MySQL 8.0.46/PHP 8.2.35
+(run 41450632188); los jobs `backend`, `frontend`, `i00` y `documentos` quedaron en verde. Las
+restricciones de cPanel/H-40 y el GO productivo siguen abiertas.
