@@ -56,7 +56,7 @@ for(const [table,data] of tables){
  const ok=target.size===data.fields.size&&[...data.fields].every(([name,col])=>{const got=target.get(name);return got&&got.type===col.type&&got.nullable===col.nullable;});
  report(ok,'DDL vs diccionario: '+table+' nombres, tipos, nulabilidad');
 }
-report(api.openapi==='3.0.3'&&api.info.version==='4.0.0','OpenAPI versión definida');
+report(api.openapi==='3.0.3'&&api.info.version==='4.1.0','OpenAPI versión definida');
 report(api.paths&&typeof api.paths==='object'&&Object.keys(api.paths).length>=24,'API endpoints presentes');
 report(api.paths['/presbiterios']&&Object.keys(api.paths['/presbiterios']).every(x=>['get','parameters','summary','description','servers'].includes(x)),'Presbiterios solo lectura');
 const schemas=api.components.schemas||{},refs=[];
