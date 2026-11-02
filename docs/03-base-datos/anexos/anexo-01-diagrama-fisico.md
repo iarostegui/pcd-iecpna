@@ -1,10 +1,10 @@
-# Anexo 01 — Diagrama físico PCD V4.0 (11 tablas)
+# Anexo 01 — Modelo físico PCD V4.1
 
-**Fuente de verdad:** [migración inicial SQL](../../../database/migrations/001_initial.sql). **11 tablas, 134 columnas, 23 FK**. Producto temporal PCD (no SGSP).
+Fuente: [001_initial.sql](../../../database/migrations/001_initial.sql). 11 tablas, 146 columnas, 23 FK. **SQL no ejecutado en motor real.**
 
-[Diccionario completo](anexo-02-diccionario-fisico.md) · [Fuente editable Mermaid](../diagramas/er-pcd-fisico.mmd)
+[Diccionario](anexo-02-diccionario-fisico.md) · [Mermaid editable](../diagramas/er-pcd-fisico.mmd)
 
-## Mapa de entidades
+## Vista general
 
 ```mermaid
 erDiagram
@@ -66,7 +66,7 @@ erDiagram
   USUARIO ||--o{ IDEMPOTENCIA : fk_idem_usuario
 ```
 
-## Diagrama detallado de atributos y relaciones
+## Modelo detallado
 
 ```mermaid
 erDiagram
@@ -77,9 +77,11 @@ erDiagram
     VARCHAR_50 codigo UK
     VARCHAR_200 nombre
     VARCHAR_200 nombre_norm
+    VARCHAR_200 nombre_raiz_norm UK
     VARCHAR_300 referencia
     TINYINT_1 activo
     DATETIME_6 created_at
+    DATETIME_6 updated_at
   }
   USUARIO {
     BIGINT_UNSIGNED id PK
@@ -111,6 +113,8 @@ erDiagram
     DECIMAL_10_7 geo_longitud
     DECIMAL_10_2 geo_precision_m
     DATETIME_6 geo_capturada_en
+    DATETIME_6 created_at
+    DATETIME_6 updated_at
   }
   LOGIN_EVENTO {
     BIGINT_UNSIGNED id PK
@@ -121,6 +125,7 @@ erDiagram
     VARBINARY_16 ip
     VARCHAR_255 user_agent
     DATETIME_6 created_at
+    DATETIME_6 updated_at
   }
   CATALOGO {
     BIGINT_UNSIGNED id PK
@@ -131,6 +136,7 @@ erDiagram
     TINYINT_1 activo
     JSON config_json
     BIGINT_UNSIGNED updated_by FK
+    DATETIME_6 created_at
     DATETIME_6 updated_at
   }
   UBIGEO {
@@ -139,6 +145,8 @@ erDiagram
     VARCHAR_6 padre_codigo FK
     VARCHAR_160 nombre
     TINYINT_1 activo
+    DATETIME_6 created_at
+    DATETIME_6 updated_at
   }
   PERSONA {
     BIGINT_UNSIGNED id PK
@@ -209,6 +217,8 @@ erDiagram
     VARCHAR_75 request_id
     BIGINT_UNSIGNED sesion_id FK
     BIGINT_UNSIGNED usuario_id FK
+    VARCHAR_80 actor_codigo
+    ENUM actor_perfil
     VARCHAR_60 accion
     VARCHAR_60 recurso_tipo
     BIGINT_UNSIGNED recurso_id
@@ -216,6 +226,7 @@ erDiagram
     JSON antes_json
     JSON despues_json
     DATETIME_6 created_at
+    DATETIME_6 updated_at
   }
   IDEMPOTENCIA {
     BIGINT_UNSIGNED id PK
@@ -225,6 +236,7 @@ erDiagram
     SMALLINT_UNSIGNED response_status
     JSON response_json
     DATETIME_6 created_at
+    DATETIME_6 updated_at
   }
   ORGANIZACION ||--o{ ORGANIZACION : fk_org_padre
   ORGANIZACION ||--o{ USUARIO : fk_usuario_presb
@@ -251,6 +263,4 @@ erDiagram
   USUARIO ||--o{ IDEMPOTENCIA : fk_idem_usuario
 ```
 
-**Notas:** ORGANIZACION combina presbiterio/sede con jerarquía. CATALOGO combina listas y configuración de campos críticos. UBIGEO es una tabla jerárquica específica. FICHA guarda secciones de cónyuge/responsabilidades como JSON; PERSONA mantiene identidad separada. SESION integra geolocalización opcional. El líder GC se obtiene desde FICHA.persona_id. No hay subtipo documental ni tabla de ámbito de consulta.
-
-**Pendiente:** probar CHECK y FK compuestas en el motor de hosting y regenerar anexos después de modificar el SQL.
+Notas: PRESBITERIO inicial por seed, sedes con alta; cada tabla con created_at/updated_at; no auditoría de creación de ficha; cambios solo a campos alterados; índices de reportes tras EXPLAIN.
