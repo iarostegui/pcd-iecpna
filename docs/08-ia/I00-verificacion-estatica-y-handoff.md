@@ -38,7 +38,7 @@ La primera verificación debe fallar cuando el SQL tenga un número distinto de 
 - E1-D01 está **aprobada**; E1-D02, H-23 y H-24 continúan abiertos; **no impedir I00/I01 por una regla propia de I02/I03**.
 
 ## 5. Resultado
-I00 tiene **evidencia técnica reproducible en MySQL 8** (run 41443882284): esquema, restricciones, seed, aprovisionamiento Argon2id, PHPUnit, runner HTTP y build del frontend. **El cierre formal sigue NO-GO** por cPanel no verificado (E-07), H-14, H-40 y la revisión del especialista. No existe GO operativo ni autorización para I01; ver [acta](i00/ACTA-PRELIMINAR-I00.md).
+I00 tiene **evidencia técnica reproducible en MySQL 8** (run 41443882284): esquema, restricciones, seed, aprovisionamiento Argon2id, PHPUnit, runner HTTP y build del frontend. **El cierre formal sigue NO-GO** por cPanel no verificado (E-07), H-14, H-40 y la revisión del especialista. El **GO formal de I00 sigue pendiente**; una [autorización posterior y condicionada](i00/AUTORIZACION-DESARROLLO-CONDICIONADA.md) permite únicamente iniciar I01 con datos sintéticos en desarrollo/CI, sin habilitar cPanel ni producción; ver [acta](i00/ACTA-PRELIMINAR-I00.md).
 
 ## Comprobador V4.1
 Después de `npm ci` (instalación reproducible desde `package-lock.json`), ejecutar `npm test` (`js-yaml` analizador formal y comparación de columnas/tipos SQL↔diccionario). Se incluye workflow CI en cada push/PR. Se requiere **prueba SQL real** de `nombre_raiz_norm`, `created_at/updated_at`, índices y CHECK antes de marcar I00 completo. [Entrega al especialista](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md).
