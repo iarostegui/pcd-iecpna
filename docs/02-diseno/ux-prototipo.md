@@ -47,10 +47,17 @@ El prototipo bloquea un documento duplicado y no representa fichas fuente múlti
 - **H-21:** etiquetas/acciones de Supervisor, aprobación de fichas y exportación hacia SGSP: **fuera de ALC-PCD**.
 - **H-22:** reintento manual GPS en la misma sesión tras denegación: **no replicar**; una única captura/estado de ubicación por sesión.
 - **H-25:** bloqueo de nombre GC repetido en demostración: no imponer UNIQUE sin cerrar E1-D02.
-**No se modifica el HTML V2.2**, que permanece como referencia visual y de flujo, no autoridad de políticas.
+**V2.2 permanece histórico, sin modificaciones. La UI vigente para construir es V2.3**.
 
 ## V4 — Diferencias autorizadas entre UX demostrativa y producto
-El HTML PCD V2.2 permanece **inalterado** como referencia visual. El software productivo elimina enumeración pública de usuarios, GPS repetido, acciones fuera de alcance, selector de ámbito de consulta GENERAL/PRESBITERIO (no autorizado), y subtipo documental (no autorizado). **Consultas** permiten buscar todos los registros de la funcionalidad con filtros independientes por Presbiterio y/o Sede. El formulario de Personas contiene solo **tipo y número de documento**, secciones cónyuge/responsabilidades en datos JSON fuente, y el árbol INEI es entrada de construcción I02. Sede se elige para **capturar**, no para limitar la consulta.
+El HTML PCD V2.2 permanece **inalterado como histórico**; **V2.3** es el prototipo vigente para implementar. El software productivo elimina enumeración pública de usuarios, GPS repetido, acciones fuera de alcance, selector de ámbito de consulta GENERAL/PRESBITERIO (no autorizado), y subtipo documental (no autorizado). **Consultas** permiten buscar todos los registros de la funcionalidad con filtros independientes por Presbiterio y/o Sede. El formulario de Personas contiene solo **tipo y número de documento**, secciones cónyuge/responsabilidades en datos JSON fuente, y el árbol INEI es entrada de construcción I02. Sede se elige para **capturar**, no para limitar la consulta.
 
 ## Control actual de versión de prototipo
 V2.3 corrige las pantallas Login, Consulta y filtros nacionales, Detalle sin GPS, Persona (calidad manual y fechas), Grupo Crecer (única pregunta impresa, avisos sin bloquear) y Reportes nacionales. **La apariencia visual sigue basándose en V2.2**. Ver [CA-101…111](../05-pruebas/validacion-prototipo-v2.3.md); todavía no se ejecutaron pruebas de React/PHP.
+
+## Aprobación V4.1 para construcción
+- E1-D01 aprobada: fichas de un mismo documento válido entre presbiterios se vinculan al mismo registro Persona sin sobrescribir datos.
+- Presbiterios iniciales solo selección; el usuario **no puede agregar presbiterios**, pero sí sede.
+- Alta de ficha presenta `created_at`; ediciones registran únicamente diferencias en bitácora.
+- Credenciales compartidas son **solo de UAT**; se reemplazan por individuales antes de producción.
+- Comparación de nombres de sede sin tildes y sin afectar su visualización.

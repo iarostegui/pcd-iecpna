@@ -82,3 +82,11 @@ Definir fecha de corte; obtener reportes de avance y calidad, conservar evidenci
 | **H-46D / medición** | Pruebas sintéticas de p95/errores y logs técnicos rotativos existentes, sin incluir PII ni GPS. Registrar hallazgos de carga en archivo de evidencia, **sin tabla nueva de métricas**. | PROD-07 y reporte de resultados con la herramienta disponible. |
 
 **Criterio de aceptación:** H-46 se considera **atendida en diseño**, no cerrada técnicamente hasta pruebas con PHP/MySQL reales. El intervalo de purga y su retención deben ser compatibles con la política de privacidad H-40 y el comportamiento de reintento acordado. No presumir plazos de retención o infraestructura no existente.
+
+## Ratificación de seguridad y producción V4.1
+- **H-03:** la contraseña común DIGITADOR es solo para pruebas/UAT; el **pase a producción bloquea** si no se cambió a credenciales individuales y revocó sesiones anteriores.
+- **H-40:** aprobación institucional continúa pendiente para datos personales y de participación religiosa, GPS y retención. No suponer consentimientos.
+- **Auditoría:** alta de FICHA solo en created_at/created_by; editar registra exclusivamente campos realmente cambiados, no copias íntegras de Persona. Restringir lectura y retención de bitácora.
+- **Presbiterios:** fijos LIM/TRU/CHI/IQU del seed; nuevos únicamente por SQL autorizado, no por frontend/backend.
+- **Rendimiento:** índices adicionales de reportes después de observar queries reales/EXPLAIN. El índice created_at de idempotencia sí apoya la depuración acotada.
+- **SQL:** probar columna generada UNIQUE para presbiterios raíz, 23 FK y 11 pares de timestamps en MySQL/MariaDB real.

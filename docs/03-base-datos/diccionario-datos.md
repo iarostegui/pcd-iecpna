@@ -19,3 +19,6 @@
 **Fuente del papel:** [diccionario de captura](../01-analisis/diccionario-captura.md) e [inventario Excel](../01-analisis/fuentes/inventario-excel-original.md). Cónyuge, responsabilidades y controles del papel van en `ficha.datos_fuente_json`, validado en PHP; no son entidades con ciclo de vida propio en PCD.
 
 **Estado:** documento y SQL diseñados, no validados con instalación MySQL.
+
+## Contratos vigentes V4.1
+[Anexo 02 por columna](anexos/anexo-02-diccionario-fisico.md) actualizado a 146 columnas/23 FK. [JSON fuente versionado](esquemas-json/README.md). El diccionario no autoriza agregar tabla ni auditoría de alta de ficha; se debe ejecutar contra MySQL de prueba antes de construir backend.

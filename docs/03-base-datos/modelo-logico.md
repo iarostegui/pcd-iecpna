@@ -29,3 +29,6 @@
 - **Pendientes:** E1-D01 vínculo cross-presbiterio; E1-D02 grupo preexistente; H-23/H-24 reglas operativas, H-40 retención y privacidad. No asumir aprobaciones.
 
 **Estado:** esquema nuevo inicial para construcción; **no ejecutado** contra MySQL/MariaDB. El diseño anterior de 17 tablas queda reemplazado y **no** debe utilizarse en código nuevo.
+
+## Reglas de integridad V4.1
+E1-D01 **aprobada**: conservar la Persona global por clave documental confiable al crear ficha adicional de otro presbiterio, sin actualizar automáticamente sus campos. Presbiterios se precargan LIM/TRU/CHI/IQU y no admiten alta por app; sedes sí. Altas de ficha solo created_at/created_by y edición audita diferencias. Todos los registros tienen created_at/updated_at.

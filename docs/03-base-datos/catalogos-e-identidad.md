@@ -39,3 +39,6 @@ DNI con ceros, 7/8/9 dígitos, CE con separadores, Otro con número común a DNI
 Estos cuatro nodos `organizacion.tipo=PRESBITERIO` se incluyen en el seed. Los códigos son **internos de PCD**, no códigos oficiales externos de IECPNA. **No exponer POST/PATCH/DELETE de presbiterio** en API. Nuevos presbiterios solo los agrega un administrador técnico de BD mediante script autorizado, nunca por UI; no confundir con alta de sede.
 
 **Normalización:** al comparar nombres, quitar diacríticos (p. ej. `Jesús` → `JESUS`), normalizar espacios/caso; almacenar nombre original intacto para mostrar. Validar también con UNIQUE y transacción en SQL.
+
+## JSON fuente y modelo V4.1
+[Esquemas estrictos y versionados Persona/GC](esquemas-json/README.md) aplican a `ficha.datos_fuente_json`, no a nueva tabla. E1-D01 está aprobada; al crear nueva ficha asociada con identidad exacta se preserva Persona; no registrar evento de auditoría de alta.

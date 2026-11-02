@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: PCD IECPNA — API de captura
-  version: 4.0.0
-  description: "PCD temporal V4.0: 11 tablas, consulta general por funcionalidad con filtros opcionales, solo tipo y número documental. E1-D01 aprobada; E1-D02 pendiente. No SGSP."
+  version: 4.1.0
+  description: "PCD temporal V4.1: 11 tablas, consulta general por funcionalidad con filtros opcionales, solo tipo y número documental. E1-D01 aprobada; E1-D02 pendiente. No SGSP."
 servers:
   - url: https://pcd.unobdata.com/api/v1
 tags:

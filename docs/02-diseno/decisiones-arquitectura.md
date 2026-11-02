@@ -12,7 +12,7 @@
 **Aprobado:** campos críticos configurables por ADMIN para calidad/reportes. No bloquear registros incompletos. **Razón:** fichas impresas tienen omisiones y revisión individual no se realizará.
 
 ## ADR-005 — Cuenta compartiendo contraseña
-**Decisión operativa aprobada con riesgo:** seis usuarios individuales por presbiterio, misma contraseña común sin cambio obligatorio. **Mitigación:** hash, IP, sesión, intento, GPS opcional, limitación tasa, revocación. **Limitación:** la contraseña común no verifica identidad física.
+**Decisión vigente V4.1:** seis cuentas individuales por presbiterio, contraseña común **exclusivamente en pruebas/UAT**; **antes del GO productivo rotación obligatoria individual y revocación de sesiones**. Hash, IP, sesión, límite de intentos y revocación. Durante UAT la clave común no prueba identidad física del operador.
 
 ## ADR-006 — Prototipo como contrato de UX
 **Aprobado:** PCD V2.2 (última identidad visual) sirve como fuente de estilo/flujo, no como código de producción. **Razón:** evita retrabajo y mantiene validaciones backend.
@@ -37,3 +37,6 @@ Formulario/API/BD usan solo `tipo_documento` y `numero_documento`. DNI válido /
 
 ## ADR-013 — Protección sensible proporcional (EN PREPARACIÓN)
 [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md), [PROD-01…10](../06-despliegue/checklist-produccion.md). No poner datos reales sin H-40 y pruebas.
+
+## ADR V4.1 — evitar sobrediseño
+Modelo físico de 11 tablas con timestamps; presbiterios fijos LIM/TRU/CHI/IQU, modificación solo SQL, sedes desde app; identidad E1-D01 aprobada; `ficha` no genera registro de auditoría en alta, ediciones auditan solo campos alterados. `nombre_norm` se calcula sin tildes, y los índices de reportes se justifican tras EXPLAIN.
