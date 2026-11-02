@@ -62,7 +62,7 @@
 | ALC-10 | `AuthService::storeLocation` | GPS opcional único | `sesion.geo_*` | CA-94/109/110 |
 | Modelo físico | Sin cambios de esquema | — | 11 tablas/146 columnas/23 FK | CA-91/92/122 |
 
-**Evidencia ejecutada:** local `npm test` (SDD), PHPUnit 64/154, runner HTTP I01 39 PASS/0 FAIL/0 BLOCKED y build React. CI [run 41451546914](https://github.com/iarostegui/pcd-iecpna/actions/runs/41451546914) con MySQL 8.0.46/PHP 8.2.35: 4 jobs verdes, I01 39/39, PHPUnit 64/153 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED y frontend 8/8.
+**Evidencia ejecutada:** local `npm test` (SDD), PHPUnit 70/179, runner HTTP I01 42 PASS/0 FAIL/0 BLOCKED y build React. CI [run 41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321) con MySQL 8.0.46/PHP 8.2.35: 4 jobs verdes, I01 42/42, PHPUnit 70/178 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED y frontend 8/8.
 **No sustituye** la revisión del especialista ni el GO productivo (E-07/H-14/H-40).
 
 ## Correcciones técnicas I01-O01…O03 (02/11/2026)
@@ -72,5 +72,4 @@
 | I01-O02 | Una única ubicación/estado por sesión; concurrencia sin sobrescritura | `SesionRepository::storeLocationIfEmpty`, `AuthService::storeLocation` | `I01-O02` HTTP concurrente + `SesionLocationTest` |
 | I01-O03 | Cookie `__Host-pcd_sid`, `Secure` en producción, `HttpOnly`, `SameSite`, `Path=/`, sin `Domain`; no confiar en proxy headers | `PhpSession::cookieName()/cookieOptions()/secure()/isHttps()` | `I01-O03` HTTP + pruebas unitarias de producción/HTTPS/forwarded |
 
-**Evidencia local de la ronda:** PHPUnit 70/179, runner I01 42/42 PASS, frontend 8/8 y build. La
-ejecución CI con MySQL 8 se registra en el PR; cPanel/TLS real permanece BLOCKED (E-07).
+**Evidencia de la ronda:** local PHPUnit 70/179, runner I01 42/42 PASS, frontend 8/8 y build; CI [run 41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321) con MySQL 8.0.46/PHP 8.2.35: I01 42/42, PHPUnit 70/178 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED y frontend 8/8. cPanel/TLS real permanece BLOCKED (E-07).

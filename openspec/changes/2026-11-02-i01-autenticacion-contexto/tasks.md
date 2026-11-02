@@ -60,7 +60,7 @@
 - [x] OpenAPI actualizado solo con extensiones aditivas y respuestas coherentes.
 - [x] READMEs, CHANGELOG, estado documental y matriz de trazabilidad actualizados.
 - [x] Commit en `feature/i01-autenticacion-contexto` (`19d6f1d`).
-- [x] Push y evidencia de GitHub Actions ([run 41451546914](https://github.com/iarostegui/pcd-iecpna/actions/runs/41451546914)).
+- [x] Push y evidencia de GitHub Actions ([run 41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321)).
 - [x] Pull Request Draft hacia `main`, sin merge ([PR #4](https://github.com/iarostegui/pcd-iecpna/pull/4)).
 - [ ] Informe final con PASS/FAIL/BLOCKED, defectos corregidos y restricciones pendientes.
 
@@ -75,11 +75,11 @@
 | `cd frontend && npm test` | 8 pruebas UX (login, contexto, expiración, GPS, 409, REPORTES) | PASS |
 | `cd frontend && npm run build` | Vite build correcto | PASS |
 | `php -l` sobre `src/tests/scripts` | sin errores de sintaxis | PASS |
-| MySQL 8 / PHP 8.2 con Argon2id y CI | run 41451546914: 4 jobs en verde; I01 39/39; PHPUnit 64/153 (1 skip); I00 31 PASS/0 FAIL/1 BLOCKED; frontend 8/8; build | PASS |
+| MySQL 8 / PHP 8.2 con Argon2id y CI | run 41456246321: 4 jobs en verde; I01 42/42; PHPUnit 70/178 (1 skip); I00 31 PASS/0 FAIL/1 BLOCKED; frontend 8/8; build | PASS |
 
 **Nota:** el entorno local usa MariaDB 11.8 y PHP 8.2 sin Argon2id (fallback bcrypt costo 12 para
 desarrollo). La evidencia de motor exigida se obtuvo en GitHub Actions con MySQL 8.0.46/PHP 8.2.35
-(run 41451546914); los jobs `backend`, `frontend`, `i00` y `documentos` quedaron en verde. Las
+(run 41456246321); los jobs `backend`, `frontend`, `i00` y `documentos` quedaron en verde. Las
 restricciones de cPanel/H-40 y el GO productivo siguen abiertas.
 
 ## 7. Correcciones técnicas I01-O01…O03 (02/11/2026)
@@ -91,4 +91,4 @@ restricciones de cPanel/H-40 y el GO productivo siguen abiertas.
 - [x] O03: `cookieName()`/`cookieOptions()`, guardia `__Host-` + `Secure`, sin confianza en proxy headers.
 - [x] O03: pruebas de contrato de cookie, HTTPS directo y `X-Forwarded-Proto` no confiable (`I01-O03`).
 - [ ] Verificación TLS/cPanel real: **BLOCKED (E-07)**.
-- [ ] Evidencia CI MySQL 8 de esta ronda y actualización de conteos: pendiente.
+- [x] Evidencia CI MySQL 8 de esta ronda: run 41456246321, I01 42/42, PHPUnit 70/178 (1 skip), frontend 8/8, I00 31 PASS/0 FAIL/1 BLOCKED; conteos actualizados.

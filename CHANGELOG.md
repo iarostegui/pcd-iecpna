@@ -11,9 +11,9 @@
 - `GET /presbiterios` público mínimo; `GET/POST /sedes` por presbiterio, normalización NFKD RN-33, 409 exacto, advertencia por similitud, idempotencia y concurrencia; `PUT /contexto/sede` y `PUT /contexto/presbiterio` (solo ADMIN, con auditoría).
 - `POST /auth/ubicacion`: una captura por sesión con estados OK/DENEGADA/ERROR/NO_DISPONIBLE, sin coordenadas en `/auth/me`, sin bloqueo de operaciones y sin uso probatorio.
 - React/TS: login sin listado de cuentas, contexto y alta de sede, identidad/perfil/contexto, logout, expiración por 401 y GPS opcional una vez; sin `localStorage` para sesión/credenciales/coordenadas.
-- Pruebas: PHPUnit 64/154; runner HTTP I01 con CA-01…CA-14, CA-56…CA-60, CA-61…CA-67, CA-76, CA-84, CA-91/92/94, CA-110/112/113/114; Vitest/Testing Library y build Vite.
+- Pruebas: PHPUnit 70/179; runner HTTP I01 con CA-01…CA-14, CA-56…CA-60, CA-61…CA-67, CA-76, CA-84, CA-91/92/94, CA-110/112/113/114; Vitest/Testing Library y build Vite.
 - OpenAPI con extensiones aditivas y documentadas en `AuthMe`/`Sede`; sin cambios de SQL, tablas, columnas ni rutas de I02–I06.
-- CI [run 41451546914](https://github.com/iarostegui/pcd-iecpna/actions/runs/41451546914): jobs `documentos`, `backend`, `frontend` e `i00` en verde; MySQL 8.0.46/PHP 8.2.35; I01 39/39, PHPUnit 64/153 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED, frontend 8/8 y build.
+- CI [run 41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321): jobs `documentos`, `backend`, `frontend` e `i00` en verde; MySQL 8.0.46/PHP 8.2.35; I01 42/42, PHPUnit 70/178 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED, frontend 8/8 y build.
 - **Límites:** E-07/cPanel, H-14, H-40, revisión del especialista y GO productivo siguen pendientes; solo datos sintéticos.
 
 ## 2026-11-02 — I00: verificación técnica

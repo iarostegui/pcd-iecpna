@@ -44,7 +44,7 @@ Cubre CA-101 (sin enumeración de cuentas), flujo login/contexto/logout, expirac
 GPS denegado una sola vez y 409 de sede duplicada; comprueba que no se usa `localStorage`.
 
 ## Evidencia CI I01
-Run [41451546914](https://github.com/iarostegui/pcd-iecpna/actions/runs/41451546914): `backend` con MySQL 8.0.46/PHP 8.2.35, runner I01 39/39 PASS, PHPUnit 64/153 (1 omitida por Argon2id), runner P01 23/23; `frontend` 8/8 y build; `i00` 31 PASS/0 FAIL/1 BLOCKED (E-07); artefacto `i01-evidencia`.
+Run [41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321): `backend` con MySQL 8.0.46/PHP 8.2.35, runner I01 42/42 PASS, PHPUnit 70/178 (1 omitida por Argon2id), runner P01 23/23; `frontend` 8/8 y build; `i00` 31 PASS/0 FAIL/1 BLOCKED (E-07); artefacto `i01-evidencia`.
 
 ## Reglas de evidencia
 Cada ejecución registra comando, commit, entorno y resultado. **No marcar PASS sin ejecución** y
