@@ -62,5 +62,5 @@
 | ALC-10 | `AuthService::storeLocation` | GPS opcional único | `sesion.geo_*` | CA-94/109/110 |
 | Modelo físico | Sin cambios de esquema | — | 11 tablas/146 columnas/23 FK | CA-91/92/122 |
 
-**Evidencia ejecutada:** local `npm test` (SDD), PHPUnit 64/154, runner HTTP I01 39 PASS/0 FAIL/0 BLOCKED y build React. CI [run 41450632188](https://github.com/iarostegui/pcd-iecpna/actions/runs/41450632188) con MySQL 8.0.46/PHP 8.2.35: 4 jobs verdes, I01 39/39, PHPUnit 64/153 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED y frontend 8/8.
+**Evidencia ejecutada:** local `npm test` (SDD), PHPUnit 64/154, runner HTTP I01 39 PASS/0 FAIL/0 BLOCKED y build React. CI [run 41451546914](https://github.com/iarostegui/pcd-iecpna/actions/runs/41451546914) con MySQL 8.0.46/PHP 8.2.35: 4 jobs verdes, I01 39/39, PHPUnit 64/153 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED y frontend 8/8.
 **No sustituye** la revisión del especialista ni el GO productivo (E-07/H-14/H-40).
