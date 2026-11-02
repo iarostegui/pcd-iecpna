@@ -22,3 +22,6 @@ La fidelidad de transcripción respecto del papel se evalúa **manualmente** en 
 
 ## REP-08 — Parámetros de criticidad
 `catalogo.config_json` contiene `ruta_dato/es_critico/desactivable` con rutas validadas en lista blanca y auditoría de cambios; relaciones técnicas no desactivables.
+
+## REP-10 — Índices por medición
+MUST optimizar informes por volúmenes/consulta reales; **no añadir nuevos índices de reporte preventivamente**. Evaluar EXPLAIN y métricas de prueba antes de ajustar estructura física.

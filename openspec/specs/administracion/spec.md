@@ -4,7 +4,7 @@
 MUST crear, activar/desactivar y restablecer usuarios, administrar parámetros de calidad, consultar y corregir fichas; cada cambio se audita con actor ADMIN y revocación de sesión si aplica.
 
 ## ADM-02 — Cuentas iniciales
-Seis cuentas DIGITADOR por presbiterio disponible, una ADMIN y una REPORTES nacionales. Cada digitador tiene **un** presbiterio operativo `usuario.presbiterio_id`; no tabla de relaciones territoriales. Contraseña inicial común sin cambio forzado pero hash, rate limiting y auditoría; nacionales con secretos distintos.
+Seis cuentas DIGITADOR por presbiterio disponible, una ADMIN y una REPORTES nacionales. Cada digitador tiene **un** presbiterio operativo `usuario.presbiterio_id`; no tabla de relaciones territoriales. Contraseña común solo durante UAT; **rotar a credenciales individuales antes de producción**, con hash y rate limit; nacionales con secretos distintos.
 
 ## ADM-03 — Campos críticos en tabla de tablas
 MUST gestionar filas `catalogo` categoría CAMPO_CRITICO_PERSONA/GC, `config_json` validado. Los toggles actualizan reportes pero no bloquean guardado incompleto. No se permite desactivar relaciones técnicas ni SQL dinámico arbitrario.
@@ -17,3 +17,8 @@ Desactivar o restablecer credenciales incrementa `usuario.auth_version`; `sesion
 
 ## ADM-06 — NO HAY PERMISOS DE CONSULTA POR ÁMBITO
 MUST NOT construir campo `alcance_consulta`, tabla `usuario_presbiterio`, UI de selección GENERAL/PRESBITERIO ni su API. La **consulta general con filtros presbiterio/sede** se define en la propia funcionalidad; la edición conserva su autorización independiente.
+
+## ADM-07 — Presbiterios de instalación
+MUST NO exponer alta ni edición de PRESBITERIO. Cuatro registros fijos en seed; nuevo presbiterio mediante SQL controlado por responsable técnico. Las sedes sí se pueden agregar desde PCD.
+## ADM-08 — Marcas de tiempo en todo registro
+MUST almacenar `created_at` y `updated_at` en las 11 tablas; reloj BD y distinción frente a fecha consignada en papel.

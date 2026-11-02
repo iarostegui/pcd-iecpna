@@ -21,3 +21,8 @@ GIVEN dos fichas con "OTRO" y mismo número WHEN se revisa duplicidad THEN ofrec
 
 ## CAT-07 — Ubigeo de construcción
 `ubigeo` es tabla jerárquica INEI de departamento/provincia/distrito, cargada **durante I02** con fuente y fecha verificadas; sin inventar códigos, sin crear tres tablas por nivel.
+
+## CAT-08 — Presbiterios precargados
+MUST cargar LIM/Lima, TRU/La Libertad – Trujillo, CHI/Chimbote e IQU/Iquitos desde el seed. Los nombres/códigos son etiquetas iniciales del prototipo; no crear presbiterio desde UI o API. Nuevos únicamente por SQL técnico autorizado.
+## CAT-09 — Nombres sin tildes para duplicados
+MUST normalizar Unicode NFKD, eliminar marcas diacríticas, normalizar mayúsculas y espacios. `Jesús María` y `JESUS MARIA` son iguales a efectos de duplicado dentro del mismo presbiterio; conservar tildes en `organizacion.nombre` para visualización. Similitudes no exactas solo advertencia.

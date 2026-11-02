@@ -6,7 +6,7 @@ MUST solicitar presbiterio de `organizacion.tipo=PRESBITERIO`, código usuario e
 GIVEN digitador asignado a Presbiterio A WHEN intenta iniciar sesión bajo B THEN responder 401 sin revelar credencial.
 
 ## AUTH-02 — Cuentas iniciales
-MUST habilitar seis digitadores por presbiterio y una cuenta nacional ADMIN y REPORTES. Digitadores comparten contraseña inicial sin cambio forzado; cuentas nacionales con claves **distintas** de digitadores; hashes protegidos y secretos fuera del repositorio. Riesgo residual de suplantación reconocido.
+MUST habilitar seis digitadores por presbiterio y una cuenta nacional ADMIN y REPORTES. Digitadores comparten contraseña **solo durante pruebas de aceptación**, y el pase productivo exige **credenciales individuales**, sesiones de UAT revocadas; cuentas nacionales con claves **distintas** de digitadores; hashes protegidos y secretos fuera del repositorio. Riesgo residual de suplantación reconocido.
 
 ## AUTH-03 — Geolocalización opcional única
 MUST intentar geolocalización como máximo una vez por sesión, guardar estado y resultado en columnas `sesion.geo_*` y NO solicitar nuevamente después de refresh/cambio sede. La denegación no bloquea captura.
@@ -29,3 +29,8 @@ Inactividad 45 minutos y absoluto 12 horas como defaults de diseño sujetos a pr
 ADMIN puede seleccionar explícitamente presbiterio/sede para escribir; REPORTES consulta informes nacionales sin obligar sede, solo lectura. Sin tabla de autorizaciones de lectura territorial.
 
 **BD:** usuario, sesion, login_evento, organizacion, auditoria_evento.
+
+## AUTH-10 — Presbiterios inmutables
+MUST ofrecer únicamente cuatro presbiterios precargados LIM/Lima, TRU/La Libertad – Trujillo, CHI/Chimbote, IQU/Iquitos para login. No hay CRUD de presbiterio en PCD; nuevos por mantenimiento SQL autorizado.
+## AUTH-11 — Rotación antes del pase productivo
+MUST NOT aprobar producción si los digitadores mantienen la contraseña compartida utilizada para pruebas/UAT. Individualizar credenciales, guardar solo hashes y revocar sesiones de aceptación.

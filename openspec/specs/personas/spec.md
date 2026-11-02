@@ -1,13 +1,13 @@
 # PCD V4 — Personas y fichas
 
 ## PER-01 — Transcripción de Persona
-MUST representar los campos y orden del [Excel original](../../../docs/01-analisis/fuentes/inventario-excel-original.md), tecla Enter/Tab y número impreso opcional, como prototipo PCD V2.2.
+MUST representar los campos y orden del [Excel original](../../../docs/01-analisis/fuentes/inventario-excel-original.md), tecla Enter/Tab y número impreso opcional, como prototipo vigente PCD V2.3.
 
 ## PER-02 — Incompletos
 MUST guardar fichas sin campos críticos o sin número impreso; integridad técnica de usuario/presbiterio/sede no es desactivable. La definición de una ficha completamente vacía sigue pendiente **H-24**.
 
 ## PER-03 — Identidad documental H-13
-MUST usar solo tipo y número. DNI confiable con 8 dígitos, C.E. confiable después de validación oficial aplicable, clave única nullable sin perder ceros. OTRO y documentos inciertos: coincidencia posible, no fusionar automáticamente. E1-D01 (fuentes cross-presbiterio) pendiente de definición detallada.
+MUST usar solo tipo y número. DNI confiable con 8 dígitos, C.E. confiable después de validación oficial aplicable, clave única nullable sin perder ceros. OTRO y documentos inciertos: coincidencia posible, no fusionar automáticamente. E1-D01 **APROBADA**: cuando existe Persona con identidad documental coincidente de otro presbiterio, conservar el mismo ID de Persona y adjuntar nueva ficha fuente sin sobrescribir atributos ni autor de fichas previas.
 ### Scenario
 GIVEN DNI 00123456 y otra ficha mismo tipo/valor WHEN valida identidad THEN reconoce coincidencia documental y conserva dos fichas fuente sin sobrescritura silenciosa.
 
@@ -20,7 +20,7 @@ GIVEN FICHA registrada por DIG-01 WHEN DIG-02 la consulta y trata PATCH THEN la 
 MUST activar flujo GC después de persistir Persona, o desde Consulta. No cambiar Persona por registrar GC.
 
 ## PER-06 — Idempotencia
-MUST retornar resultado anterior si se repite `Idempotency-Key` con mismo payload; 409 si payload difiere; transacción atomiza identidad, ficha y auditoría.
+MUST retornar resultado anterior si se repite `Idempotency-Key` con mismo payload; 409 si payload difiere; transacción atomiza identidad y ficha; **el alta no genera evento de auditoría**, solo creador/fecha en ficha.
 
 ## PER-07 — Fuente estructurada
 MUST conservar cada `ficha.datos_fuente_json`, incluyendo cónyuge y responsabilidades del papel sin tablas independientes; JSON validado contra estructura conocida, sin SQL arbitrario.
@@ -32,3 +32,8 @@ MUST rechazar 31/02/1998 (también en PHP), o permitir dejar fecha vacía y guar
 MUST NOT afirmar detección automática de error de transcripción JUANA/Juan, JU4N4; cada presbiterio revisa papel manualmente fuera de PCD, corrige mediante edición auditada.
 
 **BD:** persona, ficha, organizacion, catalogo, ubigeo, auditoria_evento, idempotencia.
+
+## PER-10 — Diferenciar creación y modificación
+MUST registrar `ficha.created_at` y `created_by` en INSERT de ficha, sin insertar `auditoria_evento` en esa operación. PATCH genera evento solo con los campos efectivamente diferentes, valores antes/después; si no cambia valor, no hay evento.
+## PER-11 — JSON fuente sin claves arbitrarias
+MUST validar `ficha.datos_fuente_json` contra [JSON Schema de Persona](../../../docs/03-base-datos/esquemas-json/ficha-persona.schema.json) y [GC](../../../docs/03-base-datos/esquemas-json/ficha-gc.schema.json) según tipo de ficha; `schema_version=1.0`, permitir NULL cuando no hay secciones, rechazar propiedades extra.

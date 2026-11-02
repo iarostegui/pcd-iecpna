@@ -25,3 +25,11 @@
 401 para no autenticado, 403 para funcionalidad/no autorización de escritura, 409 colisión de versión/idempotencia, 422 validación de tipo, 429 abuso. CSRF para mutaciones. No exponer datos sensibles en errores; DTO definido en OpenAPI.
 
 **Pendiente:** parser formal YAML, verificación completa DTO ↔ BD 11 tablas, ejecución PHP/React y pruebas reales; E1-D01/E1-D02/H-23/H-24 aún abiertos.
+
+## Contrato ratificado para construir
+- No alta de presbiterio: `GET /presbiterios` únicamente lectura de cuatro valores precargados, nuevas incorporaciones solo SQL autorizado.
+- E1-D01 aprobada: `POST /personas/{id}/fichas` agrega fuente nueva a Persona existente incluso entre presbiterios; no sobreescribe consolidados.
+- Alta de ficha se registra en `ficha.created_at/created_by`, sin crear `auditoria_evento`. Solo PATCH efectivo registra diferencias.
+- `FichaPersonaFuente/FichaGCFuente` están versionadas en [JSON Schema](../03-base-datos/esquemas-json/README.md); no JSON abierto.
+- Cookie productiva `__Host-pcd_sid` con HTTPS, no copiar secretos de pruebas. Clave común en digitadores solo UAT, pase a producción requiere individuales.
+- `created_at/updated_at` en 11 tablas. Nuevos índices de reportes tras EXPLAIN, sin anticiparlos.
