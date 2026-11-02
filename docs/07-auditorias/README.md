@@ -23,3 +23,5 @@ Se conservan **los hallazgos, decisiones y respuestas** a auditorías de documen
 - [Etapa 5 — Preparación I00](etapa-5-preparacion-i00.md): transición de auditoría a pruebas técnicas, artefactos y GO/NO-GO. **I00 aún no ejecutada en hosting.**
 
 [Entrega V4.1 para el especialista](ENTREGA-REVISION-ESPECIALISTA-V4.1.md): comprobaciones antes de una nueva auditoría formal. Las etapas anteriores se mantienen como antecedentes, no definen la implementación.
+
+**Revisión especializada previa a reauditoría:** [Entrega V4.1](ENTREGA-REVISION-ESPECIALISTA-V4.1.md). Historia indexada en [99-historico](../99-historico/README.md).

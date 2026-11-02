@@ -20,3 +20,5 @@
 
 ## Estructura JSON V4.1
 [Esquemas cerrados Persona/GC V1.0](esquemas-json/README.md), validados con PHP; no JSON arbitrario ni tablas nuevas para cónyuge. SQL con presbiterios precargados; auditoría de edición, no inserción de fichas.
+
+**Contrato de estructuras fuente:** [JSON Schema V1](esquemas-json/README.md), obligatorio antes de I02.

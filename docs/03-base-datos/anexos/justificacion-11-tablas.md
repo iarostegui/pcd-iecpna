@@ -1,6 +1,6 @@
 # Justificación de las 11 tablas PCD
 
-**Alcance:** [ALC-PCD-3.1](../../01-analisis/alcance-funcional.md). Aplicativo temporal de digitación, no sistema pastoral. **Modelo físico de referencia:** [SQL](../../../database/migrations/001_initial.sql).
+**Alcance:** [ALC-PCD-4.0](../../01-analisis/alcance-funcional.md). Aplicativo temporal de digitación, no sistema pastoral. **Modelo físico de referencia:** [SQL](../../../database/migrations/001_initial.sql).
 
 | Tabla | Área | Función propia | Justificación de mantenerla separada |
 |---|---|---|---|
@@ -34,3 +34,6 @@
 | (nueva) ubigeo | **ubigeo** | Única tabla jerárquica INEI, entrada de construcción I02; no inventar sedes ni códigos. |
 
 **Resultado neto: 17 → 11 tablas** (17 previas, se eliminan 7 netas y se añade UBIGEO). Las decisiones eliminan tablas, no controles fundamentales. No ejecutar el SQL nuevo sobre un esquema anterior con datos sin migración expresa.
+
+## Ajustes V4.1 dentro de las 11 tablas
+Fechas created_at/updated_at en todas; organización con UNIQUE de nombre raíz y presbiterios precargados; auditoría solo de diferencias de edición, sin alta de ficha; actor snapshot mínimo, idempotencia con índice temporal. E1-D01 aprobada para múltiples fichas de una Persona. **No se agregan tablas**.

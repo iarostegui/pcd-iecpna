@@ -6,7 +6,7 @@ Define **qué necesidad resuelve PCD**, qué datos se transcriben de los formula
 
 | Archivo | Contenido y finalidad |
 |---|---|
-| **[alcance-funcional.md](alcance-funcional.md)** | **Documento normativo ALC-PCD-3.1**: objetivos, funcionalidades ALC-01…12, exclusiones EXC-01…10, responsabilidades, control de calidad y límites obligatorios para IA/auditoría. |
+| **[alcance-funcional.md](alcance-funcional.md)** | **Documento normativo ALC-PCD-4.0**: objetivos, funcionalidades ALC-01…12, exclusiones EXC-01…10, responsabilidades, control de calidad y límites obligatorios para IA/auditoría. |
 | [procesos-negocio.md](procesos-negocio.md) | Pasos operativos: preparación, login, sede, Persona, GC, corrección, reportes y cierre. Distingue negocio de automatización. |
 | [reglas-negocio.md](reglas-negocio.md) | Reglas funcionales aprobadas; identidad, duplicados, sedes, auditoría, geolocalización y permisos. |
 | [casos-uso.md](casos-uso.md) | Actores, precondiciones, acciones y excepciones de los flujos principales. |
