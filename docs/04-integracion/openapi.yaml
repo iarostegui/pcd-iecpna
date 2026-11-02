@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: PCD IECPNA — API de captura
   version: 4.0.0
-  description: "PCD temporal V4.0: 11 tablas, consulta general por funcionalidad con filtros opcionales, solo tipo y número documental. E1-D01/E1-D02 aún pendientes. No SGSP."
+  description: "PCD temporal V4.0: 11 tablas, consulta general por funcionalidad con filtros opcionales, solo tipo y número documental. E1-D01 aprobada; E1-D02 pendiente. No SGSP."
 servers:
   - url: https://pcd.unobdata.com/api/v1
 tags:
@@ -18,7 +18,7 @@ components:
     cookieAuth:
       type: apiKey
       in: cookie
-      name: PHPSESSID
+      name: __Host-pcd_sid
     csrf:
       type: apiKey
       in: header
@@ -48,6 +48,40 @@ components:
         nombres: { type: string, nullable: true }
         documento_mascara: { type: string, nullable: true }
         fichas_visibles: { type: integer }
+    ConyugeFuente:
+      type: object
+      additionalProperties: false
+      properties:
+        tipo_documento: { type: string, nullable: true, enum: [DNI, CE, OTRO] }
+        numero_documento: { type: string, nullable: true }
+        nombres_apellidos: { type: string, nullable: true }
+    ResponsabilidadesFuente:
+      type: object
+      additionalProperties: false
+      properties:
+        es_pastor_sede: { type: boolean, nullable: true }
+        nombre_sede_pastoreada: { type: string, nullable: true }
+        es_presbitero: { type: boolean, nullable: true }
+        region_presbitero: { type: string, nullable: true }
+        tiene_responsabilidad: { type: boolean, nullable: true }
+        descripcion: { type: string, nullable: true }
+        fecha_desde: { type: string, format: date, nullable: true }
+        otra_descripcion: { type: string, nullable: true }
+        otra_fecha_desde: { type: string, format: date, nullable: true }
+    FichaPersonaFuente:
+      type: object
+      additionalProperties: false
+      required: [schema_version]
+      properties:
+        schema_version: { type: string, enum: ['1.0'] }
+        conyuge: { $ref: '#/components/schemas/ConyugeFuente' }
+        responsabilidades: { $ref: '#/components/schemas/ResponsabilidadesFuente' }
+    FichaGCFuente:
+      type: object
+      additionalProperties: false
+      required: [schema_version]
+      properties:
+        schema_version: { type: string, enum: ['1.0'] }
     FichaDetalle:
       type: object
       properties:
@@ -57,7 +91,11 @@ components:
         sede_id: { type: integer }
         created_by: { type: integer }
         version: { type: integer }
-        datos_fuente: { type: object, additionalProperties: true }
+        datos_fuente:
+          nullable: true
+          oneOf:
+            - $ref: '#/components/schemas/FichaPersonaFuente'
+            - $ref: '#/components/schemas/FichaGCFuente'
         puede_editar: { type: boolean }
     PersonaDetalle:
       type: object
@@ -196,7 +234,8 @@ components:
         latitud: { type: number, minimum: -90, maximum: 90, nullable: true }
         longitud: { type: number, minimum: -180, maximum: 180, nullable: true }
         precision_m: { type: number, minimum: 0, nullable: true }
-        capturada_en: { type: string, format: date-time }
+        capturada_en: { type: string, format: date-time, description: Declarada por navegador, no probatoria. }
+        recibida_en: { type: string, format: date-time, readOnly: true }
     Sede:
       type: object
       description: Proyección de organizacion tipo SEDE y padre PRESBITERIO.
@@ -243,8 +282,8 @@ components:
         fecha_papel: { type: string, format: date, nullable: true }
         responsable_papel: { type: string, nullable: true }
         observaciones: { type: string, nullable: true }
-        conyuge: { type: object, additionalProperties: true, nullable: true }
-        responsabilidades: { type: array, items: { type: object, additionalProperties: true } }
+        conyuge: { $ref: '#/components/schemas/ConyugeFuente' }
+        responsabilidades: { $ref: '#/components/schemas/ResponsabilidadesFuente' }
     GCInput:
       type: object
       properties:
@@ -316,7 +355,7 @@ paths:
     post:
       tags: [auth]
       security: [{ cookieAuth: [], csrf: [] }]
-      description: 'Snapshot único por sesión, rechaza recaptura y acepta estados denegados sin impedir uso.'
+      description: 'Ubicacion autodeclarada por cliente; no constituye prueba fisica. Un intento por sesion. Servidor registra hora de recepcion.'
       requestBody:
         required: true
         content:
@@ -329,7 +368,7 @@ paths:
     get:
       tags: [catalogos]
       security: []
-      description: 'PÚBLICO: solo id, código y nombre de presbiterios activos para mostrar login; nunca listar usuarios.'
+      description: 'PÚBLICO y solo lectura: presbiterios fijos LIM/Lima, TRU/La Libertad–Trujillo, CHI/Chimbote e IQU/Iquitos. Nuevos presbiterios solo SQL autorizado.'
       responses:
         '200':
           description: 'Lista limitada de presbiterios activos'
@@ -406,7 +445,7 @@ paths:
     put:
       tags: [auth]
       security: [{ cookieAuth: [], csrf: [] }]
-      description: 'SOLO ADMIN, cambio explícito de presbiterio activo nacional (E2-D02 pendiente); invalida sede anterior.'
+      description: 'E2-D02 aprobada: SOLO ADMIN cambia contexto entre presbiterios precargados e invalida sede anterior.'
       requestBody:
         required: true
         content:
@@ -533,7 +572,7 @@ paths:
   /personas/{id}/fichas:
     post:
       tags: [personas]
-      description: 'Vincula ficha nueva a Persona existente; nunca duplica identidad documental.'
+      description: 'E1-D01 aprobada: adjuntar ficha nueva a Persona documentalmente existente, incluso entre presbiterios, sin sobrescribir datos de la Persona.'
       security: [{ cookieAuth: [], csrf: [] }]
       parameters:
         - $ref: '#/components/parameters/PersonId'
@@ -764,9 +803,13 @@ paths:
               required: [version, datos_fuente]
               properties:
                 version: { type: integer, minimum: 1 }
-                datos_fuente: { type: object, additionalProperties: true }
+                datos_fuente:
+                  nullable: true
+                  oneOf:
+                    - $ref: '#/components/schemas/FichaPersonaFuente'
+                    - $ref: '#/components/schemas/FichaGCFuente'
                 observaciones: { type: string, nullable: true }
       responses:
-        '200': { description: 'Ficha fuente editada con auditoría, creador intacto', content: { application/json: { schema: { $ref: '#/components/schemas/FichaDetalle' } } } }
+        '200': { description: 'Solo campos efectivamente modificados generan auditoria; autor de ficha intacto', content: { application/json: { schema: { $ref: '#/components/schemas/FichaDetalle' } } } }
         '403': { description: 'Ficha ajena', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
         '409': { description: 'Versión en conflicto', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
