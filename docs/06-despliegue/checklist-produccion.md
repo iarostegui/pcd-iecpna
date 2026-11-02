@@ -6,7 +6,7 @@
 |---|---|---|---|---|
 | PROD-01 | Confirmación PHP/MySQL/MariaDB + CHECK/FK/JSON/HTTPS reales | NO EJECUTADO | Pendiente | Técnico |
 | PROD-02 | Crear 11 tablas, seed y verificar integridad del árbol y transacciones | NO EJECUTADO | Pendiente | Técnico |
-| PROD-03 | Autenticación, contraseñas distintas para nacionales, limitación de intentos, CSRF y revocación | NO EJECUTADO | Pendiente | Técnico |
+| PROD-03 | UAT: contraseña común DIGITADOR solo en pruebas; **producción: credenciales individuales provisionadas y sesiones UAT revocadas**, hashing, CSRF y limitación intentos | NO EJECUTADO | Pendiente | Técnico |
 | PROD-04 | Consulta **general con filtros** por presbiterio/sede y escritura limitada | NO EJECUTADO | Pendiente | Técnico |
 | PROD-05 | GPS único opcional por sesión y sin repetición tras denegación | NO EJECUTADO | Pendiente | Técnico |
 | PROD-06 | Copias protegidas y restauración real verificada | NO EJECUTADO | Pendiente | Operación |
@@ -25,3 +25,11 @@
 | **PROD-13** | Hash PHP Argon2id disponible o alternativa segura documentada; métricas de pruebas sin tabla adicional | NO EJECUTADO |
 
 [H-46 completo](../07-auditorias/etapa-4-produccion-y-privacidad.md). Estos controles son parte de I01/I06, **no** justifican servicios residentes ni tablas nuevas. El GO productivo también depende de PROD-11…13.
+
+## Validaciones V4.1 adicionales — NO EJECUTADAS
+- **PROD-14:** comprobar seed fijo LIM/TRU/CHI/IQU y que no haya alta/edición de presbiterios en API/React; crear sede sí permitido.
+- **PROD-15:** crear ficha con `created_at/created_by` **sin evento en auditoria_evento**, editar con solo diferencias y actor snapshot, sin datos duplicados ajenos al cambio.
+- **PROD-16:** todas las tablas disponen de `created_at/updated_at`; validar compatibilidad del UNIQUE generado de presbiterio raíz y normalización sin tildes.
+- **PROD-17:** los nuevos índices para reportes únicamente se justificarán con EXPLAIN y volúmenes de prueba. 
+- **PROD-18:** JSON fuente cerrado V1.0 y rechazo de propiedades desconocidas; E1-D01 reutiliza Persona de presbiterio distinto sin sobrescribir consolidado.
+- **PROD-19:** H-40 y política de retención aprobada institucionalmente; repositorio GitHub público sin secretos o PII y visibilidad revisada.

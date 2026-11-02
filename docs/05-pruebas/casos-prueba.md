@@ -155,3 +155,19 @@ Los casos **CA-101…CA-111** se detallan en [validacion-prototipo-v2.3.md](vali
 | **CA-114** | Password hashing compatible con PHP del hosting (`Argon2id` si disponible, alternativa fuerte documentada); pruebas de hash/verificación y bloqueo de fallos. | I01/I06 |
 
 **Estado H-46:** tres pruebas de diseño añadidas, ninguna ejecutada; [controles PROD-11…13](../06-despliegue/checklist-produccion.md).
+
+## V4.1 — Casos adicionales, diseñados NO ejecutados
+| ID | Prueba / aceptación |
+|---|---|
+| **CA-115** | Seed inicial ofrece LIM/TRU/CHI/IQU; login por catálogo sin POST/PATCH/DELETE de presbiterio. |
+| **CA-116** | Comparación `Jesús María` vs `JESUS MARIA` y diferencias de espacios/mayúsculas dentro de igual presbiterio detecta coincidencia; sede de otro presbiterio independiente. |
+| **CA-117** | Alta de nueva FICHA: fecha/hora y autor, **no fila en AUDITORIA_EVENTO**. |
+| **CA-118** | PATCH de una sola propiedad crea evento solo con esa propiedad antes/después y actor snapshot; no-op = cero eventos. |
+| **CA-119** | E1-D01: nueva ficha en otro presbiterio con DNI confiable ya existente reutiliza Persona sin sobrescribir atributos del consolidado. |
+| **CA-120** | UAT clave común permitida; gate productivo rechaza común, exige credenciales individuales y sesiones anteriores revocadas. |
+| **CA-121** | JSON Schema v1: valor válido y NULL permitidos; atributos desconocidos o formato inconsistente → 422. |
+| **CA-122** | Todas las 11 tablas incorporan `created_at/updated_at`; formato UTC/servidor consistente, papel independiente. |
+| **CA-123** | UNIQUE de nombre presbiterio raíz y alta sede validada en MySQL real; colación y NFKD sin tildes. |
+| **CA-124** | Seguridad: datos GPS autodeclarados no se presentan como evidencia física; auditoría minimiza PII en snapshots. |
+| **CA-125** | Reportes: solo crear índice nuevo si EXPLAIN/medición demuestra necesidad; regresión sin pérdida de datos. |
+**Estos casos son criterios, NO resultados de prueba.**

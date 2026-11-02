@@ -37,3 +37,14 @@
 **CAMBIO OBLIGATORIO V4:** la tabla `organizacion` reemplaza presbiterio+sede; `ubigeo` es insumo I02; `catalogo` agrupa listas y criticidad. **RN-29 implica consulta total por funcionalidad, con filtros opcionales; no restricción territorial por usuario ni subtipo documental**. Los nombres de antiguos CU/UI se conservan como identificadores de prototipo y no autorizan módulos nuevos.
 
 **Puerta SDD:** un cambio de regla obliga a actualizar spec, endpoint, SQL/índices y caso de prueba correspondiente. La columna «Pruebas» enumera **diseños**, no evidencia de ejecución. Consultar [asignación](../05-pruebas/asignacion-iteraciones.md), [OpenAPI](../04-integracion/openapi.yaml) y [anexos SQL](../03-base-datos/anexos/README.md).
+
+## Reglas V4.1 — trazabilidad adicional
+| RN | Función / contrato | SQL | Pruebas |
+|---|---|---|---|
+| RN-30 | `GET /presbiterios` fijo, sin POST de presbiterio | organizacion (seed LIM/TRU/CHI/IQU) | CA-115 |
+| RN-31 | POST FICHA sin auditoría; PATCH solo diferencias | ficha, auditoria_evento | CA-117/118 |
+| RN-32 | Timestamps servidor todas las tablas | 11 tablas, created_at/updated_at | CA-122 |
+| RN-33 | Normalizar nombres sin tildes | organizacion.nombre_norm + UNIQUE | CA-116/123 |
+| RN-34 | Clave común solo UAT; rotación antes producción | usuario.password_hash, sesion.auth_version | CA-120 |
+| RN-35 | Vincular ficha a Persona existente cross-presbiterio | persona, ficha | CA-119 |
+**Prioridad al generar código:** reglas aprobadas V4.1, no cambios históricos E1-E3.

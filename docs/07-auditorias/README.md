@@ -12,7 +12,7 @@ Se conservan **los hallazgos, decisiones y respuestas** a auditorías de documen
 
 **Fuente del informe de auditoría:** archivo aportado `auditoria-pcd-sdd-v3.1.zip` con 7 documentos, conservado en la conversación de trabajo; el ZIP no ha sido añadido a GitHub. Para rastreabilidad, cada decisión referencia el ID H-xx.
 
-**Antes de clasificar hallazgos:** leer [ALC-PCD-3.1](../01-analisis/alcance-funcional.md). Un auditor puede **cuestionar el alcance** y proponer ampliación, pero no exigir funcionalidad fuera de él ni declararla bloqueante automáticamente; no desatender por ello riesgos de seguridad, integridad o privacidad.
+**Antes de clasificar hallazgos:** leer [ALC-PCD-4.0](../01-analisis/alcance-funcional.md). Un auditor puede **cuestionar el alcance** y proponer ampliación, pero no exigir funcionalidad fuera de él ni declararla bloqueante automáticamente; no desatender por ello riesgos de seguridad, integridad o privacidad.
 
 | [etapa-2-arquitectura-seguridad-datos.md](etapa-2-arquitectura-seguridad-datos.md) | H-03/H-04/H-07/H-12/H-13/H-18/H-28/H-32/H-35; seguridad, catálogo, contexto, calidad e integridad GC con decisiones E2 abiertas. | **Diseño técnico en GitHub, pruebas reales y conformidad pendientes**. |
 
@@ -21,3 +21,5 @@ Se conservan **los hallazgos, decisiones y respuestas** a auditorías de documen
 **Etapa 4 (V4) y modelo físico simplificado:** [preparación productiva](etapa-4-produccion-y-privacidad.md), [decisiones vigentes](../01-analisis/decisiones-pendientes.md), [justificación 11 tablas](../03-base-datos/anexos/justificacion-11-tablas.md). Los hallazgos de Etapas 1–3 conservan su historial pero **NO autorizan recuperar el modelo 17 tablas ni ampliar PCD**.
 
 - [Etapa 5 — Preparación I00](etapa-5-preparacion-i00.md): transición de auditoría a pruebas técnicas, artefactos y GO/NO-GO. **I00 aún no ejecutada en hosting.**
+
+[Entrega V4.1 para el especialista](ENTREGA-REVISION-ESPECIALISTA-V4.1.md): comprobaciones antes de una nueva auditoría formal. Las etapas anteriores se mantienen como antecedentes, no definen la implementación.

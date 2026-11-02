@@ -2,7 +2,7 @@
 **Regla central:** trabajar SOLO en PCD, NO en SGSP. La migración a SGSP es futura y queda fuera del desarrollo actual.
 
 ## Límite de producto — cumplimiento obligatorio
-**Documento normativo de alcance:** [`docs/01-analisis/alcance-funcional.md`](docs/01-analisis/alcance-funcional.md) (ALC-PCD-3.1). Contiene **objetivos, inclusiones ALC-01…ALC-12, exclusiones EXC-01…EXC-10, roles, calidad manual y frontera con SGSP**.
+**Documento normativo de alcance:** [`docs/01-analisis/alcance-funcional.md`](docs/01-analisis/alcance-funcional.md) (ALC-PCD-4.0). Contiene **objetivos, inclusiones ALC-01…ALC-12, exclusiones EXC-01…EXC-10, roles, calidad manual y frontera con SGSP**.
 
 Toda IA —desarrolladora o auditora— debe **leerlo antes** de interpretar requisitos y evaluar hallazgos. El prototipo vigente V2.3 muestra UX demostrativa, pero **no autoriza funcionalidades fuera del alcance oficial**.
 
@@ -32,12 +32,12 @@ Toda IA —desarrolladora o auditora— debe **leerlo antes** de interpretar req
 
 ## Decisiones vigentes esenciales
 - Login solicita Presbiterio + Usuario + Contraseña; seis digitadores iniciales por presbiterio existente, ADMIN nacional, REPORTES nacional.
-- Contraseña **inicial común y no forzada a cambiar**, por decisión operativa; almacenar solo hashes Argon2id/bcrypt, mantener límite de intentos y auditoría; valor real se provisiona fuera del repositorio.
+- Contraseña común de DIGITADOR exclusivamente para **pruebas/UAT**, no para datos reales; **rotación individual obligatoria antes del pase a producción**, hashing seguro, límite de intentos y revocación de sesiones. Secretos fuera del repositorio.
 - Tras login seleccionar **solo Sede** dentro del Presbiterio; conservar última sede válida por usuario; crear nueva sede al vuelo, sin aprobación, con deduplicación.
 - Registro Persona y GC **integrados en la navegación**, pero **GC se abre después de persistir Persona** y es opcional.
 - Digitador edita registros de su autoría; ADMIN ve/edita todos; REPORTES solo consulta agregados y calidad autorizada.
 - Fichas incompletas son persistibles; campos críticos configurables en tiempo de operación para **indicadores**, no para bloquear.
-- Auditoría por guardado: actor, creador original, antes/después, IP, fecha, sesión y ubicación capturada al login cuando exista.
+- Alta de nueva ficha: solo fecha/hora `created_at` y `created_by` en la ficha, **sin AUDITORIA_EVENTO**. Solo al editar se registran **campos realmente alterados**, antes/después y actor; no duplicar snapshots completos ni GPS.
 - PCD usa BD propia; SGSP no forma parte del alcance de implementación.
 
 ## Ciclo SDD obligatorio
@@ -68,3 +68,12 @@ Los deltas `openspec/changes/2026-10-31-levantamiento-etapa-1`, `etapa-2`, `etap
 
 ## Puerta documental I00
 Ejecutar `node scripts/validar-sdd-i00.cjs` y `node scripts/validar-prototipo-v2.3.cjs` en el clon antes de programar. Seguir [I00 — handoff](docs/08-ia/I00-verificacion-estatica-y-handoff.md). Detectar referencias al modelo antiguo; no modificar el prototipo V2.2 ni crear funcionalidades SGSP.
+
+## REGLAS PRIORITARIAS PARA GENERAR CÓDIGO V4.1
+**No generar nuevo modelo:** exactamente 11 tablas, 146 columnas; todos los registros con `created_at/updated_at`. [SQL](database/migrations/001_initial.sql) y [diccionario](docs/03-base-datos/anexos/anexo-02-diccionario-fisico.md). Requiere pruebas MySQL reales.
+**Presbiterios:** LIM, TRU, CHI e IQU se cargan en seed. No generar UI o endpoints POST/PATCH/DELETE para presbiterios; nuevos solo por SQL autorizado. **Sedes sí se agregan**.
+**Identidad E1-D01 APROBADA:** usar `POST /personas/{id}/fichas` entre presbiterios cuando haya identidad documental exacta, sin sobrescribir Persona ni cambiar autorías.
+**Control de datos:** [JSON Schema de FICHA](docs/03-base-datos/esquemas-json/README.md) cerrado/versionado. Nombre de sede comparable sin tildes y sin alterar su presentación original.
+**Índices:** no sumar índices de reportes hasta disponer de consultas/EXPLAIN verificables.
+**H-40:** privacidad, retención y visibilidad del repositorio aún requieren decisión institucional; prohibido datos reales antes del GO.
+**Estado de revisión:** [entrega al especialista](docs/07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md). No iniciar nueva auditoría formal hasta su evaluación.

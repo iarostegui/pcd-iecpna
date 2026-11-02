@@ -9,9 +9,11 @@ No declarar módulo terminado hasta cumplir todos:
 7. Build React compilado, sin Node en cPanel, PHP no revela secretos, backup restaurable.
 8. Rendimiento medido contra web existente sin asumir capacidad.
 9. Código/documentación y OpenAPI sincronizados, sin alterar SGSP.
-10. Informe de riesgos residuales, incluyendo contraseña operativa común y GPS opcional.
+10. Evidencia de rotación desde clave común de **UAT** a credenciales individuales **antes de producción**, y uso de GPS solo como telemetría opcional.
 
 ## DoD adicional V4.0
 Ninguna iteración está terminada mientras el código no use exactamente el [modelo vigente de 11 tablas](../../database/migrations/001_initial.sql), consulta general con filtros Presbiterio/Sede, documento sin subtipo y pruebas automatizadas de permisos de edición propia. Para producción cumplir [PROD-01…10](../06-despliegue/checklist-produccion.md) y H-40, sin confundir documentación con pruebas.
 
 **Actualización de puerta I00:** ejecutar script de comprobación SDD y prototipo de forma local, y después pruebas reales SQL/PHP/MySQL + revisión de seguridad/privacidad. [Guía](I00-verificacion-estatica-y-handoff.md). La UX de referencia es V2.3, V2.2 solo histórico.
+
+**DoD V4.1:** E1-D01 cross-presbiterio implementada sin sobrescritura; presbiterios fijos sin CRUD; `created_at/updated_at` en todas las tablas; altas de ficha sin evento, modificaciones solo campos cambiados; JSON fuente validado; nombres sede sin tildes para coincidencia; índices de reporte tras EXPLAIN.

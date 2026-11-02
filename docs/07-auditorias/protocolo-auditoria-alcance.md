@@ -1,15 +1,15 @@
 # AUD-PCD-01 — Protocolo obligatorio de auditoría y control del alcance
-**Producto:** PCD — Plataforma de Captura de Datos IECPNA · **Norma de referencia:** [ALC-PCD-3.1](../01-analisis/alcance-funcional.md) · **Prototipo vigente:** PCD V2.3 (V2.2 histórico) · **Documentación vigente:** SDD V4.0 (modelo físico de 11 tablas).
+**Producto:** PCD — Plataforma de Captura de Datos IECPNA · **Norma de referencia:** [ALC-PCD-4.0](../01-analisis/alcance-funcional.md) · **Prototipo vigente:** PCD V2.3 (V2.2 histórico) · **Documentación vigente:** SDD V4.1 (modelo físico de 11 tablas).
 
 ## 1. Regla fundamental
 
-La auditoría se ejecuta **dentro del alcance funcional y no funcional aprobado de PCD**, conforme al documento ALC-PCD-3.1. El auditor **sí puede cuestionar ese alcance** y alertar de lo que falta, pero debe presentarlo como **propuesta de cambio al alcance**, no como incumplimiento automático del diseño ni requisito cuya ausencia impida programar.
+La auditoría se ejecuta **dentro del alcance funcional y no funcional aprobado de PCD**, conforme al documento ALC-PCD-4.0. El auditor **sí puede cuestionar ese alcance** y alertar de lo que falta, pero debe presentarlo como **propuesta de cambio al alcance**, no como incumplimiento automático del diseño ni requisito cuya ausencia impida programar.
 
 **No confundir PCD con SGSP:** PCD es **temporal**, dedicado a capturar dos fichas físicas (Personas y Líder GC), consultar, corregir registros autorizados, dar reportes objetivos y conservar integridad y trazabilidad. Las funcionalidades pastorales permanentes y la migración efectiva son de otro proyecto.
 
 ## 2. Fuentes y orden de revisión
 
-1. [Alcance oficial ALC-PCD-3.1](../01-analisis/alcance-funcional.md) — inclusiones ALC-01…12 y exclusiones EXC-01…10.
+1. [Alcance oficial ALC-PCD-4.0](../01-analisis/alcance-funcional.md) — inclusiones ALC-01…12 y exclusiones EXC-01…10.
 2. [Reglas de negocio](../01-analisis/reglas-negocio.md) y [decisiones pendientes](../01-analisis/decisiones-pendientes.md).
    **Precedencia:** las [decisiones V4](../01-analisis/decisiones-pendientes.md), [modelo SQL de 11 tablas](../../database/migrations/001_initial.sql), [OpenAPI V4](../04-integracion/openapi.yaml) y [estado documental](../08-ia/estado-documental.md) sustituyen expresamente cualquier instrucción de E1/E2/E3 incompatible (17 tablas, ACL territorial, subtipo documental, V2.2 como diseño vigente).
 3. [Diccionario de captura](../01-analisis/diccionario-captura.md) y [fuente Excel](../01-analisis/fuentes/README.md) (si no está accesible el original, declarar limitación).
@@ -39,7 +39,7 @@ La clasificación por tipo es **independiente** de la severidad. Una propuesta e
 - Consultas/reportes de **datos objetivos**, calidad parametrizable y posibles coincidencias.
 - Relación de Persona (líder) y datos **generales** de GC, sin integrantes nominales.
 - Seguridad y protección de datos personales/religiosos y ubicación opcional, respaldo y despliegue cPanel.
-- Consistencia entre SDD, interfaz V2.2, esquema SQL, API y casos de prueba; distinguir **planificado vs probado**.
+- Consistencia entre SDD, interfaz V2.3, esquema SQL, API y casos de prueba; distinguir **planificado vs probado**.
 
 ## 5. Lo que NO debe exigir como requisito aprobado
 
@@ -95,8 +95,11 @@ El auditor debe evaluar **el modelo aprobado de 11 tablas**, una tabla de catál
 
 ## 6. Reauditoría documental V4.0 (01/11/2026)
 
-**Objeto:** auditar coherencia y completitud de **documentación SDD V4.0**, no certificar ejecución SQL, frontend/backend ni cumplimiento productivo. Solicitar evidencia para aseveraciones de ejecución; ausencia de pruebas sobre código aún no implementado se clasifica como **dependencia de construcción**, salvo incumplimiento de un entregable documental sí exigido.
+**Objeto:** auditar coherencia y completitud de **documentación SDD V4.1**, no certificar ejecución SQL, frontend/backend ni cumplimiento productivo. Solicitar evidencia para aseveraciones de ejecución; ausencia de pruebas sobre código aún no implementado se clasifica como **dependencia de construcción**, salvo incumplimiento de un entregable documental sí exigido.
 
 **Insumos faltantes declarados:** XLSX original no versionado H-14, versión/entorno real PHP/MySQL, fuente INEI a cargar en I02, decisiones E1-D01/E1-D02/H-23/H-24, H-40 institucional. Cada uno debe recibir observación de dependencia explícita, **no falso cierre ni exigencia de nuevo módulo**. Las propuestas fuera de alcance se clasifican separadas y no bloquean por defecto; los riesgos de privacidad/integridad sí exigen controles en su fase.
 
 **Protocolo de salida:** para cada hallazgo indicar ID, evidencia (ruta y sección), regla ALC/RN, versión, categoría, severidad fundamentada, recomendación mínima, responsable, iteración I00–I06 y estado (RESUELTO_EN_DOCUMENTO / PENDIENTE_DECISIÓN / INSUMO_CONSTRUCCIÓN / PENDIENTE_PRUEBA / FUERA_DE_ALCANCE). No atribuir a prototipos simulados comportamientos de producción ni tomar los cambios históricos E1/E2/E3 como norma actual.
+
+## Revisión profesional V4.1 — prioridad
+Antes de reauditar verificar el paquete de [entrega](ENTREGA-REVISION-ESPECIALISTA-V4.1.md) y [aprobaciones funcionales](../08-ia/APROBACIONES.md). **No reabrir** E1-D01, clave compartida UAT o presbiterios fijos por ser criterios aprobados; sí evaluar viabilidad, controles y ausencia de contradicciones en API/SQL y pruebas. H-40 permanece gate obligatorio de producción; GitHub público sin secretos ni PII.

@@ -96,11 +96,11 @@ La auditoría debe contrastar cada requisito **contra ALC-01…ALC-12**, las fue
 
 ## 9. Decisiones abiertas y estado de implementación
 
-- **E1-D01:** vinculación entre fichas con documento coincidente de presbiterios diferentes — propuesta, pendiente de aprobación funcional.
+- **E1-D01: APROBADA** — vincular ficha nueva a Persona coincidente de otro presbiterio mediante endpoint, sin sobrescribir consolidado.
 - **E1-D02:** interpretación operativa de `grupo_ya_existe` y coincidencias de GC — propuesta, pendiente de aprobación funcional.
 - **H-14:** Excel original contrastado e inventariado, **archivo XLSX todavía no versionado en GitHub**.
 - **Infraestructura:** validar versiones y capacidad reales de PHP/MySQL/cPanel.
-- **Documentación:** SDD V3.1 es diseño; **React/PHP/MySQL no están desplegados ni probados en producción**.
+- **Documentación:** SDD V4.1 es diseño; **React/PHP/MySQL no están desplegados ni probados en producción**.
 
 **Regla final:** toda observación/auditoría/implementación debe partir de **este alcance oficial**. Si se considera insuficiente, se plantea una propuesta formal para decisión, sin alterar por iniciativa propia el alcance ni la versión del prototipo.
 

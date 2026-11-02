@@ -15,7 +15,7 @@ Ejecutar desde la raíz del repositorio:
 node scripts/validar-sdd-i00.cjs
 node scripts/validar-prototipo-v2.3.cjs
 ```
-La primera verificación debe fallar cuando el SQL tenga un número distinto de **11 tablas**, el diccionario no cubra **134 columnas**, el OpenAPI tenga referencias locales sin definición, exista `usuario_presbiterio`, `alcance_consulta`, `tipo_documento_detalle`, o haya incongruencia de rutas de anexos. **No reemplaza** lint YAML formal ni motor SQL, solo detecta regresiones frecuentes.
+La primera verificación debe fallar cuando el SQL tenga un número distinto de **11 tablas**, el diccionario no cubra **146 columnas**, el OpenAPI tenga referencias locales sin definición, exista `usuario_presbiterio`, `alcance_consulta`, `tipo_documento_detalle`, o haya incongruencia de rutas de anexos. **No reemplaza** lint YAML formal ni motor SQL, solo detecta regresiones frecuentes.
 
 ## 3. Tareas reales I00 todavía necesarias
 | ID | Actividad | Evidencia exigida | Estado |
@@ -24,7 +24,7 @@ La primera verificación debe fallar cuando el SQL tenga un número distinto de 
 | I00-02 | Versionar el **XLSX original de fichas** con SHA declarado H-14, preservando hojas de ejemplo separadas de producción | Archivo y hash verificado | **PENDIENTE** |
 | I00-03 | Verificar versión PHP, MariaDB/MySQL, HTTPS y PDO en cPanel | Captura/registro sin secretos | **PENDIENTE** |
 | I00-04 | Crear una BD **de prueba** vacía; ejecutar 001 y luego 002 | Logs de aplicación sin PII | **PENDIENTE** |
-| I00-05 | Probar 11 tablas, 134 columnas, 23 FK y restricciones CHECK bajo motor real | Consultas information_schema, tests de FK/CHECK | **PENDIENTE** |
+| I00-05 | Probar 11 tablas, 146 columnas, 23 FK y restricciones CHECK bajo motor real | Consultas information_schema, tests de FK/CHECK | **PENDIENTE** |
 | I00-06 | Ejecutar lint OpenAPI 3.0.3 con parser formal y revisar rutas/DTO | Reporte de parser | **PENDIENTE** |
 | I00-07 | Verificar integridad de sedes: tipo SEDE, padre PRESBITERIO; ubigeo por nivel | Casos SQL/PHP de rechazo | **PENDIENTE** |
 | I00-08 | Verificar recuperación/rollback ante reintento y conflicto de creación | CA-26, CA-42 y evidencia | **PENDIENTE DE IMPLEMENTACIÓN** |
@@ -39,3 +39,6 @@ La primera verificación debe fallar cuando el SQL tenga un número distinto de 
 
 ## 5. Resultado
 El entregable documental de I00 identifica herramientas, controles, bloqueos y ruta de verificación. **No existe evidencia de ejecución en hosting**, código PHP/React productivo, restauración de backups ni GO operativo. La siguiente actividad técnica se ejecuta al disponer del entorno y de los secretos por vía segura.
+
+## Comprobador V4.1
+Después de `npm install`, ejecutar `npm test` (`js-yaml` analizador formal y comparación de columnas/tipos SQL↔diccionario). Se incluye workflow CI en cada push/PR. Se requiere **prueba SQL real** de `nombre_raiz_norm`, `created_at/updated_at`, índices y CHECK antes de marcar I00 completo. [Entrega al especialista](../07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md).
