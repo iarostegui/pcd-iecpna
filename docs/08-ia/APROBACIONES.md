@@ -7,6 +7,7 @@
 | H-13 | Documento solo tipo/número, sin subtipo | APROBADA |
 | Modelo físico | 11 tablas, una ORGANIZACION jerárquica, una CATALOGO, una UBIGEO | APROBADA |
 | E1-D01 | Misma Persona por identidad documental confiable, nueva ficha entre presbiterios usando endpoint existente, consolidado no se sobrescribe | APROBADA |
+| E2-D02 | ADMIN nacional cambia contexto explícitamente entre los cuatro presbiterios precargados e invalida la sede previa; REPORTES consulta agregados nacionales sin sede | APROBADA (ALC-03) |
 | H-03 | Contraseña común DIGITADOR exclusivamente en UAT; rotar a credenciales individuales para producción | APROBADA, PRUEBAS PENDIENTES |
 | RN-30 | LIM/TRU/CHI/IQU precargados; ninguna alta presbiterio en app, solo SQL técnico autorizado | APROBADA |
 | RN-31 | Alta de ficha se registra en la ficha, sin evento auditoría. Ediciones: solo campos distintos y actor snapshot | APROBADA |
@@ -17,6 +18,6 @@
 | H-23/H-24 | Permiso registro GC de otra Persona / mínimo de ficha | PENDIENTE |
 | H-40 PR-01…08 | Privacidad y retención institucional | PENDIENTE, GATE PRODUCTIVO |
 | Visibilidad Github/Licencia | Repositorio público observado; cambio de visibilidad y licencia dependen del propietario | PENDIENTE DECISIÓN DEL PROPIETARIO |
-**Nota:** no inventar nombres de personas aprobadoras ni firmas. La aceptación institucional se adjuntará solo cuando exista autorización explícita.
+**Nota:** E2-D01 (consulta general con filtros opcionales) y E2-D03 (riesgo residual de clave común) quedan cubiertas por H-12 y H-03; no se reabren. No inventar nombres de personas aprobadoras ni firmas. La aceptación institucional se adjuntará solo cuando exista autorización explícita.
 
 Los algoritmos aprobados están consolidados en [CONTRATO-EJECUCION-V4.1](CONTRATO-EJECUCION-V4.1.md); esta lista no sustituye la revisión del especialista ni actas institucionales H-40.

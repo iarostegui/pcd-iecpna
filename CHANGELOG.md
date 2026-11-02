@@ -1,4 +1,10 @@
 # Changelog documental y técnico — PCD
+## 2026-11-01 — P00: consolidación de consistencia SDD V4.1
+- Casos CA-06/25/39/40/48/58/66/67/68/69/72 alineados a H-03/H-12/H-13/E1-D01 y ALC-03, sin renumerar IDs.
+- E1-CA-01 alineado a H-12: consulta general de la funcionalidad y edición solo del autor, sin restricción de visualización ajena.
+- Corregidos el enlace V2.3 que apuntaba a V2.2, la numeración duplicada del alcance, E1-D01 dado por pendiente y etiquetas V4.0/134 columnas obsoletas.
+- E2-D02 registrada como **APROBADA** (ALC-03); README de integración alineado a OpenAPI 4.1.
+- `package-lock.json` incorporado; CI y documentación usan `npm ci`. Validadores estáticos en verde; no sustituyen pruebas de motor.
 ## 2026-11-01 — SDD V4.1 (vigente para revisión de especialista)
 - Consolidación normativa [ALC-PCD-4.0](docs/01-analisis/alcance-funcional.md), conservando ALC-01…12 y EXC-01…10.
 - Clave común **solo UAT**, rotación individual y revocación antes de producción.

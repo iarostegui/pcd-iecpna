@@ -9,7 +9,7 @@ Reúne instrucciones para publicar la aplicación PCD en **`pcd.unobdata.com`**,
 | [instalacion-cpanel.md](instalacion-cpanel.md) | Prerrequisitos de PHP/MySQL/SSL, compilación React, API PHP, creación de BD, permisos, copia de seguridad y rollback. |
 | [operacion-y-cierre.md](operacion-y-cierre.md) | Operación diaria, incidentes, monitoreo, respaldos, cierre de campaña y tratamiento posterior de la información. |
 
-**Advertencia:** la publicación del HTML [V2.2](../../prototypes/PCD_v2.2.html) es una **demostración**; todavía no sustituye una instalación con autentificación y base de datos reales. Las rutas del Document Root deben verificarse en cPanel y no suponerse.
+**Advertencia:** la publicación del HTML [V2.3](../../prototypes/PCD_v2.3.html) es una **demostración** ([V2.2](../../prototypes/PCD_v2.2.html) es histórico); todavía no sustituye una instalación con autentificación y base de datos reales. Las rutas del Document Root deben verificarse en cPanel y no suponerse.
 
 ## Checklist V4
 [Controles de producción PROD-01…10](checklist-produccion.md) y [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md); banco de **11 tablas**, migración inicial exclusivamente en BD nueva, backup/restore y privacidad previa a datos reales.

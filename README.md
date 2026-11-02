@@ -9,7 +9,7 @@
 1. Leer [AGENTS.md](AGENTS.md) antes de usar una IA para implementar o revisar.
 2. Revisar [alcance aprobado](docs/01-analisis/alcance-funcional.md) y [cambios V4.1 para especialista](docs/07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md).
 3. Revisar [modelo lógico/físico](docs/03-base-datos/README.md), [JSON fuente](docs/03-base-datos/esquemas-json/README.md), [OpenAPI](docs/04-integracion/openapi.yaml), [prototipo V2.3](prototypes/PCD_v2.3.html).
-4. Ejecutar validación estática después de instalar dependencia: `npm install` y `npm test`; las pruebas SQL/API reales siguen pendientes.
+4. Ejecutar validación estática con dependencias reproducibles: `npm ci` y `npm test` (lockfile versionado); las pruebas SQL/API reales siguen pendientes.
 5. [Plan I00–I06](docs/08-ia/plan-implementacion.md) y [checklist productivo](docs/06-despliegue/checklist-produccion.md).
 
 ## Directorios

@@ -93,11 +93,11 @@ La clasificación por tipo es **independiente** de la severidad. Una propuesta e
 ## Actualización de criterios de auditoría V4
 El auditor debe evaluar **el modelo aprobado de 11 tablas**, una tabla de catálogos, organización jerárquica y ubigeo independiente. La ausencia de una tabla por cada catálogo, de permisos territoriales de consulta o de subtipo documental **no es defecto**: son decisiones explícitas. Consultas son generales por funcionalidad con filtros opcionales por presbiterio y/o sede. No convertir sugerencias de normalización adicional en requisitos. Los riesgos esenciales H-40, CSRF, privacidad y backup sí se revisan aunque PCD sea temporal.
 
-## 6. Reauditoría documental V4.0 (01/11/2026)
+## 6. Reauditoría documental V4.1 (01/11/2026)
 
 **Objeto:** auditar coherencia y completitud de **documentación SDD V4.1**, no certificar ejecución SQL, frontend/backend ni cumplimiento productivo. Solicitar evidencia para aseveraciones de ejecución; ausencia de pruebas sobre código aún no implementado se clasifica como **dependencia de construcción**, salvo incumplimiento de un entregable documental sí exigido.
 
-**Insumos faltantes declarados:** XLSX original no versionado H-14, versión/entorno real PHP/MySQL, fuente INEI a cargar en I02, decisiones E1-D01/E1-D02/H-23/H-24, H-40 institucional. Cada uno debe recibir observación de dependencia explícita, **no falso cierre ni exigencia de nuevo módulo**. Las propuestas fuera de alcance se clasifican separadas y no bloquean por defecto; los riesgos de privacidad/integridad sí exigen controles en su fase.
+**Insumos faltantes declarados:** XLSX original no versionado H-14, versión/entorno real PHP/MySQL, fuente INEI a cargar en I02, decisiones E1-D02/H-23/H-24 (E1-D01 está aprobada), H-40 institucional. Cada uno debe recibir observación de dependencia explícita, **no falso cierre ni exigencia de nuevo módulo**. Las propuestas fuera de alcance se clasifican separadas y no bloquean por defecto; los riesgos de privacidad/integridad sí exigen controles en su fase.
 
 **Protocolo de salida:** para cada hallazgo indicar ID, evidencia (ruta y sección), regla ALC/RN, versión, categoría, severidad fundamentada, recomendación mínima, responsable, iteración I00–I06 y estado (RESUELTO_EN_DOCUMENTO / PENDIENTE_DECISIÓN / INSUMO_CONSTRUCCIÓN / PENDIENTE_PRUEBA / FUERA_DE_ALCANCE). No atribuir a prototipos simulados comportamientos de producción ni tomar los cambios históricos E1/E2/E3 como norma actual.
 

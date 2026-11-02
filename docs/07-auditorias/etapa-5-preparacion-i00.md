@@ -11,12 +11,11 @@
 ## Auditoría de consistencia antes de I00
 Prueba automatizable: [script estático](../../scripts/validar-sdd-i00.cjs) y [guía I00](../08-ia/I00-verificacion-estatica-y-handoff.md).
 1. Detectar estructuras obsoletas (17 tablas, alcance_consulta, subtipo).
-2. Comprobar 11 tablas, diccionario 134 columnas y OpenAPI sin esquemas huérfanos.
+2. Comprobar 11 tablas, diccionario 146 columnas y OpenAPI sin esquemas huérfanos.
 3. **No declarar** que la revisión estática verifica FK/CHECK, seguridad, consentimiento, backup o rendimiento.
 
 ## Hallazgos todavía abiertos
 - **H-14**: fuente Excel binaria por versionar y contrastar contra inventario SHA.
-- **E1-D01**: fichas de distintos presbiterios de la misma Persona.
 - **E1-D02**: GC «ya existe» del papel.
 - **H-23**: alta GC vinculada a Persona creada por otro digitador.
 - **H-24**: mínimo de contenido para ficha.

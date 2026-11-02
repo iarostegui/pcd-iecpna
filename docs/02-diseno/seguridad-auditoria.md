@@ -1,4 +1,4 @@
-# SEC-PCD-4.0 — Seguridad y auditoría proporcionadas a PCD
+# SEC-PCD-4.1 — Seguridad y auditoría proporcionadas a PCD
 
 **Alcance:** [PCD oficial](../01-analisis/alcance-funcional.md) · [Esquema 11 tablas](../03-base-datos/modelo-logico.md). Aplicación temporal, pero protege los datos personales.
 

@@ -1,4 +1,4 @@
-# Requisitos de consultas y reportes PCD V4.0
+# Requisitos de consultas y reportes PCD V4.1
 
 ## Consulta operativa general
 Un usuario autorizado para utilizar la funcionalidad **consulta la totalidad de registros disponibles de esa funcionalidad**, con posibilidad de filtrar por **Presbiterio y/o Sede**, de manera independiente. Puede buscar por documento (solo tipo+número), nombre/apellidos y número de ficha opcional; añadir digitador, rango de fechas, tipo de ficha, incompletitud y posible coincidencia cuando corresponda.
@@ -21,7 +21,7 @@ Por digitador, presbiterio y sede en período: fichas nuevas, correcciones, últ
 Indicadores computables de fichas incompletas y campos críticos desde `catalogo` con `categoria=CAMPO_CRITICO_PERSONA/GC`. Los parámetros pueden cambiar durante campaña sin editar registros. **No** se mide fidelidad al papel automáticamente.
 
 ## Reporte D — Posibles duplicados
-DNI/C.E. coincidentes y validables, candidatos por nombres+fecha o documento OTRO no concluyente. Advertir sin fusionar Personas inciertas. La identificación global puede apoyar conteos nacionales, pero E1-D01 (vincular fichas de diferente presbiterio) sigue por cerrar.
+DNI/C.E. coincidentes y validables, candidatos por nombres+fecha o documento OTRO no concluyente. Advertir sin fusionar Personas inciertas. La identificación global puede apoyar conteos nacionales; E1-D01 (vincular fichas de diferente presbiterio) está **aprobada**: reutiliza la Persona documental y no fusiona fichas.
 
 ## Seguridad y rendimiento
 Permiso por funcionalidad en PHP, consultas parametrizadas, filtros opcionales, paginación; límites de resultados, índices y `EXPLAIN`. No implementar mecanismo de supervisión de digitación, miembros nominales GC ni exportación a SGSP.
