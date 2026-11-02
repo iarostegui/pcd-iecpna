@@ -763,6 +763,49 @@ $run('CA-94_gps_una_vez', 'CA-94', static function () use ($lim, $passwords, $db
         : ['FAIL', 'first=' . $first['status'] . ' second=' . $second['status'] . ' geo=' . (string) ($row['geo_estado'] ?? '—')];
 });
 
+$run('CA-76_nueva_sesion_gps', 'CA-76', static function () use ($lim, $passwords): array {
+    $first = login($lim, 'LIM-DIG-02', $passwords['DIGITADOR'], 'geo-new-a-' . bin2hex(random_bytes(3)));
+    $geoFirst = auth_write('POST', '/auth/ubicacion', $first, ['estado' => 'DENEGADA', 'capturada_en' => gmdate('Y-m-d\TH:i:s\Z')]);
+    $logout = auth_write('POST', '/auth/logout', $first, []);
+    $second = login($lim, 'LIM-DIG-02', $passwords['DIGITADOR'], 'geo-new-b-' . bin2hex(random_bytes(3)));
+    $me = auth_get('/auth/me', $second);
+    $geoSecond = auth_write('POST', '/auth/ubicacion', $second, ['estado' => 'DENEGADA', 'capturada_en' => gmdate('Y-m-d\TH:i:s\Z')]);
+
+    return $geoFirst['status'] === 200
+        && $logout['status'] === 204
+        && $second['response']['status'] === 200
+        && json_path($me, 'geo_estado') === null
+        && $geoSecond['status'] === 200
+        ? ['PASS', 'nuevo login inicia sesión GPS nueva; la revocación no duplica la anterior']
+        : ['FAIL', 'estados ' . $geoFirst['status'] . '/' . $logout['status'] . '/' . $geoSecond['status']];
+});
+
+$run('CA-115_presbiterios_fijos', 'CA-115', static function () use ($baseUrl): array {
+    $list = http_request('GET', $baseUrl . '/presbiterios');
+    $codes = [];
+    foreach (is_array($list['json']) ? $list['json'] : [] as $item) {
+        $codes[] = (string) ($item['codigo'] ?? '');
+    }
+    sort($codes);
+    $write = http_request('POST', $baseUrl . '/presbiterios', ['Content-Type: application/json'], '{}');
+
+    return $codes === ['CHI', 'IQU', 'LIM', 'TRU'] && $write['status'] === 405
+        ? ['PASS', 'LIM/TRU/CHI/IQU; sin POST de presbiterios']
+        : ['FAIL', 'codes=' . implode(',', $codes) . ' post=' . $write['status']];
+});
+
+$run('CA-123_unique_sede', 'CA-123', static function () use ($db): array {
+    if ($db === null) {
+        return ['BLOCKED', 'MySQL ausente'];
+    }
+    $rows = $db->query("SELECT DISTINCT index_name FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name='organizacion'")->fetchAll(PDO::FETCH_COLUMN);
+    $indexes = array_map('strval', $rows);
+
+    return in_array('uq_org_presb_nombre', $indexes, true) && in_array('uq_org_sede_nombre', $indexes, true)
+        ? ['PASS', 'UNIQUE de presbiterio raíz y de sede por padre presentes']
+        : ['FAIL', 'índices=' . implode(',', $indexes)];
+});
+
 $run('CA-113_last_seen_acotado', 'CA-113', static function () use ($lim, $passwords, $db, $sessionName): array {
     if ($db === null) {
         return ['BLOCKED', 'MySQL ausente'];

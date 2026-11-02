@@ -46,7 +46,7 @@
 - [x] CA-01…CA-14.
 - [x] CA-56…CA-60.
 - [x] CA-91, CA-92 y CA-94.
-- [x] CA-61…CA-67, CA-76, CA-84, CA-109, CA-110, CA-113, CA-114 y CA-123 como cobertura adicional I01.
+- [x] CA-61…CA-67, CA-76, CA-84, CA-109, CA-110, CA-113, CA-114, CA-115 y CA-123 como cobertura adicional I01.
 - [x] Casos negativos: login incorrecto, presbiterio incorrecto, usuario inactivo, bloqueo, revocación,
       CSRF, sesión expirada, acceso sin autenticación, sede ajena, alta/duplicidad, concurrencia y GPS denegado.
 - [x] Casos UX V2.3 aplicables (CA-101, CA-109, CA-110 y flujo React login/contexto).
@@ -70,12 +70,12 @@
 |---|---|---|
 | `npm test` (raíz) | validadores SDD y prototipo | PASS |
 | `cd backend && vendor/bin/phpunit` | 64 pruebas / 154 aserciones; integración con MariaDB 11.8 local | PASS |
-| `php tests/api/i01.php --json=...` | 36 PASS / 0 FAIL / 0 BLOCKED; CA obligatorios y cobertura I01 | PASS |
+| `php tests/api/i01.php --json=...` | 39 PASS / 0 FAIL / 0 BLOCKED; CA obligatorios y cobertura I01 | PASS |
 | `php tests/api/run.php` | 23 PASS / 0 FAIL / 0 BLOCKED | PASS |
 | `cd frontend && npm test` | 8 pruebas UX (login, contexto, expiración, GPS, 409, REPORTES) | PASS |
 | `cd frontend && npm run build` | Vite build correcto | PASS |
 | `php -l` sobre `src/tests/scripts` | sin errores de sintaxis | PASS |
-| MySQL 8 / PHP 8.2 con Argon2id y CI | run 41450632188: 4 jobs en verde; I01 36/36; PHPUnit 64/153 (1 skip); I00 31 PASS/0 FAIL/1 BLOCKED; frontend 8/8; build | PASS |
+| MySQL 8 / PHP 8.2 con Argon2id y CI | run 41450632188: 4 jobs en verde; I01 39/39; PHPUnit 64/153 (1 skip); I00 31 PASS/0 FAIL/1 BLOCKED; frontend 8/8; build | PASS |
 
 **Nota:** el entorno local usa MariaDB 11.8 y PHP 8.2 sin Argon2id (fallback bcrypt costo 12 para
 desarrollo). La evidencia de motor exigida se obtuvo en GitHub Actions con MySQL 8.0.46/PHP 8.2.35

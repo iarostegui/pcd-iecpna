@@ -3,7 +3,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 
 **Vigencia:** los casos redactados antes de V4.1 se actualizan a la decisión vigente sin renumerar su ID; la redacción anterior queda en el historial Git (CA-06, CA-25, CA-48, CA-68, CA-69 y CA-72).
 
-**Ejecución I01 (02/11/2026):** CA-01…CA-14, CA-56…CA-60, CA-61…CA-67, CA-76, CA-84, CA-91, CA-92, CA-94, CA-110, CA-112, CA-113 y CA-114 tienen ejecución automatizada en `tests/api/i01.php` contra MySQL de prueba, además de PHPUnit y Vitest. Resultado local: 36 PASS/0 FAIL/0 BLOCKED. La evidencia CI con MySQL 8 se adjunta al PR; **no es GO productivo**.
+**Ejecución I01 (02/11/2026):** CA-01…CA-14, CA-56…CA-60, CA-61…CA-67, CA-76, CA-84, CA-91, CA-92, CA-94, CA-110, CA-112, CA-113, CA-114, CA-115, CA-123 tienen ejecución automatizada en `tests/api/i01.php` contra MySQL de prueba, además de PHPUnit y Vitest. Resultado local: 39 PASS/0 FAIL/0 BLOCKED. La evidencia CI con MySQL 8 se adjunta al PR; **no es GO productivo**.
 
 | ID | Prueba GIVEN / WHEN / THEN | Prioridad |
 |---|---|---|

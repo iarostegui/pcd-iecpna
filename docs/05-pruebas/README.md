@@ -26,12 +26,12 @@ La implementación I01 ejecuta los casos obligatorios con automatización real:
 
 | Bloque | Comando | Resultado local |
 |---|---|---|
-| Casos CA-01…14, CA-56…60, CA-61…67, CA-76, CA-84, CA-91/92/94, CA-110/112/113/114 | `php tests/api/i01.php --base-url=... --json=i01-evidencia.json` | 36 PASS / 0 FAIL / 0 BLOCKED |
+| Casos CA-01…14, CA-56…60, CA-61…67, CA-76, CA-84, CA-91/92/94, CA-110/112/113/114 | `php tests/api/i01.php --base-url=... --json=i01-evidencia.json` | 39 PASS / 0 FAIL / 0 BLOCKED |
 | Unitarias e integración MySQL | `cd backend && vendor/bin/phpunit` | 64 pruebas / 154 aserciones |
 | UX React I01 | `cd frontend && npm test` | 8 pruebas (login, contexto, expiración, GPS, 409, REPORTES) |
 | Validadores SDD | `npm test` | OK |
 | Build React | `cd frontend && npm run build` | OK |
-| CI MySQL 8/PHP 8.2 | run [41450632188](https://github.com/iarostegui/pcd-iecpna/actions/runs/41450632188) | 4 jobs PASS; I01 36/36; PHPUnit 64/153 (1 skip); I00 31 PASS/0 FAIL/1 BLOCKED; frontend 8/8 |
+| CI MySQL 8/PHP 8.2 | run [41450632188](https://github.com/iarostegui/pcd-iecpna/actions/runs/41450632188) | 4 jobs PASS; I01 39/39; PHPUnit 64/153 (1 skip); I00 31 PASS/0 FAIL/1 BLOCKED; frontend 8/8 |
 
 Los estados son de ejecución local con datos sintéticos y MySQL de prueba; la evidencia CI con
 MySQL 8 se adjunta al PR. **No constituyen GO productivo** ni sustituyen E-07, H-14, H-40 ni la
