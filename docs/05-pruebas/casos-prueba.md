@@ -65,7 +65,7 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 ## Casos propuestos E1 (NO EJECUTADOS)
 | ID | Comprobación | Iteración |
 |---|---|---|
-| E1-CA-01 | Documento existente de otra sede: crear ficha nueva, no segunda Persona y no mostrar PII ajena | I02 |
+| E1-CA-01 | Documento existente de otra sede: crear ficha nueva reutilizando Persona, sin segunda Persona ni sobrescritura; la consulta general (H-12) permite ver el registro y la edición queda restringida al autor | I02 |
 | E1-CA-02 | Crear primera ficha genera fuente y Persona; segunda ficha divergente no sobrescribe Persona | I02 |
 | E1-CA-03 | Autores distintos editan solo sus fichas; ADMIN conserva autoría | I02/I04 |
 | E1-CA-04 | Fecha imposible no se admite; digitador corrige o deja fecha vacía; PHP vuelve a comprobar y DATE solo tiene fecha válida o NULL | I02 |
