@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS organizacion (
  referencia VARCHAR(300) NULL,
  activo TINYINT(1) NOT NULL DEFAULT 1,
  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
- updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  UNIQUE KEY uq_org_codigo(codigo),
  UNIQUE KEY uq_org_presb_nombre(nombre_raiz_norm),
  UNIQUE KEY uq_org_sede_nombre(padre_id,nombre_norm),
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS sesion (
  geo_precision_m DECIMAL(10,2) NULL,
  geo_capturada_en DATETIME(6) NULL,
  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
- updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  UNIQUE KEY uq_sesion_hash(session_ref_hash),
  KEY ix_sesion_user_fecha(usuario_id,fecha_login),
  CONSTRAINT fk_sesion_usuario FOREIGN KEY(usuario_id) REFERENCES usuario(id),
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS login_evento (
  ip VARBINARY(16) NULL,
  user_agent VARCHAR(255) NULL,
  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
- updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  KEY ix_login_codigo_fecha(codigo_intentado,created_at),
  KEY ix_login_ip_fecha(ip,created_at),
  CONSTRAINT fk_login_usuario FOREIGN KEY(usuario_id) REFERENCES usuario(id),
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS ubigeo (
  nombre VARCHAR(160) NOT NULL,
  activo TINYINT(1) NOT NULL DEFAULT 1,
  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
- updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  KEY ix_ubigeo_padre(padre_codigo,tipo,nombre),
  CONSTRAINT fk_ubigeo_padre FOREIGN KEY(padre_codigo) REFERENCES ubigeo(codigo),
  CONSTRAINT chk_ubigeo_nivel CHECK (
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS auditoria_evento (
  antes_json JSON NULL,
  despues_json JSON NULL,
  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
- updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  KEY ix_auditoria_recurso(recurso_tipo,recurso_id,created_at),
  KEY ix_auditoria_actor(usuario_id,created_at),
  CONSTRAINT fk_audit_sesion FOREIGN KEY(sesion_id) REFERENCES sesion(id),
@@ -265,7 +265,7 @@ CREATE TABLE IF NOT EXISTS idempotencia (
  response_status SMALLINT UNSIGNED NULL,
  response_json JSON NULL,
  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
- updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6)
+ updated_at DATETIME(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
  UNIQUE KEY uq_idem_usuario_clave(usuario_id,clave),
  KEY ix_idem_created_at(created_at),
  CONSTRAINT fk_idem_usuario FOREIGN KEY(usuario_id) REFERENCES usuario(id)
