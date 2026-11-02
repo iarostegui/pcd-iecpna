@@ -199,7 +199,11 @@ function db_all(PDO $pdo, string $sql, array $params = []): array
     $statement = $pdo->prepare($sql);
     $statement->execute($params);
 
-    return $statement->fetchAll();
+    // information_schema devuelve columnas en MAYÚSCULAS; se normalizan a minúsculas.
+    return array_map(
+        static fn (array $row): array => array_change_key_case($row, CASE_LOWER),
+        $statement->fetchAll(),
+    );
 }
 
 function db_value(PDO $pdo, string $sql, array $params = []): mixed
