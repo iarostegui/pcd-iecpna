@@ -1,0 +1,29 @@
+# Secretos y claves
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+# Dependencias y compilados
+node_modules/
+vendor/
+dist/
+frontend/dist/
+backend/vendor/
+coverage/
+.nyc_output/
+# Logs, backups y dumps
+*.log
+*.sql.gz
+*.sql.zip
+*.dump
+backups/
+.tmp/
+# IDE/SO
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

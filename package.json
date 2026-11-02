@@ -1,0 +1,17 @@
+{
+  "name": "pcd-iecpna-sdd",
+  "private": true,
+  "version": "4.1.0",
+  "description": "Validación de especificaciones PCD (la app productiva aún se construirá)",
+  "scripts": {
+    "check:sdd": "node scripts/validar-sdd-i00.cjs",
+    "check:prototype": "node scripts/validar-prototipo-v2.3.cjs",
+    "test": "npm run check:sdd && npm run check:prototype"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
