@@ -5,7 +5,7 @@
 | ID | Campo papel | Campo propuesto PCD | Regla |
 |---|---|---|---|
 | P01 | N.º ficha impresa | ficha.numero_ficha | Texto opcional, conserva ceros; no único |
-| P02 | Tipo documento DNI/C.E./Otro | persona.tipo_documento | Solo tipo; **no subtipo**. Descripción libre de «Otro» del papel, si existe, solo en JSON de fuente. |
+| P02 | Tipo documento DNI/C.E./Otro | persona.tipo_documento | Solo tipo; **no subtipo**. El detalle libre impreso en «Otro» no genera un tercer dato documental en PCD; si se necesita preservar en el futuro deberá aprobarse una ampliación. |
 | P03 | N.º documento | persona.numero_documento | Texto opcional, ceros preservados; deduplicar solo documentos confiables. |
 | P04 | Nombres | persona.nombres | Texto |
 | P05 | Apellido paterno | persona.apellido_paterno | Texto |
@@ -78,6 +78,12 @@ La fuente física se contrastó con [inventario-excel-original.md](fuentes/inven
 - La calidad de transcripción es responsabilidad de la **revisión manual externa de cada presbiterio**; la calidad calculada por PCD se limita a hechos verificables como faltantes, integridad y coincidencias documentales.
 - GC **no** incluye registro nominal de integrantes ni su pertenencia; solo el líder y datos agregados del grupo. Véase [levantamiento E1](../07-auditorias/etapa-1-resolucion.md).
 
-## Mapeo PCD V4.0 obligatorio
+## Mapeo PCD V4.1 obligatorio
 
-Se emplean exclusivamente 11 tablas. Los tipos de documento son **tipo/número**, sin subtipo en Persona ni en API; las secciones cónyuge y responsabilidades se guardan dentro de `ficha.datos_fuente_json`, no en tablas físicas independientes. `organizacion` contiene presbiterio/sede, `catalogo` las listas pequeñas y `ubigeo` el árbol oficial INEI a importar en I02. Para identidad global E1-D01 todavía se requiere decisión funcional. Consultar [diccionario físico](../03-base-datos/anexos/anexo-02-diccionario-fisico.md).
+Se emplean exclusivamente 11 tablas. Los tipos de documento son **tipo/número**, sin subtipo en Persona ni en API; las secciones cónyuge y responsabilidades se guardan dentro de `ficha.datos_fuente_json`, no en tablas físicas independientes. `organizacion` contiene presbiterio/sede, `catalogo` las listas pequeñas y `ubigeo` el árbol oficial INEI a importar en I02. **E1-D01 aprobada**: una nueva ficha de identidad documental confiable se vincula a la Persona existente incluso entre presbiterios, usando el endpoint aprobado, sin sobreescribir consolidado. Consultar [diccionario físico](../03-base-datos/anexos/anexo-02-diccionario-fisico.md).
+
+## Origen de secciones JSON V4.1
+- Cónyuge en [`conyuge`](../03-base-datos/esquemas-json/ficha-persona.schema.json), con `tipo_documento`, `numero_documento`, `nombres_apellidos`.
+- Responsabilidades en objeto `responsabilidades` con las dos descripciones/fechas y flags que aparecen en papel; no crear array libre ni tablas nuevas.
+- JSON de fuente requiere `schema_version='1.0'` y prohíbe campos adicionales; datos principales Persona/GC y control_papel permanecen en columnas físicas.
+- Alta de ficha usa `ficha.created_at/created_by`, sin evento de auditoría; solo ediciones registran cambios.
