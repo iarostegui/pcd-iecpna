@@ -25,13 +25,14 @@ curl -s http://127.0.0.1:8080/api/v1/health
 ## Endpoints del andamiaje
 | Método y ruta | Estado |
 |---|---|
-| `GET /api/v1/health` | Operativo (no es funcionalidad de negocio). |
+| `GET /api/v1/health` | **Liveness**: 200 si el proceso HTTP responde; no consulta MySQL. |
+| `GET /api/v1/ready` | **Readiness**: 200 `database.status=up`; 503 `ok=false` si MySQL no responde. |
 | `POST /api/v1/auth/login` | **501** placeholder de I01. |
 | `GET /api/v1/auth/me` | **501** placeholder de I01. |
 | `POST /api/v1/auth/logout` | **501** con CSRF obligatorio (token de I01). |
 | `GET /api/v1/presbiterios` | **501** placeholder de catálogos. |
 
-Los errores usan el sobre de OpenAPI: `{"error":{"code","message"},"request_id"}`.
+Los errores usan el sobre de OpenAPI: `{"error":{"code","message"},"request_id"}`. Las respuestas operativas no exponen entorno, credenciales, DSN, rutas internas ni trazas.
 
 ## Estructura
 - `public/index.php`: front controller; `public/.htaccess` para Apache/cPanel.

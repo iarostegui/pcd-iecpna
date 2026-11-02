@@ -17,7 +17,7 @@ vendor/bin/phpunit --configuration phpunit.xml --testdox
 ```bash
 php tests/api/run.php --base-url=http://127.0.0.1:8081/api/v1
 ```
-Verifica salud, sobre de error, 404/405/400, placeholders 501, CSRF, CORS y cabeceras. Estados:
+Verifica liveness (`/health`), readiness (`/ready` con MySQL arriba/abajo), sobre de error, 404/405/400, placeholders 501, CSRF, CORS y cabeceras. Estados:
 
 | Estado | Significado |
 |---|---|

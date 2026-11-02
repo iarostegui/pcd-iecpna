@@ -1,7 +1,8 @@
 # Andamiaje ejecutable — requisitos verificables
 
-## AND-01 — Salud del servicio
-GIVEN el backend desplegado WHEN se solicita `GET /api/v1/health` THEN responde 200 con `ok=true`, `request_id`, versión del andamiaje y estado de la BD, sin datos personales.
+## AND-01 — Salud y dependencias
+GIVEN el proceso HTTP activo WHEN se solicita `GET /api/v1/health` THEN responde 200 con `ok=true`, `request_id`, servicio y versión, **sin consultar MySQL ni exponer el entorno**.
+GIVEN MySQL caído WHEN se solicita `GET /api/v1/ready` THEN responde 503 con `ok=false` y `database.status=down`; GIVEN MySQL operativo THEN responde 200 con `status=ready` y `database.status=up`.
 
 ## AND-02 — Sobre de error uniforme
 GIVEN una ruta inexistente, un método no permitido o un cuerpo JSON inválido WHEN se procesa la solicitud THEN responde 404/405/400 con `{error:{code,message},request_id}` y sin trazas.

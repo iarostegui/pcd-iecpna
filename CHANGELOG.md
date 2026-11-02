@@ -4,7 +4,10 @@
 - Placeholders 501 para rutas de I01; no se implementan login, captura, consulta ni reportes.
 - `scripts/bootstrap-provision.php`: 24 DIGITADORES + ADMIN + REPORTES, idempotente, Argon2id y modo separado `admin-prod`.
 - Frontend React/TS/Vite con cliente HTTP centralizado, `request_id` y CSRF en memoria.
-- PHPUnit y runner HTTP de 22 verificaciones con estados PASS/FAIL/BLOCKED/NOT_IMPLEMENTED.
+- PHPUnit y runner HTTP de 23 verificaciones con estados PASS/FAIL/BLOCKED/NOT_IMPLEMENTED.
+- P01-O01: `/health` (liveness, sin MySQL) y `/ready` (readiness 200/503 según dependencia), con pruebas de ambos escenarios.
+- P01-O02: respuestas operativas sin identificador de entorno, credenciales, DSN, rutas internas ni trazas.
+- P01-O03: aprovisionamiento no destructivo; no actualiza perfil, presbiterio, activo ni claves existentes, e informa conflictos sin corregirlos (código 5).
 - CI con MySQL 8 real, PHPUnit, aprovisionamiento, runner y build del frontend.
 - Sin cambios en SQL, OpenAPI, prototipo V2.3 ni decisiones funcionales.
 ## 2026-11-01 — P00: consolidación de consistencia SDD V4.1

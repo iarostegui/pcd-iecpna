@@ -47,7 +47,7 @@ $dryRun = array_key_exists('dry-run', $options);
 $rotate = array_key_exists('rotate', $options);
 
 try {
-    match ($mode) {
+    $exitCode = match ($mode) {
         'uat' => runUat($dryRun),
         'admin-prod' => runAdminProd($dryRun, $rotate),
         default => throw new BootstrapError(sprintf('Modo no válido: %s (use uat o admin-prod).', $mode), 2),
@@ -60,9 +60,9 @@ try {
     exit(3);
 }
 
-exit(0);
+exit($exitCode);
 
-function runUat(bool $dryRun): void
+function runUat(bool $dryRun): int
 {
     $environment = strtolower((string) Env::get('PCD_ENV', 'local'));
 
@@ -84,7 +84,7 @@ function runUat(bool $dryRun): void
         $plan = Plan::build(fixedPresbiterios());
         printPlan($plan);
         fwrite(STDOUT, PHP_EOL . 'DRY-RUN: plan válido; no se conecta a BD ni se escribe nada.' . PHP_EOL);
-        return;
+        return 0;
     }
 
     assertArgon2id();
@@ -106,15 +106,18 @@ function runUat(bool $dryRun): void
 
     printPlan($plan);
     fwrite(STDOUT, sprintf(
-        PHP_EOL . 'Aprovisionamiento UAT: creados=%d, existentes=%d, total=%d.' . PHP_EOL
+        PHP_EOL . 'Aprovisionamiento UAT: creados=%d, existentes=%d, conflictos=%d, total=%d.' . PHP_EOL
         . 'Las contraseñas provienen del entorno y no se registran.' . PHP_EOL,
         $summary['created'],
         $summary['existing'],
+        count($summary['conflicts']),
         $summary['total'],
     ));
+
+    return printConflicts($summary['conflicts']);
 }
 
-function runAdminProd(bool $dryRun, bool $rotate): void
+function runAdminProd(bool $dryRun, bool $rotate): int
 {
     $environment = strtolower((string) Env::get('PCD_ENV', ''));
 
@@ -130,7 +133,7 @@ function runAdminProd(bool $dryRun, bool $rotate): void
     if ($dryRun) {
         printPlan(Plan::adminOnly());
         fwrite(STDOUT, PHP_EOL . 'DRY-RUN: solo se aprovisionaría el ADMIN nacional.' . PHP_EOL);
-        return;
+        return 0;
     }
 
     assertArgon2id();
@@ -141,17 +144,50 @@ function runAdminProd(bool $dryRun, bool $rotate): void
     if ($rotate) {
         $provisioner->rotateAdminPassword($adminPassword);
         fwrite(STDOUT, 'ADMIN-NAC rotado; auth_version incrementado y sesiones previas revocadas.' . PHP_EOL);
-        return;
+        return 0;
     }
 
     $summary = $provisioner->run(Plan::adminOnly(), ['ADMIN' => $adminPassword]);
     printPlan(Plan::adminOnly());
     fwrite(STDOUT, sprintf(
-        PHP_EOL . 'ADMIN productivo: creados=%d, existentes=%d.' . PHP_EOL
+        PHP_EOL . 'ADMIN productivo: creados=%d, existentes=%d, conflictos=%d.' . PHP_EOL
         . 'La contraseña proviene del entorno y no se registra.' . PHP_EOL,
         $summary['created'],
         $summary['existing'],
+        count($summary['conflicts']),
     ));
+
+    return printConflicts($summary['conflicts']);
+}
+
+/**
+ * Informa divergencias sin corregirlas. Devuelve 5 si existe al menos una.
+ *
+ * @param list<array{codigo:string, conflicts:list<array{campo:string, esperado:string|null, actual:string|null}>}> $conflicts
+ */
+function printConflicts(array $conflicts): int
+{
+    if ($conflicts === []) {
+        return 0;
+    }
+
+    fwrite(STDERR, PHP_EOL . 'CONFLICTOS detectados (no se modificó ninguna cuenta existente):' . PHP_EOL);
+
+    foreach ($conflicts as $userConflict) {
+        foreach ($userConflict['conflicts'] as $conflict) {
+            fwrite(STDERR, sprintf(
+                '  %s: %s esperado=%s actual=%s' . PHP_EOL,
+                $userConflict['codigo'],
+                $conflict['campo'],
+                $conflict['esperado'] ?? '(nulo)',
+                $conflict['actual'] ?? '(nulo)',
+            ));
+        }
+    }
+
+    fwrite(STDERR, 'Revise la cuenta y resuelva el conflicto por un procedimiento autorizado.' . PHP_EOL);
+
+    return 5;
 }
 
 /** @return list<array{id:int|null, codigo:string}> */

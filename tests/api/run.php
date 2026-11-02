@@ -142,24 +142,52 @@ $checks[] = ['id' => 'health_service_name', 'run' => static function () use ($ba
         : ['FAIL', 'service distinto'];
 }];
 
-$checks[] = ['id' => 'health_db_status_reported', 'run' => static function () use ($base): array {
+$checks[] = ['id' => 'health_hides_environment', 'run' => static function () use ($base): array {
     $response = http_request('GET', $base . '/health');
-    $status = json_path($response, 'database.status');
 
-    return in_array($status, ['up', 'down'], true)
-        ? ['PASS', (string) $status]
-        : ['FAIL', 'database.status ausente'];
-}];
-
-$checks[] = ['id' => 'db_connectivity', 'run' => static function () use ($base): array {
-    $response = http_request('GET', $base . '/health');
-    $status = json_path($response, 'database.status');
-
-    if ($status === 'up') {
-        return ['PASS', 'MySQL responde'];
+    if (!is_array($response['json'])) {
+        return ['FAIL', 'respuesta no JSON'];
     }
 
-    return ['BLOCKED', 'MySQL no disponible en este entorno'];
+    $forbidden = ['env', 'environment', 'database', 'password', 'secret', 'dsn'];
+
+    foreach ($forbidden as $key) {
+        if (array_key_exists($key, $response['json'])) {
+            return ['FAIL', 'expone la clave ' . $key];
+        }
+    }
+
+    return ['PASS', 'sin entorno ni configuración sensible'];
+}];
+
+$checks[] = ['id' => 'readiness_db_up', 'run' => static function () use ($base): array {
+    $response = http_request('GET', $base . '/ready');
+    $database = json_path($response, 'database.status');
+
+    if ($response['status'] === 200 && $database === 'up') {
+        return ['PASS', 'ready (MySQL responde)'];
+    }
+
+    if ($response['status'] === 503 && $database === 'down') {
+        return ['BLOCKED', 'MySQL no disponible en este entorno'];
+    }
+
+    return ['FAIL', 'HTTP ' . $response['status'] . ' database=' . (string) $database];
+}];
+
+$checks[] = ['id' => 'readiness_payload_shape', 'run' => static function () use ($base): array {
+    $response = http_request('GET', $base . '/ready');
+    $ok = json_path($response, 'ok');
+    $status = json_path($response, 'status');
+    $database = json_path($response, 'database.status');
+
+    $validOk = in_array($ok, [true, false], true);
+    $validStatus = in_array($status, ['ready', 'not_ready'], true);
+    $validDatabase = in_array($database, ['up', 'down'], true);
+
+    return $validOk && $validStatus && $validDatabase
+        ? ['PASS', 'ok/status/database coherentes']
+        : ['FAIL', 'payload de readiness incompleto'];
 }];
 
 $checks[] = ['id' => 'request_id_in_body', 'run' => static function () use ($base): array {

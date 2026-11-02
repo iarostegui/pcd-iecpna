@@ -31,8 +31,10 @@ php scripts/bootstrap-provision.php --mode=admin-prod --rotate
 Variables: `PCD_DB_HOST`, `PCD_DB_PORT`, `PCD_DB_NAME`, `PCD_DB_USER`, `PCD_DB_PASSWORD`, `PCD_UAT_DIGITADOR_PASSWORD`, `PCD_ADMIN_PASSWORD`, `PCD_REPORTES_PASSWORD`.
 
 Reglas:
-- Idempotente por `usuario.codigo`; no duplica cuentas ni sobrescribe hashes existentes.
+- Idempotente por `usuario.codigo`; no duplica cuentas.
+- **Segunda ejecución no modifica** credenciales, perfil, presbiterio ni `activo` de cuentas existentes.
+- Si una cuenta existente difiere del plan (perfil, presbiterio o cuenta deshabilitada), **informa el conflicto sin corregirlo** y devuelve código 5; nunca reactiva cuentas.
 - **Argon2id obligatorio**; si PHP no lo ofrece, aborta (código 4) y no usa otro algoritmo.
 - La clave común de DIGITADOR es **solo UAT**; antes de producción se rota a credenciales individuales.
 - No imprime contraseñas ni hashes; las credenciales se leen del entorno.
-- Códigos de salida: `0` correcto, `2` configuración, `3` BD, `4` Argon2id ausente.
+- Códigos de salida: `0` correcto, `2` configuración, `3` BD, `4` Argon2id ausente, `5` conflictos detectados sin corregir.

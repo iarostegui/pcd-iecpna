@@ -103,7 +103,7 @@ jobs:
           done
           curl -fsS http://127.0.0.1:8081/api/v1/health
 
-      - name: Runner HTTP (22 verificaciones)
+      - name: Runner HTTP (23 verificaciones)
         run: php tests/api/run.php --base-url=http://127.0.0.1:8081/api/v1
 
       - name: Log del servidor

@@ -105,7 +105,8 @@ final class App
     private static function router(): Router
     {
         $router = new Router();
-        $router->add('GET', '/health', [HealthController::class, 'show']);
+        $router->add('GET', '/health', [HealthController::class, 'liveness']);
+        $router->add('GET', '/ready', [HealthController::class, 'readiness']);
         $router->add('POST', '/auth/login', [PlaceholderController::class, 'notImplemented']);
         $router->add('GET', '/auth/me', [PlaceholderController::class, 'notImplemented']);
         $router->add('POST', '/auth/logout', [PlaceholderController::class, 'notImplemented'], true);

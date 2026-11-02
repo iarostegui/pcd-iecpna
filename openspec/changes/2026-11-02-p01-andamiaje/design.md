@@ -21,14 +21,15 @@
 - `Security\Csrf`: sesión `HttpOnly/SameSite`, token aleatorio y comparación en tiempo constante.
 - `Http\Middleware\CsrfMiddleware`: solo rutas marcadas (p. ej. logout), nunca el login pre-sesión.
 - `Http\Middleware\CorsMiddleware`: orígenes permitidos por entorno; preflight 204.
-- `Controller\HealthController`: `GET /api/v1/health` con estado de BD.
+- `Controller\HealthController`: `GET /api/v1/health` (liveness, sin BD ni entorno) y `GET /api/v1/ready` (readiness 200/503 según MySQL).
 - `Controller\PlaceholderController`: 501 uniforme para rutas del contrato que pertenecen a I01.
 - `Provisioning\Plan` / `Provisioning\Provisioner`: plan puro y ejecución transaccional idempotente.
 
 ## API del andamiaje
 | Ruta | Estado | Nota |
 |---|---|---|
-| `GET /api/v1/health` | Implementada | Operativa, fuera de OpenAPI; no es funcionalidad de negocio. |
+| `GET /api/v1/health` | Implementada | Liveness: 200 sin consultar MySQL ni exponer entorno. |
+| `GET /api/v1/ready` | Implementada | Readiness: 200 con MySQL arriba y 503 si no responde. |
 | `POST /api/v1/auth/login` | Placeholder 501 | Contrato reservado a I01. |
 | `GET /api/v1/auth/me` | Placeholder 501 | Contrato reservado a I01. |
 | `POST /api/v1/auth/logout` | Placeholder 501 con CSRF | Verifica middleware antes de responder. |
