@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcd.unobdata.com/schemas/ficha-persona-1",
+  "title": "PCD ficha Persona — origen",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "conyuge": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "tipo_documento": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "DNI",
+            "CE",
+            "OTRO",
+            null
+          ]
+        },
+        "numero_documento": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 60
+        },
+        "nombres_apellidos": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 260
+        }
+      }
+    },
+    "responsabilidades": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "es_pastor_sede": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "nombre_sede_pastoreada": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "es_presbitero": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "region_presbitero": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tiene_responsabilidad": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "descripcion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fecha_desde": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "otra_descripcion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "otra_fecha_desde": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    }
+  }
+}
