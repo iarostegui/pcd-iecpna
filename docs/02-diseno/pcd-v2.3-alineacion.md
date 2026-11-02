@@ -10,11 +10,11 @@
 | Pantalla / interacción | Diferencia V2.2 → V2.3 | Regla / implementación real |
 |---|---|---|
 | Login | Desplegable de cuentas sustituido por **código de usuario escrito**; contraseña sin valor precargado. | AUTH-01, AUTH-05; en backend, cuentas reales/contraseñas hash, 401/429, cookie protegida, CSRF. **Nunca copiar DEMO_KEYS**. |
-| Login de prueba | Claves **ficticias distintas** para digitador, ADMIN y REPORTES. Se aclara que son visibles en HTML. | H-03: en producción clave inicial común exclusivamente DIGITADOR, nacionales con secretos separados, controles compensatorios. |
+| Login de prueba | Claves **ficticias distintas** para digitador, ADMIN y REPORTES. Se aclara que son visibles en HTML. | H-03: contraseña común solo para pruebas/UAT DIGITADOR; antes del pase productivo rotar a credenciales individuales, nacionales con secretos separados y controles. |
 | Consultar fichas | Consulta **nacional/general** dentro de la funcionalidad para DIGITADOR/ADMIN; filtros opcionales Presbiterio y/o Sede, autor y calidad. | H-12/RN-29/REP-09; backend autentica funcionalidad; **no** autorización territorial de lectura por usuario. |
 | Consulta vs edición | Las fichas de otros digitadores se ven pero no presentan acciones de edición. | PER-04: DIGITADOR modifica solo propias; ADMIN según rol; REPORTES no escribe. Comprobar en servidor, no solo UI. |
 | Detalle de Persona | Omite coordenadas GPS de un detalle ordinario. | Datos GPS son de `sesion` y solo para controles/auditoría ADMIN, no DTO nominal habitual. |
-| Duplicados | Coincidencia DNI confiable accesible para consulta; sin instrucción de conciliación con otro presbiterio. Documento OTRO/C.E. queda como señal potencial, no fusión exacta. | H-13/E1-D01. **IMPORTANTE**: la demo todavía bloquea intentar duplicar un DNI ya registrado; la vinculación de nueva ficha a Persona global es **decisión E1-D01 aprobada**; NO copiar ese bloqueo como regla final hasta cerrar la decisión. |
+| Duplicados | Coincidencia DNI confiable accesible para consulta; sin instrucción de conciliación con otro presbiterio. Documento OTRO/C.E. queda como señal potencial, no fusión exacta. | H-13/E1-D01. **IMPORTANTE:** la demo bloquea un DNI duplicado, pero la regla productiva E1-D01 es vincular nueva ficha a Persona existente SIN bloqueo de captura ni cambio de consolidado. hasta cerrar la decisión. |
 | Grupo Crecer | Se elimina el selector no respaldado por ficha «¿Ya está digitado?» y su reconciliación. Se conserva **«¿El grupo ya existe?»** del papel. Nombre repetido → advertencia, no bloqueo ni fusión. | GC-03/05, H-08/H-25. **E1-D02/H-23 siguen pendientes**; no inventar maestro de GC o asignación automática a líder distinto. |
 | Fechas | Las fechas de calendario imposibles se rechazan también en borradores; se puede dejar en blanco. | H-05 y PER-08; validación fecha real `DATE`/NULL en PHP y React, sin guardar texto 31/02/1998. |
 | Revisión de calidad | Se elimina el texto de supervisor; revisión de exactitud del papel será manual **fuera de PCD** por presbiterios. | H-09/RN-22 y PER-09. Reportes de completitud son automáticos, no prueba de fidelidad. |
@@ -31,7 +31,7 @@
 El storage ahora usa `pcd_iecpna_demo_v2_3`, **separado** del de V2.2 para evitar contaminación de demostraciones. El formulario sigue el orden del papel y mantiene el diseño responsive.
 
 ## 3. Pendientes no resueltos por la maqueta
-- **E1-D01:** cómo conservar una ficha adicional vinculada a una Persona documentalmente existente en otro presbiterio sin sobrescribir su consolidado.
+- **E1-D01 APROBADA:** conservar ficha adicional vinculada a una Persona documentalmente existente en otro presbiterio SIN sobrescribir su consolidado. El endpoint es parte del contrato.
 - **E1-D02:** alcance de «GC ya existe» ante una captura previa.
 - **H-23:** crear una ficha GC vinculada a Persona cuyo autor es otro digitador.
 - **H-24:** dato mínimo para evitar una ficha completamente vacía permitiendo incompletas.

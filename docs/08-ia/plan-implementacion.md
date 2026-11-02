@@ -40,7 +40,7 @@
 **H-46 integrado en I01/I06:** controlar frecuencia de actualización de sesión, validación de hashing PHP, limpieza acotada de idempotencia y métricas p95 sin servicio adicional ni tablas. [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md) · [CA-112…114](../05-pruebas/casos-prueba.md).
 
 ## Etapa 5 — Preparación técnica I00
-La [guía I00](I00-verificacion-estatica-y-handoff.md) incluye script [`validar-sdd-i00.cjs`](../../scripts/validar-sdd-i00.cjs) y checklist de pruebas reales. Generar evidencia del motor real antes de declarar I00 terminada; evitar repetir propuestas fuera de alcance y no depender de las decisiones E1-D01/E1-D02 para comenzar I00.
+La [guía I00](I00-verificacion-estatica-y-handoff.md) incluye script [`validar-sdd-i00.cjs`](../../scripts/validar-sdd-i00.cjs) y checklist de pruebas reales. Generar evidencia del motor real antes de declarar I00 terminada; evitar repetir propuestas fuera de alcance y no depender de E1-D02/H-23/H-24 para comenzar I00 (E1-D01 aprobada).
 
 ## Criterios técnicos obligatorios ratificados 01/11/2026
 - Los cuatro presbiterios **LIM/TRU/CHI/IQU** están en seed y no son CRUD. Sedes sí se agregan por usuario autorizado; comparar sin tildes.

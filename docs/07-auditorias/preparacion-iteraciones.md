@@ -25,8 +25,8 @@ La **revisión de fidelidad del texto con el papel** corresponde a cada presbite
 | Iteración | Preparación lograda | Pendiente antes de GO / ejecución |
 |---|---|---|
 | I00 | SQL inicial E2, catálogos/semillas y OpenAPI documentados. | Verificar versión MySQL/MariaDB real, ejecutar `001_initial.sql` y semillas en BD **de prueba**, lint API y pruebas de CHECK/FK. |
-| I01 | Login/contexto/sesiones/roles/auditoría documentados con CA-56…65/66/67/76. | E2-D02 contexto nacional, mitigación clave compartida, pruebas de SQL/API; producción además requiere E2-D03. |
-| I02 | Normalización DNI/OTRO y catálogo, criticidad, esquema fuente. | E1-D01, E2-D01, ubigeo/CE si aplica, API de fichas y control de acceso; tests. |
+| I01 | Login/contexto/sesiones/roles/auditoría documentados con CA-56…65/66/67/76. | E2-D02 contexto nacional, mitigación clave compartida, pruebas de SQL/API; producción requiere credenciales cambiadas respecto a UAT y H-40. |
+| I02 | Normalización DNI/OTRO y catálogo, criticidad, esquema fuente. | E1-D01 aprobada, E2-D01 resuelta, ubigeo/CE si aplica, API de fichas y control de acceso; tests. |
 | I03 | Líder GC solo vía ficha; FK/CHECK propuestas. | E1-D02 y prueba física; contratos/test funcionales. |
 | I04 | Consulta por presbiterio como base del prototipo. | E2-D01 y pruebas de no exposición cross-scope. |
 | I05 | Matriz críticos y cálculo dinámico. | Prueba de informes con cambios ADMIN y control nacional. |
@@ -42,7 +42,7 @@ La **revisión de fidelidad del texto con el papel** corresponde a cada presbite
 
 ## Etapa 3 — puertas de entrada
 - I01: los contratos de login, permisos nacionales y scope configurable están definidos, pero faltan lint formal y pruebas PHP/MySQL.
-- I02: DTO de Persona/ficha y filtros preparados; E1-D01 y H-24 requieren decisión, además del Excel binario y ubigeo en la construcción.
+- I02: DTO de Persona/ficha y filtros preparados; H-24 requiere decisión (E1-D01 ya aprobada), además del Excel binario y ubigeo en la construcción.
 - I03: el control 409 usa la versión de ficha GC; E1-D02/H-23 y pruebas FK bloquean GO.
 - I04: ámbito GENERAL/PRESBITERIO **aprobado**; falta implementar API y tests de edición solo propia.
 - I05: reportes por actor de auditoría, filtros y parametrización aprobados, sin resultados probados.
@@ -51,10 +51,17 @@ La **revisión de fidelidad del texto con el papel** corresponde a cada presbite
 ## V4 — actualizaciones obligatorias de puertas I00–I06
 - **I00:** SQL de **11 tablas**, fuente [Anexo ER](../03-base-datos/anexos/anexo-01-diagrama-fisico.md), [diccionario](../03-base-datos/anexos/anexo-02-diccionario-fisico.md). Probar MySQL real antes del GO.
 - **I01:** sesión con GPS dentro de `sesion`, ORGANIZACION única para presbiterios y sedes, usuario con presbiterio operativo. Sin `usuario_presbiterio`.
-- **I02:** Persona y Ficha, solo tipo+número, cónyuge/responsabilidades en JSON, entrada UBIGEO INEI oficial; E1-D01 y H-24 pendientes.
+- **I02:** Persona y Ficha, solo tipo+número, cónyuge/responsabilidades en JSON, entrada UBIGEO INEI oficial; H-24 pendiente; E1-D01 aprobada.
 - **I03:** Grupo Crecer solo líder desde ficha y datos agregados, E1-D02/H-23 pendientes.
 - **I04:** **consulta total** en funcionalidad permitida con filtros presbiterio/sede, edición digitador solo propias.
 - **I05:** cambios de críticos en `catalogo.config_json`, sin tabla física `campo_critico` ni ámbitos de lectura configurables.
 - **I06:** [PROD-01…10](../06-despliegue/checklist-produccion.md) y [Etapa 4](etapa-4-produccion-y-privacidad.md). H-40 pendiente.
 
 **Los estados o GO expresados antes de V4 quedan invalidados cuando supongan 17 tablas, permisos territoriales o subtipo**; las pruebas deben replanificarse.
+
+## Cierre de bloqueos V4.1 para I00/I01/I02
+- E1-D01 aprobado: vinculación entre presbiterios por documento confiable a través de endpoint, sin modificar consolidado. No condiciona I02 a nueva decisión E1-D01.
+- E2-D01/D02/D03 resueltas; claves compartidas **solo UAT**, cambio individual antes de producción.
+- Los cuatro presbiterios se precargan; UI no gestiona altas, solo sede.
+- H-24, E1-D02 y H-23 siguen como decisiones pendientes propias de su iteración.
+- Validación CI estática PASS; motor SQL/backend no probados.

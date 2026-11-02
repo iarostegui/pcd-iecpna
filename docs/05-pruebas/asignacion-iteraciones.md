@@ -14,7 +14,7 @@
 ## Casos E3 adicionales (ver matriz principal)
 CA-77…CA-100 cubren contratos de éxito/error, consulta configurable, conflicto de versión, idempotencia con payload distinto, métricas, edición admin y no replicar funciones de supervisor. Están **diseñados, no ejecutados**.
 
-**Regla:** los casos con decisión funcional pendiente (E1-D01/D02; H-23/H-24) se marcan `BLOQUEADO` hasta aprobar sus requisitos, en lugar de falsear un PASS.
+**Regla:** los casos con decisión funcional pendiente (E1-D02; H-23/H-24) se marcan `BLOQUEADO` hasta aprobar sus requisitos, en lugar de falsear un PASS.
 
 
 ## Ajuste V4
