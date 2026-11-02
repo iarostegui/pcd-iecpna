@@ -16,6 +16,10 @@ frontend/dist/
 backend/vendor/
 coverage/
 .nyc_output/
+# Herramientas locales y cachés de build
+.tools/
+*.tsbuildinfo
+backend/.phpunit.cache/
 # Logs, backups y dumps
 *.log
 *.sql.gz

@@ -3,14 +3,26 @@
 >
 > **Fuente vigente para construcción:** **SDD V4.1**, [ALC-PCD-4.0](docs/01-analisis/alcance-funcional.md), [decisiones](docs/01-analisis/decisiones-pendientes.md), [aprobaciones](docs/08-ia/APROBACIONES.md), [OpenSpec](openspec/specs/README.md), [API](docs/04-integracion/openapi.yaml), [SQL de 11 tablas](database/migrations/001_initial.sql).
 >
-> **Estado:** especificaciones y prototipo HTML V2.3 disponibles; todavía NO existen frontend React/backend PHP productivos ni SQL probado en hosting.
+> **Estado:** P00 consolidó la especificación V4.1. **P01 aporta un andamiaje ejecutable** (API PHP 8.2 + React/TS/Vite) con salud, errores, PDO, CSRF/CORS y aprovisionamiento; **los procesos funcionales I01–I05 siguen pendientes**. El SQL no está probado en el hosting.
 
 ## Para empezar
 1. Leer [AGENTS.md](AGENTS.md) antes de usar una IA para implementar o revisar.
 2. Revisar [alcance aprobado](docs/01-analisis/alcance-funcional.md) y [cambios V4.1 para especialista](docs/07-auditorias/ENTREGA-REVISION-ESPECIALISTA-V4.1.md).
 3. Revisar [modelo lógico/físico](docs/03-base-datos/README.md), [JSON fuente](docs/03-base-datos/esquemas-json/README.md), [OpenAPI](docs/04-integracion/openapi.yaml), [prototipo V2.3](prototypes/PCD_v2.3.html).
-4. Ejecutar validación estática con dependencias reproducibles: `npm ci` y `npm test` (lockfile versionado); las pruebas SQL/API reales siguen pendientes.
+4. Ejecutar validación documental reproducible: `npm ci` y `npm test`.
 5. [Plan I00–I06](docs/08-ia/plan-implementacion.md) y [checklist productivo](docs/06-despliegue/checklist-produccion.md).
+
+### Andamiaje P01
+```bash
+# API PHP 8.2
+(cd backend && composer install)
+cp backend/.env.example backend/.env      # editar localmente
+php -S 127.0.0.1:8080 -t backend/public backend/public/router.php
+
+# Frontend React/TS/Vite
+(cd frontend && npm ci && npm run dev)
+```
+Pruebas: `(cd backend && vendor/bin/phpunit)` y `php tests/api/run.php --base-url=http://127.0.0.1:8080/api/v1`.
 
 ## Directorios
 | Carpeta | Uso |
@@ -20,10 +32,10 @@
 | [openspec/changes/](openspec/changes/README.md) | Cambios históricos y decisiones de ingeniería. No implementar versiones antiguas sin comprobación. |
 | [database/](database/README.md) | SQL/semillas; cuatro presbiterios precargados, sedes editables. |
 | [prototypes/](prototypes/README.md) | V2.3 = UI vigente; V2.2 = histórico. |
-| [frontend/](frontend/README.md) | Futuro React/TS/Vite. |
-| [backend/](backend/README.md) | Futuro PHP REST/PDO. |
-| [tests/](tests/README.md) | Pruebas automatizadas y evidencias de ejecución. |
-| [scripts/](scripts/README.md) | Validadores documentales. |
+| [frontend/](frontend/README.md) | React/TS/Vite: andamiaje P01, sin formularios funcionales. |
+| [backend/](backend/README.md) | API PHP 8.2/PDO: andamiaje P01, placeholders 501. |
+| [tests/](tests/README.md) | PHPUnit y runner HTTP con estados verificables. |
+| [scripts/](scripts/README.md) | Validadores documentales y aprovisionamiento de cuentas. |
 
 **Cambios:** [CHANGELOG](CHANGELOG.md). **Estado real:** [estado-documental](docs/08-ia/estado-documental.md). **Protocolo de auditoría:** [AUD-PCD-01](docs/07-auditorias/protocolo-auditoria-alcance.md).
 

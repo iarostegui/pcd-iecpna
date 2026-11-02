@@ -1,4 +1,15 @@
 # Changelog documental y técnico — PCD
+## 2026-11-02 — P01: andamiaje ejecutable
+- Backend PHP 8.2 (Composer/PSR-4 `Pcd\`), router explícito, manejo centralizado de errores, PDO utf8mb4, CSRF/CORS y `GET /api/v1/health`.
+- Placeholders 501 para rutas de I01; no se implementan login, captura, consulta ni reportes.
+- `scripts/bootstrap-provision.php`: 24 DIGITADORES + ADMIN + REPORTES, idempotente, Argon2id y modo separado `admin-prod`.
+- Frontend React/TS/Vite con cliente HTTP centralizado, `request_id` y CSRF en memoria.
+- PHPUnit y runner HTTP de 23 verificaciones con estados PASS/FAIL/BLOCKED/NOT_IMPLEMENTED.
+- P01-O01: `/health` (liveness, sin MySQL) y `/ready` (readiness 200/503 según dependencia), con pruebas de ambos escenarios.
+- P01-O02: respuestas operativas sin identificador de entorno, credenciales, DSN, rutas internas ni trazas.
+- P01-O03: aprovisionamiento no destructivo; no actualiza perfil, presbiterio, activo ni claves existentes, e informa conflictos sin corregirlos (código 5).
+- CI con MySQL 8 real, PHPUnit, aprovisionamiento, runner y build del frontend.
+- Sin cambios en SQL, OpenAPI, prototipo V2.3 ni decisiones funcionales.
 ## 2026-11-01 — P00: consolidación de consistencia SDD V4.1
 - Casos CA-06/25/39/40/48/58/66/67/68/69/72 alineados a H-03/H-12/H-13/E1-D01 y ALC-03, sin renumerar IDs.
 - E1-CA-01 alineado a H-12: consulta general de la funcionalidad y edición solo del autor, sin restricción de visualización ajena.

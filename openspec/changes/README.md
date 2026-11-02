@@ -2,7 +2,7 @@
 
 [↑ openspec](../README.md) · [↑ Índice principal](../../README.md)
 
-**Estado actual:** no hay cambios abiertos registrados; el directorio contenía un marcador `.gitkeep`.
+**Estado actual:** cambio P01 abierto (andamiaje técnico); el resto son antecedentes.
 
 Cuando una modificación se apruebe, crear una carpeta `YYYY-MM-DD-descripcion/` con:
 
@@ -14,6 +14,9 @@ Cuando una modificación se apruebe, crear una carpeta `YYYY-MM-DD-descripcion/`
 | `tasks.md` | Actividades y verificación por iteración. |
 
 **Regla:** después de implementar y verificar, consolidar el requisito en [specs vigentes](../specs/README.md), actualizar índices/documentos afectados y registrar cierre del cambio. No documentar cambios del **SGSP** en este repositorio PCD.
+
+## Cambio P01 abierto
+- [2026-11-02-p01-andamiaje/](2026-11-02-p01-andamiaje/proposal.md) — andamiaje PHP 8.2 + React/TS/Vite, aprovisionamiento idempotente y runner HTTP. **No implementa I01–I05** ni modifica SQL/OpenAPI.
 
 ## Cambio E1 abierto
 [2026-10-31-levantamiento-etapa-1/](2026-10-31-levantamiento-etapa-1/README.md) — deltas H-01, H-02, H-05, H-08, H-09, H-14. **Propuesto, no consolidado en specs vigentes ni codificado**.

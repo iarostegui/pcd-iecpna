@@ -1,11 +1,27 @@
-# frontend — Aplicación web productiva (pendiente de implementación)
+# frontend — React + TypeScript + Vite (andamiaje P01)
 
 [↑ Índice principal](../README.md)
 
-**Estado actual:** carpeta preparada; **no contiene aún código React productivo** (solo `.gitkeep`).
+**Estado:** andamiaje ejecutable. Cliente HTTP centralizado, manejo uniforme de errores y preparación de CSRF. **No contiene login, captura, consulta ni reportes** (I01–I05).
 
-**Contenido previsto:** proyecto **React + TypeScript + Vite**, formularios de Persona/GC, login por presbiterio, selector de sede, consultas, administración y reportes; componentes reutilizables, cliente HTTP tipado y pruebas de interfaz. El compilado se publicará en el Document Root del subdominio, sin mantener Node.js ejecutándose en el servidor.
+## Comandos
+```bash
+npm ci
+npm run dev       # http://localhost:5173 con proxy /api -> 127.0.0.1:8080
+npm run build     # tsc -b && vite build -> dist/
+npm run typecheck
+```
 
-**Leer antes de implementar:** [prototipo V2.2](../prototypes/PCD_v2.2.html), [UX](../docs/02-diseno/ux-prototipo.md), [diseño de componentes](../docs/02-diseno/diseno-componentes.md), [OpenAPI](../docs/04-integracion/openapi.yaml) y [specs](../openspec/README.md).
+## Variables de entorno
+`VITE_API_BASE_URL` (por defecto `/api/v1`). Copiar `.env.example`; nunca incluir secretos.
 
-**Prohibiciones:** no usar `localStorage` para fichas reales, contraseñas o coordenadas; no decidir permisos solo en React; no cambiar la identidad visual aprobada sin acuerdo.
+## Estructura
+- `src/api/client.ts`: `fetch` con `credentials: include`, timeout, `ApiError` normalizado y `X-CSRF-Token` en memoria (nunca `localStorage`).
+- `src/api/types.ts`: sobres de respuesta/error compatibles con OpenAPI.
+- `src/App.tsx`: consola mínima que consulta `GET /health` y muestra errores con `request_id`.
+
+## Despliegue
+El resultado de `npm run build` es estático (`dist/`) y se publica en cPanel. **No requiere Node residente** en el hosting.
+
+## Prohibiciones
+No usar `localStorage` para fichas, credenciales o coordenadas; no decidir permisos solo en React; no implementar funcionalidades fuera de ALC-PCD.
