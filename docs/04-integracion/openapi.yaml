@@ -187,6 +187,15 @@ components:
         csrf_token: { type: string, description: 'Solo sesión autenticada, nunca secreto localStorage.' }
         vence_inactividad_en: { type: string, format: date-time }
         vence_absoluta_en: { type: string, format: date-time }
+        usuario_codigo: { type: string, description: 'Extensión aditiva I01 para mostrar la identidad autenticada.' }
+        usuario_nombre: { type: string, description: 'Extensión aditiva I01; no sustituye autorización server-side.' }
+        presbiterio_nombre: { type: string, description: 'Etiqueta visible del contexto; el permiso se valida por ID.' }
+        sede_nombre: { type: string, nullable: true, description: 'Etiqueta visible de la sede contextual.' }
+        geo_estado:
+          type: string
+          nullable: true
+          enum: [OK, DENEGADA, NO_DISPONIBLE, ERROR]
+          description: 'Extensión aditiva I01: permite a React no repetir la solicitud GPS de la sesión; no expone coordenadas.'
     PresbiterioPublico:
       type: object
       description: Proyección pública de organizacion tipo PRESBITERIO (sin datos de usuarios).
@@ -244,6 +253,10 @@ components:
         presbiterio_id: { type: integer }
         nombre_oficial: { type: string }
         ubicacion_referencia: { type: string, nullable: true }
+        advertencia:
+          type: string
+          nullable: true
+          description: 'Extensión aditiva I01: similitud no bloqueante al crear una sede.'
     BusquedaSedes:
       type: object
       properties:
@@ -351,11 +364,13 @@ paths:
       security: [{ cookieAuth: [], csrf: [] }]
       responses:
         '204': { description: 'Sesión invalidada' }
+        '401': { description: 'No autenticado o sesión expirada/revocada; se valida antes de CSRF', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '403': { description: 'Token CSRF ausente o inválido', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /auth/ubicacion:
     post:
       tags: [auth]
       security: [{ cookieAuth: [], csrf: [] }]
-      description: 'Ubicacion autodeclarada por cliente; no constituye prueba fisica. Un intento por sesion. Servidor registra hora de recepcion.'
+      description: 'Ubicacion autodeclarada por cliente; no constituye prueba fisica. Un intento por sesion: la primera actualizacion condicional gana y las concurrentes reciben 409 con la ubicacion original. Servidor registra hora de recepcion.'
       requestBody:
         required: true
         content:
@@ -363,7 +378,10 @@ paths:
             schema: { $ref: '#/components/schemas/Location' }
       responses:
         '200': { description: 'Ubicación de sesión original o recién guardada', content: { application/json: { schema: { $ref: '#/components/schemas/Location' } } } }
-        '409': { description: 'Ubicación ya capturada (se devuelve la primera)', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '401': { description: 'No autenticado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '403': { description: 'Token CSRF ausente o inválido', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '409': { description: 'Ubicación ya capturada; dos solicitudes concurrentes no sobrescriben la primera (se devuelve en details.ubicacion)', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '422': { description: 'Estado o coordenadas inválidas', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /presbiterios:
     get:
       tags: [catalogos]
@@ -428,6 +446,7 @@ paths:
           schema: { type: string }
       responses:
         '200': { description: 'Sedes disponibles para seleccionar dentro del contexto de digitación (padre PRESBITERIO)', content: { application/json: { schema: { $ref: '#/components/schemas/BusquedaSedes' } } } }
+        '401': { description: 'No autenticado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
     post:
       tags: [catalogos]
       security: [{ cookieAuth: [], csrf: [] }]
@@ -440,7 +459,11 @@ paths:
             schema: { $ref: '#/components/schemas/NewSede' }
       responses:
         '201': { description: 'Sede creada y disponible', content: { application/json: { schema: { $ref: '#/components/schemas/Sede' } } } }
-        '409': { description: 'Duplicado normalizado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '400': { description: 'Idempotency-Key ausente', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '401': { description: 'No autenticado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '403': { description: 'CSRF inválido o perfil REPORTES de solo lectura', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '409': { description: 'Duplicado normalizado o conflicto de idempotencia', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '422': { description: 'Nombre o referencia inválidos', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /contexto/presbiterio:
     put:
       tags: [auth]
@@ -457,7 +480,8 @@ paths:
                 presbiterio_id: { type: integer }
       responses:
         '200': { description: 'Contexto actualizado; sede se vuelve a seleccionar', content: { application/json: { schema: { $ref: '#/components/schemas/AuthMe' } } } }
-        '403': { description: 'Solo ADMIN; digitador no cambia presbiterio', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '401': { description: 'No autenticado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '403': { description: 'Solo ADMIN; digitador/reportes no cambia presbiterio', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
         '422': { description: 'Presbiterio inactivo o inválido', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /contexto/sede:
     put:
@@ -474,7 +498,9 @@ paths:
                 sede_id: { type: integer }
       responses:
         '200': { description: 'Sede contextual consistente', content: { application/json: { schema: { $ref: '#/components/schemas/AuthMe' } } } }
-        '403': { description: 'Sede fuera de ámbito', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '401': { description: 'No autenticado', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '403': { description: 'Sede fuera de ámbito o perfil REPORTES', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '422': { description: 'sede_id ausente o inválido', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
   /personas/duplicados:
     get:
       tags: [personas]

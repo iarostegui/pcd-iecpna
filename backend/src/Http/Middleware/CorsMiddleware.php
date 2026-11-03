@@ -29,7 +29,7 @@ final class CorsMiddleware
 
             if ($request->method === 'OPTIONS') {
                 Response::empty($request, 204, array_merge($headers, [
-                    'Access-Control-Allow-Methods' => 'GET, POST, PATCH, DELETE, OPTIONS',
+                    'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
                     'Access-Control-Allow-Headers' => 'Content-Type, X-CSRF-Token, X-Request-Id, Idempotency-Key',
                     'Access-Control-Max-Age' => '600',
                 ]));

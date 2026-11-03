@@ -3,6 +3,8 @@ Cada caso debe reportar: estado `NO_EJECUTADO/PASÓ/FALLÓ/BLOQUEADO`, evidencia
 
 **Vigencia:** los casos redactados antes de V4.1 se actualizan a la decisión vigente sin renumerar su ID; la redacción anterior queda en el historial Git (CA-06, CA-25, CA-48, CA-68, CA-69 y CA-72).
 
+**Ejecución I01 (02/11/2026):** CA-01…CA-14, CA-56…CA-60, CA-61…CA-67, CA-76, CA-84, CA-91, CA-92, CA-94, CA-110, CA-112, CA-113, CA-114, CA-115, CA-123 tienen ejecución automatizada en `tests/api/i01.php` contra MySQL de prueba, además de PHPUnit y Vitest. Resultado local: 42 PASS/0 FAIL/0 BLOCKED (incluye I01-O01…O03). La evidencia CI con MySQL 8 se adjunta al PR; **no es GO productivo**.
+
 | ID | Prueba GIVEN / WHEN / THEN | Prioridad |
 |---|---|---|
 | CA-01 | Login sin presbiterio → rechaza | P0 |
@@ -173,3 +175,11 @@ Los casos **CA-101…CA-111** se detallan en [validacion-prototipo-v2.3.md](vali
 | **CA-124** | Seguridad: datos GPS autodeclarados no se presentan como evidencia física; auditoría minimiza PII en snapshots. |
 | **CA-125** | Reportes: solo crear índice nuevo si EXPLAIN/medición demuestra necesidad; regresión sin pérdida de datos. |
 **Estos casos son criterios, NO resultados de prueba.**
+
+
+## Correcciones técnicas I01-O01…O03 (02/11/2026)
+| ID | Verificación | Resultado local |
+|---|---|---|
+| **I01-O01** | 5 fallos de una cuenta bajo un presbiterio no bloquean su login correcto en el presbiterio propio; el cubo es usuario/código + presbiterio y la IP sigue global. | PASS |
+| **I01-O02** | Dos POST concurrentes a `/auth/ubicacion` producen 200 + 409 y la fila `sesion` conserva el estado/coordenadas del ganador, sin sobrescritura. | PASS |
+| **I01-O03** | Cookie de sesión con `HttpOnly`, `SameSite=Lax`, `Path=/`, sin `Domain`; prueba unitaria de `__Host-pcd_sid` + `Secure` en producción y de no confiar en `X-Forwarded-Proto`. TLS/cPanel real: BLOCKED. | PASS / BLOCKED (cPanel) |

@@ -1,4 +1,4 @@
-# PCD — Estado documental vigente 01/11/2026 (V4.1)
+# PCD — Estado documental vigente 02/11/2026 (V4.1 + I01)
 
 ## Decisiones funcionales y estructura vigentes
 - [Alcance oficial](../01-analisis/alcance-funcional.md): plataforma **temporal** de captura de fichas Persona/Líder GC, no SGSP.
@@ -10,11 +10,24 @@
 - Calidad: reportes de faltantes automáticos, revisión de fidelidad papel↔transcripción manual externa por presbiterios.
 - Líder GC único y resumen agregado, sin integrantes nominales.
 
+## I01 implementado en desarrollo/CI (02/11/2026)
+- Autenticación real contra MySQL con `password_verify`, presbiterio + código tecleado, bloqueo 5/cuenta y 20/IP en 15 min, `login_evento`.
+- Sesión persistida en `sesion` (hash de cookie, `last_seen`, `auth_version`, GPS), cookie HttpOnly/SameSite/Secure, CSRF, inactividad 45 min y absoluta 12 h, logout y revocación.
+- `GET /presbiterios` público y mínimo; sedes del presbiterio, alta normalizada RN-33 con 409 e idempotencia; contexto ADMIN explícito; REPORTES solo lectura.
+- React I01: login sin listado de cuentas, selección/alta de sede, contexto autenticado, expiración, GPS opcional una vez por sesión y ausencia de `localStorage`.
+- Evidencia: `npm test` (SDD), PHPUnit 70/179 local (la CI de la ronda se registra en el PR), runner I01 42/42 PASS y build React. CI [run 41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321): jobs `documentos`, `backend`, `frontend` e `i00` en verde, MySQL 8.0.46/PHP 8.2.35. **No es GO productivo; E-07, H-14, H-40 y revisión del especialista siguen abiertos.**
+
+## Correcciones técnicas I01-O01…O03 (02/11/2026)
+- **O01:** cubo de intentos por `(usuario_id o codigo_intentado) + presbiterio_id`; los fallos en un presbiterio no bloquean la cuenta en otro. IP sigue global. Pruebas HTTP y de repositorio.
+- **O02:** captura GPS con `UPDATE ... WHERE geo_estado IS NULL` atómico; concurrencia 200/409 sin sobrescritura. Pruebas HTTP concurrentes y de dos conexiones MySQL.
+- **O03:** `PhpSession::cookieName()`/`cookieOptions()`, `__Host-pcd_sid` + `Secure` en producción, `HttpOnly`, `SameSite=Lax`, `Path=/`, sin `Domain`; no se confía en cabeceras de proxy. TLS/cPanel real: BLOCKED (E-07).
+- Evidencia de la ronda: local PHPUnit 70/179, runner I01 42/42 PASS, frontend 8/8 y build; CI [run 41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321) con MySQL 8.0.46/PHP 8.2.35: I01 42/42, PHPUnit 70/178 (1 omitida), I00 31 PASS/0 FAIL/1 BLOCKED y frontend 8/8.
+
 ## Etapa 4 preparada, no ejecutada
 [Informe E4](../07-auditorias/etapa-4-produccion-y-privacidad.md), [checklist productivo](../06-despliegue/checklist-produccion.md). PR-01…08 de datos personales/sensibles quedan sin decisión institucional. No se han ejecutado pruebas MySQL/Apache/PHP, recuperación de backups, E2E ni carga real.
 
 ## Pendientes
-E1-D02, H-23, H-24; H-14 Excel binario; fuente/corte INEI durante I02; ambiente cPanel real; H-40 privacidad/retención. **P01 dejó un andamiaje ejecutable (API PHP 8.2 + React/TS/Vite) con salud, errores, PDO, CSRF/CORS y aprovisionamiento; no hay procesos funcionales ni backend/frontend productivos.**
+E1-D02, H-23, H-24; H-14 Excel binario; fuente/corte INEI durante I02; ambiente cPanel real; H-40 privacidad/retención. **P01 dejó el andamiaje (API PHP 8.2 + React/TS/Vite); I01 añade autenticación, sesiones y contexto operativo en desarrollo/CI. I02–I05 siguen pendientes y no existe backend/frontend productivo.**
 
 ## Documentación histórica
 Textos de análisis/auditorías y cambios E1/E2/E3 de fecha 31/10/2026 se preservan como **antecedentes**; cualquier mención a 17 tablas, `alcance_consulta`, subtipo documental o permisos territoriales **ha sido anulada** por decisiones V4.1. El prototipo V2.2 no se modificó.

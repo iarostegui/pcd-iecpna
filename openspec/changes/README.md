@@ -2,7 +2,7 @@
 
 [↑ openspec](../README.md) · [↑ Índice principal](../../README.md)
 
-**Estado actual:** cambio P01 abierto (andamiaje técnico); el resto son antecedentes.
+**Estado actual:** cambio I01 abierto en PR Draft; P01 aprobado e integrado; el resto son antecedentes.
 
 Cuando una modificación se apruebe, crear una carpeta `YYYY-MM-DD-descripcion/` con:
 
@@ -15,8 +15,11 @@ Cuando una modificación se apruebe, crear una carpeta `YYYY-MM-DD-descripcion/`
 
 **Regla:** después de implementar y verificar, consolidar el requisito en [specs vigentes](../specs/README.md), actualizar índices/documentos afectados y registrar cierre del cambio. No documentar cambios del **SGSP** en este repositorio PCD.
 
-## Cambio P01 abierto
-- [2026-11-02-p01-andamiaje/](2026-11-02-p01-andamiaje/proposal.md) — andamiaje PHP 8.2 + React/TS/Vite, aprovisionamiento idempotente y runner HTTP. **No implementa I01–I05** ni modifica SQL/OpenAPI.
+## Cambio I01 abierto (PR Draft)
+- [2026-11-02-i01-autenticacion-contexto/](2026-11-02-i01-autenticacion-contexto/proposal.md) — autenticación, sesión, organización/sedes, contexto ADMIN y GPS opcional. Incluye `proposal.md`, `design.md`, `spec.md` Given/When/Then y `tasks.md`. **No implementa I02–I06** ni modifica tablas/columnas.
+
+## Cambio P01 aprobado e integrado
+- [2026-11-02-p01-andamiaje/](2026-11-02-p01-andamiaje/proposal.md) — andamiaje PHP 8.2 + React/TS/Vite, aprovisionamiento idempotente y runner HTTP. **No implementó I01–I05**; base para I01.
 
 ## Cambio E1 abierto
 [2026-10-31-levantamiento-etapa-1/](2026-10-31-levantamiento-etapa-1/README.md) — deltas H-01, H-02, H-05, H-08, H-09, H-14. **Propuesto, no consolidado en specs vigentes ni codificado**.

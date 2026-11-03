@@ -32,7 +32,7 @@
 - **H-40:** responsable, finalidad, base jurídica, aviso, retención y cierre.
 - Fuente oficial INEI y corte para I02; catálogo de sedes incompleto pero hay alta de sedes; versión real hosting y carga por probar.
 
-**Estado real:** SQL, OpenAPI, anotaciones y anexos están en GitHub; **NO hay frontend/backend productivos**, ni pruebas de motor, integración, restore o carga ejecutadas.
+**Estado real:** SQL, OpenAPI, anotaciones y anexos están en GitHub. **I01 está implementado en desarrollo/CI** con autenticación, sesión, organización/sedes, contexto y GPS opcional, pruebas PHPUnit/HTTP/UX y build React; I02–I05 siguen pendientes. **NO hay frontend/backend productivos** ni pruebas de restore/carga ejecutadas; E-07/H-14/H-40 y revisión del especialista siguen abiertos.
 
 ## Gate V2.3 (UX aprobada como referencia, no implementación)
 **Referencia interactiva vigente:** [PCD_v2.3.html](../../prototypes/PCD_v2.3.html). [Cambios por pantalla](../02-diseno/pcd-v2.3-alineacion.md). I01 login por usuario escrito, claves separadas en producción, GPS único; I02 Persona tipo+número, fecha imposible rechazada, calidad externa; I03 GC sin selector adicional; I04 consulta nacional con filtros, lectura independiente de edición; I05 reportes generales. Probar **CA-101…111**. **E1-D01 está aprobada**; E1-D02/H-23/H-24 siguen pendientes y no quedan resueltos por la maqueta.

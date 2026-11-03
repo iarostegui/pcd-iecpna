@@ -1,6 +1,6 @@
 # Matriz de trazabilidad integral PCD V4.1 — RN → Spec → CU → UI → API → SQL → CA
 
-**Alcance:** [ALC-PCD-4.0](../01-analisis/alcance-funcional.md). **Estado:** contratos diseñados; E1-D01 aprobada mediante endpoint existente, E1-D02 pendiente; frontend/backend productivos aún no implementados.
+**Alcance:** [ALC-PCD-4.0](../01-analisis/alcance-funcional.md). **Estado:** contratos diseñados; E1-D01 aprobada mediante endpoint existente, E1-D02 pendiente. **I01 implementado en desarrollo/CI**; I02–I05 pendientes; no existe GO productivo.
 
 | RN | Spec/EXC | Caso de uso | Pantalla | Endpoint | Persistencia | Pruebas |
 |---|---|---|---|---|---|---|
@@ -48,3 +48,28 @@
 | RN-34 | Clave común solo UAT; rotación antes producción | usuario.password_hash, sesion.auth_version | CA-120 |
 | RN-35 | Vincular ficha a Persona existente cross-presbiterio | persona, ficha | CA-119 |
 **Prioridad al generar código:** reglas aprobadas V4.1, no cambios históricos E1-E3.
+
+
+## I01 — implementación verificada en desarrollo/CI (02/11/2026)
+| Requisito | Implementación backend | UI React | Persistencia | Evidencia |
+|---|---|---|---|---|
+| AUTH-01/02 | `AuthController`, `AuthService`, hashing y límites | Login I01 | `usuario`, `login_evento` | CA-01/02/03/04/05/06/57/58 |
+| AUTH-03/04 | `PhpSession`, `Csrf`, `SesionRepository`, revocación | Expiración y logout | `sesion` | CA-61/62/63/64/94/113 |
+| AUTH-05 | `GET /presbiterios` público | Selector de login | `organizacion` | CA-56/115 |
+| AUTH-06/07 | Bloqueo por cuenta/IP y CSRF | Mensajes 401/403/429 | `login_evento` | CA-07/59/60 |
+| AUTH-09 | `PUT /contexto/presbiterio` ADMIN | Cambio de presbiterio | `sesion`; `auditoria_evento` | CA-66/67 |
+| CAT-01/02/03/09 | `SedeService`, normalización NFKD, idempotencia | Contexto, búsqueda y alta | `organizacion`; `idempotencia` | CA-08…14/112/116/123 |
+| ALC-10 | `AuthService::storeLocation` | GPS opcional único | `sesion.geo_*` | CA-94/109/110 |
+| Modelo físico | Sin cambios de esquema | — | 11 tablas/146 columnas/23 FK | CA-91/92/122 |
+
+**Evidencia ejecutada:** local `npm test` (SDD), PHPUnit 70/179, runner HTTP I01 42 PASS/0 FAIL/0 BLOCKED y build React. CI [run 41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321) con MySQL 8.0.46/PHP 8.2.35: 4 jobs verdes, I01 42/42, PHPUnit 70/178 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED y frontend 8/8.
+**No sustituye** la revisión del especialista ni el GO productivo (E-07/H-14/H-40).
+
+## Correcciones técnicas I01-O01…O03 (02/11/2026)
+| ID | Requisito / contrato | Implementación | Pruebas |
+|---|---|---|---|
+| I01-O01 | 5 fallos por cuenta **y presbiterio**; 20/IP global; sin enumeración ni bloqueo permanente | `AuthService::assertRateLimit`, `LoginEventoRepository::failedCountByAccount` | `I01-O01` HTTP + `LoginEventoScopeTest` |
+| I01-O02 | Una única ubicación/estado por sesión; concurrencia sin sobrescritura | `SesionRepository::storeLocationIfEmpty`, `AuthService::storeLocation` | `I01-O02` HTTP concurrente + `SesionLocationTest` |
+| I01-O03 | Cookie `__Host-pcd_sid`, `Secure` en producción, `HttpOnly`, `SameSite`, `Path=/`, sin `Domain`; no confiar en proxy headers | `PhpSession::cookieName()/cookieOptions()/secure()/isHttps()` | `I01-O03` HTTP + pruebas unitarias de producción/HTTPS/forwarded |
+
+**Evidencia de la ronda:** local PHPUnit 70/179, runner I01 42/42 PASS, frontend 8/8 y build; CI [run 41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321) con MySQL 8.0.46/PHP 8.2.35: I01 42/42, PHPUnit 70/178 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED y frontend 8/8. cPanel/TLS real permanece BLOCKED (E-07).

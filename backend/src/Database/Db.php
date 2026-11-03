@@ -63,6 +63,10 @@ final class Db
             PDO::ATTR_TIMEOUT => 3,
         ]);
 
+        // Contrato V4.1/CA-122: timestamps del servidor coherentes en UTC.
+        // El offset '+00:00' no requiere tablas de zonas horarias en cPanel.
+        $this->pdo->exec("SET time_zone = '+00:00'");
+
         return $this->pdo;
     }
 

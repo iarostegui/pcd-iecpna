@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pcd\Provisioning;
 
+use Pcd\Security\PasswordHasher;
 use PDO;
 use RuntimeException;
 use Throwable;
@@ -28,11 +29,7 @@ final class Provisioner
      */
     public function run(array $users, array $passwords): array
     {
-        if (!defined('PASSWORD_ARGON2ID')) {
-            throw new RuntimeException(
-                'PHP no ofrece Argon2id (PASSWORD_ARGON2ID). No se aprovisiona con un algoritmo distinto; instale soporte Argon2id.',
-            );
-        }
+        PasswordHasher::assertAvailable();
 
         $select = $this->pdo->prepare(
             'SELECT id, nombre_display, perfil, presbiterio_id, activo FROM usuario WHERE codigo = ?',
@@ -70,7 +67,7 @@ final class Provisioner
                     $user['nombre_display'],
                     $user['perfil'],
                     $user['presbiterio_id'],
-                    password_hash($password, PASSWORD_ARGON2ID),
+                    PasswordHasher::hash($password),
                 ]);
                 $created++;
             }
@@ -136,14 +133,12 @@ final class Provisioner
      */
     public function rotateAdminPassword(string $password): void
     {
-        if (!defined('PASSWORD_ARGON2ID')) {
-            throw new RuntimeException('PHP no ofrece Argon2id (PASSWORD_ARGON2ID).');
-        }
+        PasswordHasher::assertAvailable();
 
         $statement = $this->pdo->prepare(
             'UPDATE usuario SET password_hash = ?, auth_version = auth_version + 1 WHERE codigo = ? AND perfil = ?',
         );
-        $statement->execute([password_hash($password, PASSWORD_ARGON2ID), 'ADMIN-NAC', 'ADMIN']);
+        $statement->execute([PasswordHasher::hash($password), 'ADMIN-NAC', 'ADMIN']);
 
         if ($statement->rowCount() === 0) {
             throw new RuntimeException('No existe ADMIN-NAC; cree el ADMIN productivo antes de rotar.');

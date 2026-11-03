@@ -1,4 +1,21 @@
 # Changelog documental y técnico — PCD
+## 2026-11-02 — Correcciones técnicas I01-O01…O03
+- **O01:** el límite de 5 fallos por cuenta ahora usa `usuario_id` (o `codigo_intentado` si no existe) + `presbiterio_id`; intentos en un presbiterio no bloquean el login legítimo en otro. IP sigue global (20/15 min). Pruebas HTTP de aislamiento y de repositorio.
+- **O02:** `SesionRepository::storeLocationIfEmpty()` usa un `UPDATE ... WHERE geo_estado IS NULL` atómico y `rowCount`; dos POST concurrentes producen 200 + 409 y no sobrescriben la primera ubicación. Pruebas HTTP concurrentes y de dos conexiones MySQL.
+- **O03:** `PhpSession::cookieName()/cookieOptions()` centralizan `__Host-pcd_sid`, `Secure`, `HttpOnly`, `SameSite=Lax`, `Path=/` y sin `Domain`; guardia `__Host-`+`Secure`; no se confía en `X-Forwarded-Proto`. Pruebas de producción/HTTPS; cPanel/TLS real BLOCKED (E-07).
+- Sin cambios de tablas/columnas ni de reglas funcionales; PR #4 se mantiene Draft.
+
+## 2026-11-02 — I01: autenticación, sesiones y contexto operativo
+- Backend PHP 8.2: login real con presbiterio + código tecleado + contraseña verificada en MySQL; límites 5/cuenta y 20/IP en 15 min; `login_evento` sin secretos.
+- Sesión persistida en `sesion` con hash de cookie, `HttpOnly/SameSite/Secure`, CSRF, regeneración al autenticar, inactividad 45 min, absoluta 12 h, revocación por `auth_version` y logout real.
+- `GET /presbiterios` público mínimo; `GET/POST /sedes` por presbiterio, normalización NFKD RN-33, 409 exacto, advertencia por similitud, idempotencia y concurrencia; `PUT /contexto/sede` y `PUT /contexto/presbiterio` (solo ADMIN, con auditoría).
+- `POST /auth/ubicacion`: una captura por sesión con estados OK/DENEGADA/ERROR/NO_DISPONIBLE, sin coordenadas en `/auth/me`, sin bloqueo de operaciones y sin uso probatorio.
+- React/TS: login sin listado de cuentas, contexto y alta de sede, identidad/perfil/contexto, logout, expiración por 401 y GPS opcional una vez; sin `localStorage` para sesión/credenciales/coordenadas.
+- Pruebas: PHPUnit 70/179; runner HTTP I01 con CA-01…CA-14, CA-56…CA-60, CA-61…CA-67, CA-76, CA-84, CA-91/92/94, CA-110/112/113/114; Vitest/Testing Library y build Vite.
+- OpenAPI con extensiones aditivas y documentadas en `AuthMe`/`Sede`; sin cambios de SQL, tablas, columnas ni rutas de I02–I06.
+- CI [run 41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246321): jobs `documentos`, `backend`, `frontend` e `i00` en verde; MySQL 8.0.46/PHP 8.2.35; I01 42/42, PHPUnit 70/178 (1 omitida por Argon2id), I00 31 PASS/0 FAIL/1 BLOCKED, frontend 8/8 y build.
+- **Límites:** E-07/cPanel, H-14, H-40, revisión del especialista y GO productivo siguen pendientes; solo datos sintéticos.
+
 ## 2026-11-02 — I00: verificación técnica
 - `scripts/i00/verificar.php`: 32 controles de entorno, MySQL, enforcement y seguridad con salida JSON.
 - Job CI `i00` con MySQL 8: migraciones, seed, bootstrap UAT idempotente, build del frontend y artefacto de evidencia.

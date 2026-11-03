@@ -472,15 +472,21 @@ run_check($results, 'S-04', 'Seguridad', 'Argon2id disponible', static function 
 });
 
 run_check($results, 'S-05', 'Seguridad', 'Sesión preparada (HttpOnly/SameSite/Secure)', static function () use ($root): array {
-    $ok = source_contains($root . '/backend/src/Security/Csrf.php', ['httponly', 'samesite', 'secure', 'session_set_cookie_params']);
+    $ok = source_contains(
+        $root . '/backend/src/Security/PhpSession.php',
+        ['httponly', 'samesite', 'secure', 'session_set_cookie_params', 'session_regenerate_id'],
+    );
 
     return $ok
-        ? ['PASS', 'configuración de cookie revisada; emisión real en I01']
+        ? ['PASS', 'cookie HttpOnly/SameSite/Secure y regeneración en PhpSession']
         : ['FAIL', 'configuración de sesión incompleta'];
 });
 
 run_check($results, 'S-06', 'Seguridad', 'HTTPS previsto en producción', static function () use ($root): array {
-    $ok = source_contains($root . '/backend/src/Security/Csrf.php', ["Env::get('PCD_ENV') === 'production'", "'secure' => \$secure"]);
+    $ok = source_contains(
+        $root . '/backend/src/Security/PhpSession.php',
+        ["=== 'production'", "'secure' => self::secure()", 'isHttps'],
+    );
 
     return $ok
         ? ['PASS', 'cookie Secure en producción/HTTPS; TLS del hosting BLOQUEADO']
@@ -497,8 +503,14 @@ run_check($results, 'S-07', 'Seguridad', 'Sin PII real ni dumps versionados', st
         : ['FAIL', 'archivos de datos: ' . implode(', ', $unexpected)];
 });
 
-run_check($results, 'S-08', 'Seguridad', 'GPS opcional, una vez por sesión', static function (): array {
-    return ['NOT_IMPLEMENTED', 'Comportamiento funcional de I01; el modelo ya limita geo_* a sesion'];
+run_check($results, 'S-08', 'Seguridad', 'GPS opcional, una vez por sesión', static function () use ($root): array {
+    $ok = source_contains($root . '/backend/src/App.php', ['/auth/ubicacion'])
+        && source_contains($root . '/backend/src/Service/AuthService.php', ['ubicacion_ya_capturada'])
+        && source_contains($root . '/backend/src/Repository/SesionRepository.php', ['geo_estado', 'geo_capturada_en']);
+
+    return $ok
+        ? ['PASS', 'ruta /auth/ubicacion y persistencia única en sesion.geo_*']
+        : ['FAIL', 'flujo de ubicación de sesión no encontrado'];
 });
 
 // ---------------------------------------------------------------------------

@@ -245,49 +245,51 @@ $checks[] = ['id' => 'malformed_json_400', 'run' => static function () use ($bas
         : ['FAIL', 'HTTP ' . $response['status']];
 }];
 
-$checks[] = ['id' => 'login_placeholder_501', 'run' => static function () use ($base): array {
-    $payload = json_encode(['presbiterio_id' => 1, 'usuario' => 'LIM-DIG-01', 'password' => 'x']);
-    $response = http_request('POST', $base . '/auth/login', ['Content-Type: application/json'], (string) $payload);
+$checks[] = ['id' => 'login_validation_422', 'run' => static function () use ($base): array {
+    $response = http_request('POST', $base . '/auth/login', ['Content-Type: application/json'], '{"usuario":"LIM-DIG-01","password":"x"}');
 
-    return $response['status'] === 501 && json_path($response, 'error.code') === 'not_implemented'
-        ? ['NOT_IMPLEMENTED', '501 not_implemented (I01)']
+    return $response['status'] === 422 && json_path($response, 'error.code') === 'validation_error'
+        ? ['PASS', '422 validation_error']
         : ['FAIL', 'HTTP ' . $response['status']];
 }];
 
-$checks[] = ['id' => 'auth_me_placeholder_501', 'run' => static function () use ($base): array {
+$checks[] = ['id' => 'auth_me_requires_session', 'run' => static function () use ($base): array {
     $response = http_request('GET', $base . '/auth/me');
 
-    return $response['status'] === 501 && json_path($response, 'error.code') === 'not_implemented'
-        ? ['NOT_IMPLEMENTED', '501 not_implemented (I01)']
+    return $response['status'] === 401 && json_path($response, 'error.code') === 'unauthenticated'
+        ? ['PASS', '401 unauthenticated']
         : ['FAIL', 'HTTP ' . $response['status']];
 }];
 
-$checks[] = ['id' => 'presbiterios_placeholder_501', 'run' => static function () use ($base): array {
+$checks[] = ['id' => 'presbiterios_public', 'run' => static function () use ($base): array {
     $response = http_request('GET', $base . '/presbiterios');
 
-    return $response['status'] === 501 && json_path($response, 'error.code') === 'not_implemented'
-        ? ['NOT_IMPLEMENTED', '501 not_implemented (I01)']
+    return $response['status'] === 200 && is_array($response['json']) && count($response['json']) >= 4
+        ? ['PASS', '200 presbiterios activos']
         : ['FAIL', 'HTTP ' . $response['status']];
 }];
 
-$checks[] = ['id' => 'csrf_required_on_logout', 'run' => static function () use ($base, $sessionName): array {
+$checks[] = ['id' => 'logout_requires_auth_before_csrf', 'run' => static function () use ($base, $sessionName): array {
     $response = http_request(
         'POST',
         $base . '/auth/logout',
         ['Cookie: ' . $sessionName . '=testsession123'],
     );
 
-    return $response['status'] === 403 && json_path($response, 'error.code') === 'csrf_invalid'
-        ? ['PASS', '403 csrf_invalid']
+    return $response['status'] === 401 && json_path($response, 'error.code') === 'unauthenticated'
+        ? ['PASS', '401 antes de CSRF']
         : ['FAIL', 'HTTP ' . $response['status']];
 }];
 
 $checks[] = ['id' => 'cors_preflight_allowed', 'run' => static function () use ($base, $origin): array {
     $response = http_request('OPTIONS', $base . '/health', ['Origin: ' . $origin]);
+    $methods = header_value($response, 'access-control-allow-methods');
 
-    return $response['status'] === 204 && header_value($response, 'access-control-allow-origin') === $origin
-        ? ['PASS', '204 CORS']
-        : ['FAIL', 'HTTP ' . $response['status']];
+    return $response['status'] === 204
+        && header_value($response, 'access-control-allow-origin') === $origin
+        && str_contains($methods, 'PUT')
+        ? ['PASS', '204 CORS con PUT']
+        : ['FAIL', 'HTTP ' . $response['status'] . ' methods=' . $methods];
 }];
 
 $checks[] = ['id' => 'security_headers', 'run' => static function () use ($base): array {
