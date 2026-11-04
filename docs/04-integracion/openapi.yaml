@@ -275,15 +275,15 @@ components:
       required: [nombres, apellido_paterno, apellido_materno, tipo_documento, numero_documento, telefono]
       properties:
         numero_ficha: { type: string, nullable: true }
-        tipo_documento: { type: string, nullable: true, enum: [DNI, CE, OTRO] }
-        numero_documento: { type: string, nullable: true }
-        nombres: { type: string, nullable: true }
-        apellido_paterno: { type: string, nullable: true }
-        apellido_materno: { type: string, nullable: true }
+        tipo_documento: { type: string, enum: [DNI, CE, OTRO] }
+        numero_documento: { type: string, minLength: 1 }
+        nombres: { type: string, minLength: 1 }
+        apellido_paterno: { type: string, minLength: 1 }
+        apellido_materno: { type: string, minLength: 1 }
         fecha_nacimiento: { type: string, format: date, nullable: true }
         sexo_codigo: { type: string, nullable: true }
         estado_civil_codigo: { type: string, nullable: true }
-        telefono: { type: string, nullable: true }
+        telefono: { type: string, minLength: 1 }
         correo: { type: string, format: email, nullable: true }
         facebook_usuario: { type: string, nullable: true }
         direccion: { type: string, nullable: true }
