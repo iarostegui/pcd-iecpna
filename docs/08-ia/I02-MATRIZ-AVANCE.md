@@ -1,57 +1,50 @@
-# I02 — Matriz técnica de control y límites de aprobación
+# I02 — Matriz de cierre técnico (PCD IECPNA)
 
-**Iteración:** I02 Captura Persona/Ficha. **Entorno permitido:** GitHub Actions / MySQL 8 / datos sintéticos.
-**Contrato:** V4.1, OpenAPI, SQL inmutable 11/146/23, UX V2.3.
+**Fecha de verificación:** 04/11/2026. **Ámbito:** I02 Captura de Persona y ficha; desarrollo/CI con MySQL 8 y datos sintéticos. **No equivale a GO de producción.**
 
-## Implementación en rama I02
-| Componente | Evidencia en código | Estado |
+## 1. Requisitos aprobados y operación probada
+
+| Control | Implementación / evidencia | Resultado |
 |---|---|---|
-| Documento DNI 8 dígitos con ceros | PersonaInputValidator | IMPLEMENTADO; PASS en CI |
-| CE / OTRO | PersonaInputValidator: clave_identidad=NULL | IMPLEMENTADO SIN FUSIÓN; CE confiable BLOQUEADO |
-| Persona y fichas independientes | PersonaService::create | IMPLEMENTADO; PASS en CI |
-| Reutilización E1-D01 | PersonaService::findByIdentity | IMPLEMENTADO; PASS en CI |
-| Anexo con documento concordante | PersonaService::resolveAttach | IMPLEMENTADO; PASS en CI |
-| Idempotencia | tabla idempotencia + hash payload y transacción | IMPLEMENTADO; PASS en CI |
-| Sede del contexto | validación PHP + FK compuesta | IMPLEMENTADO; PASS en CI |
-| Fechas/JSON fuente estrictos | PersonaInputValidator | IMPLEMENTADO; PASS en CI |
-| Autoría y ausencia auditoría INSERT | ficha.created_by, sin insertar auditoria_evento | IMPLEMENTADO; PASS en CI |
-| Formulario React | PersonaCapture + Workspace | IMPLEMENTADO; PASS en Vitest/build |
-| Catálogos/ubigeos | consultas solo de filas existentes | IMPLEMENTADO; la importación INEI NO está hecha |
-| Concurrencia identidad/Idempotency-Key | UNIQUE + reintento de deadlock + curl_multi contra MySQL 8 | **PASS** I02-HTTP-17…19 en CI; mantener pruebas de carga I06 |
-| Edición PATCH Persona/Ficha | prevista para I04 | NO_IMPLEMENTADO en I02 |
+| H-14 formulario de digitación | `SGSP_Fichas_Imprimibles_A4 (2).xlsx`, hoja Persona. [Matriz papel → API/BD/UI](../02-diseno/I02-MATRIZ-CAMPOS-PAPEL-DIGITACION.md). | CUBIERTO I02 |
+| H-24 campos obligatorios | Presbiterio+sede desde sesión; nombres, ambos apellidos, tipo/número documento y teléfono; validación PHP y HTML. | PASS |
+| Identidad DNI | Longitud 8 y ceros preservados, `clave_identidad` única. | PASS |
+| E1-D01 | Consolidado Persona único para DNI coincidente de distintos presbiterios; fichas independientes sin sobrescribir consolidado. | PASS |
+| Anexar ficha por ID | `POST /personas/{id}/fichas`; identidad concordante exigida, anexo válido y discrepancia bloqueada. | PASS |
+| C.E. y OTRO | Captura de CE alfanumérico 1–11 conservando ceros; ninguna fusión automática ni validación de titularidad fingida. OTRO no fusiona. [Criterio y fuentes](../02-diseno/I02-MATRIZ-CAMPOS-PAPEL-DIGITACION.md). | PASS en política conservadora |
+| Fecha, correo y secciones fuente | Fechas reales; cónyuge/responsabilidades bajo JSON cerrado 1.0, sin tablas redundantes. | PASS |
+| Control del impreso | Campos de H-14; marcas de completitud/validación **transcritas**, no certificación institucional. | PASS |
+| Catálogos reales | Sexo, estado civil, condición desde `catalogo` MySQL vía API, sin códigos libres en UI. | PASS |
+| UBIGEO recibido | `rptUbigeo.xlsx` → CSV SHA256 fijo → paquetes versionados de geografía → MySQL 8, 25/196/1893. | PASS de integridad/carga/API |
+| Jerarquía geográfica | API por tipo/padre y selección dependiente React; rechazo de provincia ajena al departamento; ceros preservados. | PASS |
+| Idempotencia y simultaneidad | Replay, clave/payload, dos POST simultáneos mismo DNI con clave igual/distinta; sin doble alta accidental en UI. | PASS |
+| Autenticación, contexto, REPORTES | Rol REPORTES solo lectura; sede/presbiterio exigidos en backend. | PASS |
+| Autoría y auditoría | Alta con `ficha.created_at/created_by`, sin evento INSERT; lecturas sin editar. | PASS |
+| PATCH y gestión de GC | Alcance posterior I04 e I03, respectivamente; **no simularlos**. | FUERA DE I02 |
 
-## Evidencia ejecutada en MySQL 8 (CI)
-Ejecución [41756308611](https://github.com/iarostegui/pcd-iecpna/actions/runs/41756308611): backend, frontend, documentos e i00 **SUCCESS**. PHPunit **91 tests / 210 assertions**; HTTP I02 **19 PASS / 0 FAIL**, incluidos dos escenarios de concurrencia real con sesiones paralelas, doble clic y fuentes diferentes; suites previas I01 sin regresión.
+## 2. Evidencia de CI ejecutada
 
-## Pruebas trazables (no declarar PASS por diseño)
-- PHPUnit: `backend/tests/Unit/PersonaInputValidatorTest.php`, `backend/tests/Integration/PersonaCaptureTest.php`.
-- HTTP: `tests/api/i02.php`, 16 controles nominados `I02-HTTP-01…16`.
-- React: `frontend/src/__tests__/PersonaCapture.test.tsx` + build y suites I01 sin regresiones.
-- CI: `.github/workflows/validacion-sdd.yml`, ejecución en PR #5.
+**GitHub Actions:** [ejecución 41916350881](https://github.com/iarostegui/pcd-iecpna/actions/runs/41916350881): cuatro trabajos **SUCCESS** (`backend`, `frontend`, `documentos`, `i00`).
 
-## Bloqueos obligatorios
-1. **H-24 (APROBADA):** campos mínimos Persona: presbiterio y sede de sesión; nombres, apellidos paterno y materno, tipo y número de documento y teléfono de contacto. Implementación backend/frontend y pruebas en revisión. La regla para GC se evaluará en I03 sobre su especificación.
-2. **UBIGEO (FUENTE RECIBIDA):** `rptUbigeo.xlsx` fue incorporado como documentación persistente del proyecto y normalizado a CSV/SQL con SHA256; contiene **25 departamentos, 196 provincias y 1893 distritos**. Se validaron códigos, jerarquías y duplicados sin errores. [Ficha de fuente](../03-base-datos/fuentes/UBIGEO-RPT-2026-11-04.md). **Queda pendiente corroborar el corte de INEI**: una publicación oficial de proyecciones 2026 reporta 1892 distritos. No se ha importado en MySQL de prueba ni producción; no declarar cierre I02 hasta resolver discrepancia y ejecutar pruebas.
-3. **C.E.:** falta validar formato de identidad confiable con fuente normativa; no se crea clave para fusionar automáticamente.
-4. **H-14 (REFERENCIA CONFIRMADA):** el archivo `SGSP_Fichas_Imprimibles_A4 (2).xlsx` fue utilizado para recopilar los datos y debe guiar la digitación. No se incorpora el binario al repositorio público; la revisión exhaustiva de mapeo de campos de Persona debe completarse antes del cierre de I02, y la de Líder GC antes del cierre de I03.
-5. **H-40/cPanel/especialista:** NO-GO para datos reales y producción.
-6. **Consulta de duplicados por GET:** OpenAPI vigente utiliza `numero_documento` en query. No se habilita aún ese endpoint porque incorporaría PII a URL/logs; debe definirse contrato seguro antes de implementar consulta previa. El alta transaccional reutiliza identidad DNI sin consulta GET previa.
-7. **Pruebas de carga/estrés:** las pruebas paralelas de I02 (19 controles HTTP en CI) pasan; carga concurrente de 10/20/30 y línea base p95 siguen reservadas a I06.
+- PHPUnit backend/MySQL: **96 pruebas, 222 aserciones, 1 omitida** (omisión registrada).
+- Runner HTTP I02: **28 PASS / 0 FAIL**, incluidos casos `I02-U01…U04`, `I02-CE01`, `I02-H14` y `I02-A01`.
+- Frontend: **13 pruebas, 3 archivos; build React/TypeScript satisfactorio**.
+- Importación real en MySQL 8 de CI: **2114 filas** (25 departamentos, 196 provincias, 1893 distritos); segunda importación **0 creadas / 2114 iguales**.
+- Dataset reconstruido desde `database/referencias/ubigeo-20261104/parte-{01,02,03}.b64`; SHA256 del CSV **8a3abc99898d2927d926536e4f31120b324e08e571111414846c6d2508cb650b**; cero padres inexistentes.
+- Paquete UAT sin despliegue: workflow `paquete-uat.yml` produce artefacto y verifica SHA; sin credenciales ni información personal.
 
-**Dictamen:** la entrega puede revisarse como implementación parcial de I02; NO declararla completada formalmente mientras existan controles críticos bloqueados o pruebas no ejecutadas. PR #5 debe permanecer Draft, sin integración automática.
+## 3. Requisitos externos posteriores, no falsificar
 
-## Importador INEI preparado, fuente real pendiente
-Se incorporó `scripts/i02/importar-ubigeo.php` con verificación SHA256 de CSV, fuente/corte declarados, estructura jerárquica, rechazo de diferencias existentes y modo dry-run. La CI comprueba sintaxis y dry-run con un CSV **explícitamente sintético** sin escribir en BD. **No se ha descargado ni importado aún el conjunto oficial del INEI.**
+**Ubigeos:** la fuente geográfica entregada por responsable es válida **como referencia operativa para digitación** y está integrada en MySQL de CI, **pero no tiene corte INEI oficial acreditado**. Publicación INEI citada reporta 1892 distritos; libro recibido tiene 1893. La conciliación con un catálogo oficial y su fecha es una tarea de validación de procedencia para la puesta en producción, no motivo para inventar una fila ni bloquear indefinidamente las pruebas del PCD. [Custodia](../03-base-datos/fuentes/UBIGEO-RPT-2026-11-04.md).
 
-## Validación final de entrega técnica (03/11/2026)
-- GitHub Actions: [ejecución 41757545580](https://github.com/iarostegui/pcd-iecpna/actions/runs/41757545580): **4/4 jobs SUCCESS** (`documentos`, `backend`, `frontend`, `i00`).
-- PHPUnit: **91 pruebas, 210 aserciones, 1 omitida**; omisión registrada, no ocultada.
-- Runner HTTP I02: **19 PASS / 0 FAIL**, incluidos casos de simultaneidad; regresión I01 y build frontend en verde.
-- Importador INEI: **dry-run sobre 3 filas sintéticas temporales**, SHA válido; **sin importación de fuente oficial**.
-- Seguimiento de decisiones: [H-24 #6](https://github.com/iarostegui/pcd-iecpna/issues/6) y [INEI/CE #7](https://github.com/iarostegui/pcd-iecpna/issues/7).
+**C.E.:** se permite digitación sin fusión porque la longitud/número no acredita identidad contra Migraciones. La integración con un verificador oficial requeriría autorización y diseño independiente; no se promete.
 
-**Cierre:** operación de desarrollo y verificación técnica completada; **I02 no puede cerrarse formalmente ni integrarse a `main`** por dependencias funcionales e institucionales pendientes. PR #5 continúa Draft. No hay GO productivo.
+**H-40 / hosting / especialista:** REPORTES **gestiona** la designación y aprobación institucional, sin modificar su perfil de solo lectura; falta evidencia formal de finalidad, base legal/aviso, retención, política de GPS y respaldos. No se ha desplegado en cPanel ni probado PHP/MySQL productivo, restore o carga 10/20/30 (I06). Ninguna persona real ni dato sensible puede cargarse antes del GO.
 
-## H-40 — Asignación funcional aclarada
-El perfil **REPORTES** queda designado para **gestionar la designación y aprobación institucional** del PCD. Conserva los permisos de lectura previstos; esta asignación no permite crear, editar ni aprobar cambios operativos en Persona/Ficha. Las evidencias del acto institucional, responsable nominal, finalidad, aviso, base legal y retención permanecen pendientes para producción. No confundir designación del perfil con aprobación institucional ya emitida.
-\n## H-14 — referencia documental recibida\nSe recibió como insumo de referencia el libro `SGSP_Fichas_Imprimibles_A4 (2).xlsx`, con cuatro hojas: `Ficha_Persona`, `Ejemplo_Ficha_Persona`, `Ficha_Lider_GC` y `Ejemplo_Lider_GC`. La ficha impresa original señala obligatorios distintos (por ejemplo, nacimiento, sexo, dirección/ubigeo y condición), y el apellido materno/teléfono no figura marcado igual. Para captura PCD prevalece la decisión H-24 vigente, sin alterar la plantilla impresa. En ficha original lista LIM/TRU/IQU y no CHI, pero catálogo inicial PCD sigue cuatro presbiterios. No se sube XLSX al repositorio sin revisión de privacidad/licencia; se documenta referencia funcional. La conciliación fina de campos de Líder GC pertenece a I03.\n
+**Consulta GET de duplicados con documento en URL:** contrato legacy debe corregirse en I04 o mediante modificación segura de contrato (evitar PII en URLs/logs). Para I02 la identidad se reutiliza automáticamente en la transacción de alta.
+
+## 4. Dictamen
+
+**I02 preparada para integración técnica a `main`** con la funcionalidad aprobada, base real MySQL de CI, SDD y pruebas exitosas. La aceptación de I02 **no autoriza producción**. I03 (Líder Grupo Crecer), I04 (edición completa), I05 (administración/reportes) e I06 (integración/hosting) siguen independientes.
+
+Seguimiento original: [H-24 #6](https://github.com/iarostegui/pcd-iecpna/issues/6) (cerrado) y [UBIGEO/C.E. #7](https://github.com/iarostegui/pcd-iecpna/issues/7) (fuente usuario operativa, procedencia INEI pendiente para producción).
