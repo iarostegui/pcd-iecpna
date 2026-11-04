@@ -116,4 +116,50 @@ final class PersonaInputValidatorTest extends TestCase
         $json = json_decode((string) $data['datos_fuente'], true);
         self::assertSame(['schema_version' => '1.0', 'responsabilidades' => ['es_presbitero' => true]], $json);
     }
+    public function testCeConservaSerieYNoFusiona(): void
+    {
+        $data = PersonaInputValidator::normalize(self::valid([
+            'tipo_documento' => 'CE', 'numero_documento' => 'N000123456',
+        ]));
+        self::assertSame('N000123456', $data['numero_norm']);
+        self::assertNull($data['clave_identidad']);
+        self::assertNotEmpty($data['advertencias']);
+    }
+
+    public function testCeCaracteresNoAdmitidos(): void
+    {
+        $this->expectException(HttpException::class);
+        PersonaInputValidator::normalize(self::valid([
+            'tipo_documento' => 'CE', 'numero_documento' => 'CE-123#',
+        ]));
+    }
+
+    public function testControlPapelConservaMarcasNoContradictorias(): void
+    {
+        $payload = self::valid([
+            'control_papel' => '{"ficha_completa":true,"falta_informacion":false,"persona_validada":true}',
+        ]);
+        $data = PersonaInputValidator::normalize($payload);
+        self::assertSame(
+            ['ficha_completa' => true, 'falta_informacion' => false, 'persona_validada' => true],
+            json_decode((string) $data['ficha']['control_papel'], true)
+        );
+    }
+
+    public function testControlPapelRechazaMarcasContradictorias(): void
+    {
+        $this->expectException(HttpException::class);
+        PersonaInputValidator::normalize(self::valid([
+            'control_papel' => '{"ficha_completa":true,"falta_informacion":true}',
+        ]));
+    }
+
+    public function testControlPapelNoPermiteClavesArbitrarias(): void
+    {
+        $this->expectException(HttpException::class);
+        PersonaInputValidator::normalize(self::valid([
+            'control_papel' => '{"valida_administracion":true}',
+        ]));
+    }
+
 }
