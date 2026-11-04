@@ -103,6 +103,17 @@ jobs:
           done
           curl -fsS http://127.0.0.1:8081/api/v1/health
 
+      - name: Verificar importador INEI en dry-run con fixture SINTETICA
+        run: |
+          php -l scripts/i02/importar-ubigeo.php
+          sha=$(sha256sum scripts/i02/fixtures/ubigeo-sintetico.csv | cut -d' ' -f1)
+          php scripts/i02/importar-ubigeo.php \
+            --file=scripts/i02/fixtures/ubigeo-sintetico.csv \
+            --sha256="$sha" \
+            --fuente-url=https://example.invalid/fixture-sintetica \
+            --corte=2026-11-03
+        # Dry-run NO importa ni certifica fuente oficial INEI.
+
       - name: Runner HTTP P01 (23 verificaciones)
         run: php tests/api/run.php --base-url=http://127.0.0.1:8081/api/v1
 
