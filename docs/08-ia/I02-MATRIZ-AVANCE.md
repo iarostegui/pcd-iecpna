@@ -42,3 +42,12 @@ Ejecución [41756308611](https://github.com/iarostegui/pcd-iecpna/actions/runs/4
 
 ## Importador INEI preparado, fuente real pendiente
 Se incorporó `scripts/i02/importar-ubigeo.php` con verificación SHA256 de CSV, fuente/corte declarados, estructura jerárquica, rechazo de diferencias existentes y modo dry-run. La CI comprueba sintaxis y dry-run con un CSV **explícitamente sintético** sin escribir en BD. **No se ha descargado ni importado aún el conjunto oficial del INEI.**
+
+## Validación final de entrega técnica (03/11/2026)
+- GitHub Actions: [ejecución 41757545580](https://github.com/iarostegui/pcd-iecpna/actions/runs/41757545580): **4/4 jobs SUCCESS** (`documentos`, `backend`, `frontend`, `i00`).
+- PHPUnit: **91 pruebas, 210 aserciones, 1 omitida**; omisión registrada, no ocultada.
+- Runner HTTP I02: **19 PASS / 0 FAIL**, incluidos casos de simultaneidad; regresión I01 y build frontend en verde.
+- Importador INEI: **dry-run sobre 3 filas sintéticas temporales**, SHA válido; **sin importación de fuente oficial**.
+- Seguimiento de decisiones: [H-24 #6](https://github.com/iarostegui/pcd-iecpna/issues/6) y [INEI/CE #7](https://github.com/iarostegui/pcd-iecpna/issues/7).
+
+**Cierre:** operación de desarrollo y verificación técnica completada; **I02 no puede cerrarse formalmente ni integrarse a `main`** por dependencias funcionales e institucionales pendientes. PR #5 continúa Draft. No hay GO productivo.
