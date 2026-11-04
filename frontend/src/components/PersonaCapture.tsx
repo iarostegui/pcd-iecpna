@@ -152,7 +152,7 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
 
   async function save(event: React.FormEvent): Promise<void> {
     event.preventDefault();
-    if (busy || auth.perfil === 'REPORTES') return;
+    if (busy || saved || auth.perfil === 'REPORTES') return;
     setBusy(true);
     setError(null);
     try {
@@ -249,13 +249,13 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
         </fieldset>
 
         {error && <p role="alert" className="notice warn">{error}</p>}
-        {saved && <p role="status" className="notice info">
+        {saved && <p className="muted">Para evitar registros duplicados, pulsa «Nueva captura» antes de registrar otra ficha.</p>}\n        {saved && <p role="status" className="notice info">
           Ficha #{saved.ficha_id} registrada. Persona #{saved.persona_id}.
           {saved.persona_reutilizada ? ' Se reutilizó la identidad existente.' : ' Nueva Persona.'}
           {saved.advertencias?.length ? ` ${saved.advertencias.join(' ')}` : ''}
         </p>}
         <div className="row">
-          <button className="btn primary" type="submit" disabled={busy || auth.perfil === 'REPORTES'}>{busy ? 'Guardando…' : 'Registrar ficha'}</button>
+          <button className="btn primary" type="submit" disabled={busy || Boolean(saved) || auth.perfil === 'REPORTES'}>{busy ? 'Guardando…' : saved ? 'Ficha registrada' : 'Registrar ficha'}</button>
           <button className="btn soft" type="button" onClick={reset} disabled={busy}>Nueva captura</button>
         </div>
       </form>
