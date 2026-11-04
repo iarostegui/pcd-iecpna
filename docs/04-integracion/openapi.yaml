@@ -271,7 +271,8 @@ components:
         ubicacion_referencia: { type: string, nullable: true }
     PersonaInput:
       type: object
-      description: "El número de ficha y los campos críticos son opcionales al guardar; solo contexto autenticado es obligatorio."
+      description: "H-24: presbiterio y sede se obtienen del contexto de sesión, y son obligatorios. Para crear ficha Persona se requieren nombres, ambos apellidos, tipo/número documento y teléfono. Los demás campos son opcionales."
+      required: [nombres, apellido_paterno, apellido_materno, tipo_documento, numero_documento, telefono]
       properties:
         numero_ficha: { type: string, nullable: true }
         tipo_documento: { type: string, nullable: true, enum: [DNI, CE, OTRO] }
