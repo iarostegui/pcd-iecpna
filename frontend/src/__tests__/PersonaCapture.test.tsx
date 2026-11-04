@@ -33,12 +33,16 @@ describe('Captura I02 (solo información sintética)', () => {
     await user.type(screen.getByLabelText('Apellido paterno'), 'APELLIDO');
     await user.type(screen.getByLabelText('Apellido materno'), 'MATERNO');
     await user.type(screen.getByLabelText('Teléfono'), '999888777');
+    await user.click(screen.getByLabelText('Ficha completa'));
+    await user.click(screen.getByLabelText('Persona validada en papel'));
     await user.click(screen.getByRole('button', { name: /registrar ficha/i }));
 
     await screen.findByText(/ficha #50 registrada/i);
     const call = fetchMock.mock.calls.find(args => String(args[0]) === '/api/v1/personas');
-    const body = JSON.parse(String(call?.[1]?.body)) as { numero_documento: string };
+    const body = JSON.parse(String(call?.[1]?.body)) as { numero_documento: string; control_papel: string };
     expect(body.numero_documento).toBe('00123456');
+    expect(JSON.parse(body.control_papel)).toEqual({ ficha_completa: true, falta_informacion: false, persona_validada: true });
+    expect(screen.getByRole('button', { name: 'Ficha registrada' })).toBeDisabled();
     expect(new Headers(call?.[1]?.headers).has('Idempotency-Key')).toBe(true);
     expect(window.localStorage.length).toBe(0);
   });
@@ -59,6 +63,6 @@ describe('Captura I02 (solo información sintética)', () => {
   it('I02-S10: muestra catálogo vacío sin inventar ubigeos', async () => {
     setup();
     render(<PersonaCapture auth={authMe({ sede_id: 1 })} />);
-    await waitFor(() => expect(screen.getByText(/catálogo INEI aún no importado/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/catálogo geográfico aún no cargado/i)).toBeInTheDocument());
   });
 });
