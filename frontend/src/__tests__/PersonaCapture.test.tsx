@@ -73,10 +73,9 @@ describe('Captura I02 (solo información sintética)', () => {
     const user = userEvent.setup();
     expect(screen.getByText(/Sede Lima Centro/)).toBeInTheDocument();
     await user.selectOptions(screen.getByLabelText('Departamento'), '15');
-    await screen.findByRole('option', { name: 'Lima', hidden: false });
-    await waitFor(() => expect(screen.getByLabelText('Provincia')).toHaveValue(''));
+    await waitFor(() => expect(screen.getByLabelText('Provincia').querySelector('option[value="1501"]')).not.toBeNull());
     await user.selectOptions(screen.getByLabelText('Provincia'), '1501');
-    await waitFor(() => expect(screen.getByRole('option', { name: 'Lima', hidden: false })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByLabelText('Distrito').querySelector('option[value="150101"]')).not.toBeNull());
     await user.selectOptions(screen.getByLabelText('Distrito'), '150101');
     await waitFor(() => expect(screen.getByRole('option', { name: 'Masculino' })).toBeInTheDocument());
     await user.selectOptions(screen.getByLabelText('Sexo (código de ficha)'), 'M');
