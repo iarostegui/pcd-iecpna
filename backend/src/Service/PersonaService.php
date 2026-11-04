@@ -28,7 +28,7 @@ final class PersonaService
     /** @param array<string,mixed> $payload
      * @return array{status:int,body:array<string,mixed>}
      */
-    public function create(SessionContext $context, array $payload, ?string $idempotencyKey, ?int $attachPersonaId = null): array
+    public function create(SessionContext $context, array $payload, ?string $idempotencyKey, ?int $attachPersonaId = null, int $attempt = 0): array
     {
         if ($context->perfil === 'REPORTES') {
             throw new HttpException(403, 'forbidden', 'El perfil REPORTES no puede registrar fichas.');
@@ -96,6 +96,14 @@ final class PersonaService
             return ['status' => 201, 'body' => $body];
         } catch (PDOException $e) {
             $this->rollback();
+            // InnoDB puede detectar un deadlock entre dos capturas de DNI aún
+            // inexistente. Reintentar tras rollback abre una instantánea nueva.
+            // Máximo dos reintentos, sin cambiar clave/payload ni crear dobles altas.
+            if (((string) $e->getCode() === '40001' || (int) ($e->errorInfo[1] ?? 0) === 1213)
+                && $attempt < 2) {
+                usleep(20000 * ($attempt + 1));
+                return $this->create($context, $payload, $idempotencyKey, $attachPersonaId, $attempt + 1);
+            }
             if ((string) $e->getCode() === '23000') {
                 // Clave idempotente disputada; releer después del rollback para
                 // evitar una instantánea de lectura anterior a la otra transacción.
