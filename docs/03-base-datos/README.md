@@ -11,6 +11,7 @@
 | [Justificación de tablas](anexos/justificacion-11-tablas.md) | Razón para mantener cada tabla. |
 | [Diccionario resumido](diccionario-datos.md) | Campos principales por área. |
 | [Catálogos e identidad](catalogos-e-identidad.md) | Una tabla CATALOGO, documento sin subtipo, UBIGEO I02. |
+| [Fuente recibida de ubigeos (I02)](fuentes/UBIGEO-RPT-2026-11-04.md) | Libro `rptUbigeo.xlsx` custodiado en Biblioteca; trazabilidad, conteo 25/196/1893, hashes SHA256, derivado CSV/SQL y discrepancia con fuentes INEI. |
 | [Campos críticos](campos-criticos.md) | Parametrización mediante CATALOGO.config_json. |
 | [Diagrama editable](diagramas/er-pcd-fisico.mmd) | Fuente Mermaid versionada. |
 
