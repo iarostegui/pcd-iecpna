@@ -14,4 +14,4 @@ El proceso usa transacción; si algún registro ya existe y difiere, se cancela 
 
 ## Estado
 
-**Pendiente de archivo oficial, hash y aprobación de corte.** GitHub Actions crea una muestra completamente sintética en `/tmp` para probar el modo dry-run; no se versionan CSV ni se importa la muestra.
+**Se recibió un archivo de referencia del responsable funcional y se generó un CSV normalizado con SHA256; el corte y la correspondencia con el archivo oficial del INEI aún requieren corroboración.** Ver [ficha documental del ubigeo](../../docs/03-base-datos/fuentes/UBIGEO-RPT-2026-11-04.md). Archivos conservados en la Biblioteca del proyecto, no en el repositorio. GitHub Actions crea una muestra completamente sintética en `/tmp` para probar el modo dry-run; no se versionan CSV ni se importa la muestra.
