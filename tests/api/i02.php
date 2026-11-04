@@ -184,6 +184,56 @@ try {
     $catalog = $lim->send('GET', '/catalogos');
     $ubigeo = $lim->send('GET', '/ubigeos?tipo=DEPARTAMENTO');
     checkI02('I02-HTTP-14', $catalog['code'] === 200 && $ubigeo['code'] === 200, 'catálogos desde BD, sin inventarlos');
+    // I02-U01..U04: el catálogo de 2114 códigos suministrados se importó
+    // en MySQL 8 real, preservando códigos con ceros y jerarquía por API.
+    $deps = $lim->send('GET', '/ubigeos?tipo=DEPARTAMENTO');
+    checkI02('I02-U01', $deps['code'] === 200 && count($deps['body']) === 25
+        && in_array('01', array_column($deps['body'], 'codigo'), true),
+        '25 departamentos y código 01 preservado');
+    $provs = $lim->send('GET', '/ubigeos?tipo=PROVINCIA&padre_codigo=15');
+    $dists = $lim->send('GET', '/ubigeos?tipo=DISTRITO&padre_codigo=1501');
+    checkI02('I02-U02', $provs['code'] === 200 && $dists['code'] === 200
+        && in_array('1501', array_column($provs['body'], 'codigo'), true)
+        && in_array('150101', array_column($dists['body'], 'codigo'), true),
+        'jerarquía Lima / Provincia Lima / Distrito Lima');
+    $geoPersona = $lim->send('POST', '/personas', h24([
+        'tipo_documento' => 'DNI', 'numero_documento' => str_pad((string) random_int(1000000, 8999999), 8, '0', STR_PAD_LEFT),
+        'ubigeo_dpto_codigo' => '15', 'ubigeo_prov_codigo' => '1501',
+        'ubigeo_dist_codigo' => '150101',
+    ]), pcdKey());
+    if (isset($geoPersona['body']['ficha_id'])) $clean['fichas'][] = (int) $geoPersona['body']['ficha_id'];
+    if (isset($geoPersona['body']['persona_id'])) $clean['personas'][] = (int) $geoPersona['body']['persona_id'];
+    checkI02('I02-U03', $geoPersona['code'] === 201, 'Persona con ubigeo real del archivo recibido');
+    $badGeo = $lim->send('POST', '/personas', h24([
+        'ubigeo_dpto_codigo' => '15', 'ubigeo_prov_codigo' => '0101',
+    ]), pcdKey());
+    checkI02('I02-U04', $badGeo['code'] === 422, 'rechazar provincia de otro departamento');
+    // C.E. sin verificación remota: captura de formato orientativo y NO fusión
+    // del documento sin prueba de identidad otorgada por Migraciones.
+    $ceA = $lim->send('POST', '/personas', h24([
+        'tipo_documento' => 'CE', 'numero_documento' => 'N000123456',
+    ]), pcdKey());
+    $ceB = $lim->send('POST', '/personas', h24([
+        'tipo_documento' => 'CE', 'numero_documento' => 'N000123456',
+    ]), pcdKey());
+    foreach ([$ceA, $ceB] as $record) {
+        if (isset($record['body']['ficha_id'])) $clean['fichas'][] = (int) $record['body']['ficha_id'];
+        if (isset($record['body']['persona_id'])) $clean['personas'][] = (int) $record['body']['persona_id'];
+    }
+    checkI02('I02-CE01', $ceA['code'] === 201 && $ceB['code'] === 201
+        && ($ceA['body']['persona_id'] ?? null) !== ($ceB['body']['persona_id'] ?? null),
+        'C.E. se captura sin fusionar automáticamente');
+    $paper = $lim->send('POST', '/personas', h24([
+        'tipo_documento' => 'OTRO', 'numero_documento' => 'PAPEL-PRUEBA',
+        'control_papel' => '{"ficha_completa":true,"persona_validada":true}',
+    ]), pcdKey());
+    if (isset($paper['body']['ficha_id'])) $clean['fichas'][] = (int) $paper['body']['ficha_id'];
+    if (isset($paper['body']['persona_id'])) $clean['personas'][] = (int) $paper['body']['persona_id'];
+    $paperDetail = isset($paper['body']['ficha_id'])
+        ? $lim->send('GET', '/fichas/' . $paper['body']['ficha_id']) : ['code' => 0, 'body' => []];
+    checkI02('I02-H14', $paper['code'] === 201 && $paperDetail['code'] === 200
+        && str_contains((string) ($paperDetail['body']['control_papel'] ?? ''), '"persona_validada":true'),
+        'marcas del formulario físico conservadas en ficha');
     $check = $pdo->prepare("SELECT COUNT(*) FROM auditoria_evento WHERE recurso_tipo = 'FICHA' AND recurso_id IN (?, ?)");
     $check->execute([$first['body']['ficha_id'], $second['body']['ficha_id']]);
     checkI02('I02-HTTP-15', (int) $check->fetchColumn() === 0, 'alta sin auditoría_evento');
