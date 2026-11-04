@@ -14,7 +14,7 @@ Ruta Biblioteca de ChatGPT: `/IAC - Sistema de Iglesias/PCD IECPNA/Ubigeos/`
 | `PCD_IECPNA_ubigeo_fuente_usuario.sql` | Derivado SQL orientado a base **vacía de pruebas**, con niveles padre antes que hijos; no ejecutar en producción sin GO. |
 | `PCD_IECPNA_ubigeo_manifest.json` | Integridad: recuentos, SHA256 y tratamiento de la estructura de entrada. |
 
-Se prefirió conservar los archivos en la Biblioteca del proyecto en lugar de incorporar el Excel o CSV al repositorio GitHub. Los controles de I00 `S-07` impiden versionar arbitrariamente archivos de datos: no relajar controles de privacidad por conveniencia. Esta ficha de procedencia SÍ forma parte de la documentación versionada.
+El Excel original y los derivados de trabajo se conservan en la Biblioteca. También existe una copia reproducible **solo geográfica, sin datos personales** en `database/referencias/ubigeo-20261104/parte-{01,02,03}.b64` (xz + base64), para ejecutar CI sin acceso a la Biblioteca. Los controles de I00 `S-07` impiden versionar arbitrariamente archivos de datos: no relajar controles de privacidad por conveniencia. Esta ficha de procedencia SÍ forma parte de la documentación versionada.
 
 ## 2. Recuento y correspondencia con el modelo
 
@@ -63,4 +63,4 @@ Referencias externas para corroboración:
 4. No cargar en producción, no publicar datos reales de Personas, no declarar I02 aprobado por la sola existencia de archivos. Mantener PR #5 en Draft hasta evidencia del catálogo importado en MySQL de prueba y validación de C.E.
 5. Al cerrar I02, incorporar evidencia de versión, conteos, consulta jerárquica por API y pruebas de regresión.
 
-**Decisión vigente:** el dataset entregado se incorpora al repositorio documental **por referencia persistente** y debe utilizarse para continuar I02. Su oficialidad/versión queda expresamente diferenciada de la validación estructural.
+**Decisión vigente:** fuente operativa H-UBIGEO aprobada para digitación, reproducible mediante paquetes comprimidos versionados con SHA256; origen oficial INEI y fecha de corte aún no acreditados. CI integra datos únicamente en MySQL de pruebas. Su oficialidad/versión queda expresamente diferenciada de la validación estructural.
