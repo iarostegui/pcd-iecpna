@@ -56,6 +56,16 @@ final class I02Client {
         return $this->send('PUT', '/contexto/sede', ['sede_id' => $id]);
     }
 }
+function h24(array $changes = []): array {
+    return array_merge([
+        'nombres' => 'PERSONA PRUEBA CI',
+        'apellido_paterno' => 'APELLIDO',
+        'apellido_materno' => 'MATERNO',
+        'tipo_documento' => 'DNI',
+        'numero_documento' => '00123456',
+        'telefono' => '999888777',
+    ], $changes);
+}
 function pcdKey(): string {
     global $clean;
     $key = 'i02-ci-' . bin2hex(random_bytes(9));
@@ -126,10 +136,10 @@ try {
     $lim->selectSede((int) $sedeA['body']['id']);
     $tru->selectSede((int) $sedeB['body']['id']);
     $dni = str_pad((string) random_int(1000000, 8999999), 8, '0', STR_PAD_LEFT);
-    $payload = ['tipo_documento' => 'DNI', 'numero_documento' => $dni,
+    $payload = h24(['tipo_documento' => 'DNI', 'numero_documento' => $dni,
         'nombres' => 'PERSONA PRUEBA CI', 'fecha_nacimiento' => '2024-02-29',
         'conyuge' => ['tipo_documento' => 'DNI', 'numero_documento' => '00000001'],
-        'fecha_papel' => '2026-11-02'];
+        'fecha_papel' => '2026-11-02']);
     $key = pcdKey();
     $first = $lim->send('POST', '/personas', $payload, $key);
     if (isset($first['body']['ficha_id'])) $clean['fichas'][] = (int) $first['body']['ficha_id'];
@@ -139,11 +149,11 @@ try {
     $again = $lim->send('POST', '/personas', $payload, $key);
     checkI02('I02-HTTP-04', $again['code'] === 201 && $again['body']['ficha_id'] === $first['body']['ficha_id'],
         'reintento idempotente');
-    $changed = $lim->send('POST', '/personas', ['nombres' => 'OTRO'], $key);
+    $changed = $lim->send('POST', '/personas', h24(['nombres' => 'OTRO']), $key);
     checkI02('I02-HTTP-05', $changed['code'] === 409, 'misma clave distinta carga');
-    $second = $tru->send('POST', '/personas', [
+    $second = $tru->send('POST', '/personas', h24([
         'tipo_documento' => 'DNI', 'numero_documento' => $dni, 'nombres' => 'NOMBRE DIVERGENTE'
-    ], pcdKey());
+    ]), pcdKey());
     if (isset($second['body']['ficha_id'])) $clean['fichas'][] = (int) $second['body']['ficha_id'];
     checkI02('I02-HTTP-06', $second['code'] === 201
         && ($second['body']['persona_reutilizada'] ?? false) === true
@@ -153,14 +163,18 @@ try {
         && ($detail['body']['persona']['nombres'] ?? '') === 'PERSONA PRUEBA CI'
         && count($detail['body']['fichas'] ?? []) >= 2, 'consolidado inmutable');
     $fakeId = $first['body']['persona_id'];
-    $mismatch = $tru->send('POST', '/personas/' . $fakeId . '/fichas', [
+    $mismatch = $tru->send('POST', '/personas/' . $fakeId . '/fichas', h24([
         'tipo_documento' => 'DNI', 'numero_documento' => str_pad((string) random_int(1000000, 8999999), 8, '0', STR_PAD_LEFT)
-    ], pcdKey());
+    ]), pcdKey());
     checkI02('I02-HTTP-08', $mismatch['code'] === 409, 'impedir falso vínculo por ID');
     $date = $lim->send('POST', '/personas', ['fecha_nacimiento' => '2026-02-30'], pcdKey());
     checkI02('I02-HTTP-09', $date['code'] === 422, 'fecha imposible rechazada');
     $extra = $lim->send('POST', '/personas', ['subtipo_documento' => 'PROHIBIDO'], pcdKey());
     checkI02('I02-HTTP-10', $extra['code'] === 422, 'propiedad fuera de contrato');
+    $missing = $lim->send('POST', '/personas', h24(['telefono' => '']), pcdKey());
+    checkI02('I02-H24-01', $missing['code'] === 422, 'teléfono obligatorio');
+    $missingSurname = $lim->send('POST', '/personas', h24(['apellido_materno' => null]), pcdKey());
+    checkI02('I02-H24-02', $missingSurname['code'] === 422, 'apellido materno obligatorio');
     $anonResult = $anon->send('POST', '/personas', $payload, pcdKey());
     checkI02('I02-HTTP-11', $anonResult['code'] === 401, 'requiere sesión');
     $rep = $reports->login((int) $ids['LIM'], 'REPORTES-NAC', getenv('PCD_REPORTES_PASSWORD') ?: '');
@@ -183,7 +197,7 @@ try {
     if ($limOtherLogin['code'] !== 200) throw new RuntimeException('Segunda sesión de carrera falló.');
     $limOther->selectSede((int) $sedeA['body']['id']);
     $raceDni = str_pad((string) random_int(1000000, 8999999), 8, '0', STR_PAD_LEFT);
-    $racePayload = ['tipo_documento' => 'DNI', 'numero_documento' => $raceDni, 'nombres' => 'PRUEBA PARALELA'];
+    $racePayload = h24(['tipo_documento' => 'DNI', 'numero_documento' => $raceDni, 'nombres' => 'PRUEBA PARALELA']);
     $raceKey = pcdKey();
     $races = concurrentPostsI02($base, [
         ['client' => $lim, 'body' => $racePayload, 'key' => $raceKey],
