@@ -51,3 +51,6 @@ Se incorporó `scripts/i02/importar-ubigeo.php` con verificación SHA256 de CSV,
 - Seguimiento de decisiones: [H-24 #6](https://github.com/iarostegui/pcd-iecpna/issues/6) y [INEI/CE #7](https://github.com/iarostegui/pcd-iecpna/issues/7).
 
 **Cierre:** operación de desarrollo y verificación técnica completada; **I02 no puede cerrarse formalmente ni integrarse a `main`** por dependencias funcionales e institucionales pendientes. PR #5 continúa Draft. No hay GO productivo.
+
+## H-40 — Asignación funcional aclarada
+El perfil **REPORTES** queda designado para **gestionar la designación y aprobación institucional** del PCD. Conserva los permisos de lectura previstos; esta asignación no permite crear, editar ni aprobar cambios operativos en Persona/Ficha. Las evidencias del acto institucional, responsable nominal, finalidad, aviso, base legal y retención permanecen pendientes para producción. No confundir designación del perfil con aprobación institucional ya emitida.
