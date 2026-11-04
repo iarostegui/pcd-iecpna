@@ -9,9 +9,16 @@ describe('Captura I02 (solo información sintética)', () => {
     vi.unstubAllGlobals();
   });
 
-  function setup() {
+  function setup(loaded = false) {
     return mockApi([
-      { method: 'GET' as const, path: '/api/v1/ubigeos?tipo=DEPARTAMENTO', response: () => jsonResponse(200, []) },
+      { method: 'GET' as const, path: '/api/v1/ubigeos?tipo=DEPARTAMENTO', response: () => jsonResponse(200, loaded ? [{ codigo: '15', nombre: 'Lima', tipo: 'DEPARTAMENTO', padre_codigo: null }] : []) },
+      { method: 'GET' as const, path: '/api/v1/ubigeos?tipo=PROVINCIA&padre_codigo=15', response: () => jsonResponse(200, [{ codigo: '1501', nombre: 'Lima', tipo: 'PROVINCIA', padre_codigo: '15' }]) },
+      { method: 'GET' as const, path: '/api/v1/ubigeos?tipo=DISTRITO&padre_codigo=1501', response: () => jsonResponse(200, [{ codigo: '150101', nombre: 'Lima', tipo: 'DISTRITO', padre_codigo: '1501' }]) },
+      { method: 'GET' as const, path: '/api/v1/catalogos', response: () => jsonResponse(200, [
+        { categoria: 'SEXO', codigo: 'M', etiqueta: 'Masculino', orden: 20 },
+        { categoria: 'ESTADO_CIVIL', codigo: 'CASADO', etiqueta: 'Casado(a)', orden: 20 },
+        { categoria: 'CONDICION', codigo: 'MIEMBRO', etiqueta: 'Miembro', orden: 30 },
+      ]) },
       { method: 'GET' as const, path: '/api/v1/personas?pagina=1&tamano=10', response: () => jsonResponse(200, {
         pagina: 1, tamano: 10, total: 0, items: [],
       }) },
@@ -58,6 +65,23 @@ describe('Captura I02 (solo información sintética)', () => {
     setup();
     render(<PersonaCapture auth={authMe({ perfil: 'REPORTES', sede_id: null })} />);
     expect(screen.getByRole('button', { name: /registrar ficha/i })).toBeDisabled();
+  });
+
+  it('I02-UAT: elige jerarquía geográfica real y catálogos de iglesia desde API', async () => {
+    setup(true);
+    render(<PersonaCapture auth={authMe({ sede_id: 1, sede_nombre: 'Sede Lima Centro' })} />);
+    const user = userEvent.setup();
+    expect(screen.getByText(/Sede Lima Centro/)).toBeInTheDocument();
+    await user.selectOptions(screen.getByLabelText('Departamento'), '15');
+    await screen.findByRole('option', { name: 'Lima', hidden: false });
+    await waitFor(() => expect(screen.getByLabelText('Provincia')).toHaveValue(''));
+    await user.selectOptions(screen.getByLabelText('Provincia'), '1501');
+    await waitFor(() => expect(screen.getByRole('option', { name: 'Lima', hidden: false })).toBeInTheDocument());
+    await user.selectOptions(screen.getByLabelText('Distrito'), '150101');
+    await waitFor(() => expect(screen.getByRole('option', { name: 'Masculino' })).toBeInTheDocument());
+    await user.selectOptions(screen.getByLabelText('Sexo (código de ficha)'), 'M');
+    expect(screen.getByLabelText('Distrito')).toHaveValue('150101');
+    expect(screen.getByLabelText('Sexo (código de ficha)')).toHaveValue('M');
   });
 
   it('I02-S10: muestra catálogo vacío sin inventar ubigeos', async () => {
