@@ -7,7 +7,7 @@
 - [x] Frontend de captura integrado a Workspace I01, con pruebas Vitest/build.
 - [x] Probar en MySQL 8 CI y corregir errores (run 41756308611, I02-HTTP 19 PASS).
 - [x] Matriz de evidencias por IDs y PR Draft #5.
-- [ ] H-24 — **BLOCKED** por decisión funcional.
+- [x] H-24 — **APROBADA FUNCIONALMENTE**: presbiterio/sede + nombres, ambos apellidos, tipo/número documento y teléfono; código/tests incluidos.
 - [ ] CE confiable — **BLOCKED** hasta norma verificable.
 - [ ] INEI importación — **BLOCKED** hasta descargar/cortar/verificar archivo oficial.
 - [ ] GO producción — **NO AUTORIZADO** (H-40, cPanel, especialista).
