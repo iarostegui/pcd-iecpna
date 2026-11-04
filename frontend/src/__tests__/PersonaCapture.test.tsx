@@ -30,6 +30,9 @@ describe('Captura I02 (solo información sintética)', () => {
     await user.selectOptions(screen.getByLabelText('Tipo de documento'), 'DNI');
     await user.type(screen.getByLabelText(/número de documento \(conservar ceros\)/i), '00123456');
     await user.type(screen.getByLabelText('Nombres'), 'PERSONA SINTETICA');
+    await user.type(screen.getByLabelText('Apellido paterno'), 'APELLIDO');
+    await user.type(screen.getByLabelText('Apellido materno'), 'MATERNO');
+    await user.type(screen.getByLabelText('Teléfono'), '999888777');
     await user.click(screen.getByRole('button', { name: /registrar ficha/i }));
 
     await screen.findByText(/ficha #50 registrada/i);
@@ -38,6 +41,13 @@ describe('Captura I02 (solo información sintética)', () => {
     expect(body.numero_documento).toBe('00123456');
     expect(new Headers(call?.[1]?.headers).has('Idempotency-Key')).toBe(true);
     expect(window.localStorage.length).toBe(0);
+  });
+
+  it('I02-H24: el formulario bloquea confirmación si faltan apellidos', async () => {
+    const fetchMock = setup();
+    render(<PersonaCapture auth={authMe({ sede_id: 1 })} />);
+    await userEvent.click(screen.getByRole('button', { name: /registrar ficha/i }));
+    expect(fetchMock.mock.calls.some(args => String(args[0]) === '/api/v1/personas')).toBe(false);
   });
 
   it('I02-S05: REPORTES no puede confirmar ficha', async () => {
