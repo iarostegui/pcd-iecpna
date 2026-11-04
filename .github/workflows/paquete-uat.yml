@@ -1,8 +1,9 @@
 name: Paquete UAT PCD (sin despliegue)
 
-# Solo ejecución manual. No publica en cPanel ni usa secretos.
+# PR y ejecución manual: genera un artefacto sintético sin publicar en hosting ni usar secretos.
 on:
   workflow_dispatch:
+  pull_request:
 
 permissions:
   contents: read
