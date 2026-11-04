@@ -167,6 +167,17 @@ try {
         'tipo_documento' => 'DNI', 'numero_documento' => str_pad((string) random_int(1000000, 8999999), 8, '0', STR_PAD_LEFT)
     ]), pcdKey());
     checkI02('I02-HTTP-08', $mismatch['code'] === 409, 'impedir falso vínculo por ID');
+    // Caso positivo de anexo por ID: antes la ruta fallaba por servicio no inicializado.
+    $attached = $lim->send('POST', '/personas/' . $first['body']['persona_id'] . '/fichas',
+        h24(['numero_documento' => $dni, 'nombres' => 'OTRA FICHA DEL MISMO DNI']),
+        pcdKey());
+    if (isset($attached['body']['ficha_id'])) $clean['fichas'][] = (int) $attached['body']['ficha_id'];
+    checkI02('I02-A01', $attached['code'] === 201
+        && ($attached['body']['persona_id'] ?? null) === $first['body']['persona_id']
+        && ($attached['body']['persona_reutilizada'] ?? null) === true
+        && ($attached['body']['ficha_id'] ?? null) !== $first['body']['ficha_id'],
+        'anexo autorizado de nueva ficha a Persona existente');
+
     $date = $lim->send('POST', '/personas', ['fecha_nacimiento' => '2026-02-30'], pcdKey());
     checkI02('I02-HTTP-09', $date['code'] === 422, 'fecha imposible rechazada');
     $extra = $lim->send('POST', '/personas', ['subtipo_documento' => 'PROHIBIDO'], pcdKey());
