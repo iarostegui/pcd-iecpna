@@ -16,7 +16,8 @@
 | Índices reportes | Optimizar solo con consultas/EXPLAIN reales | APROBADA |
 | E1-D02 | Identificación GC preexistente | PENDIENTE |
 | H-23/H-24 | Permiso registro GC de otra Persona / mínimo de ficha | PENDIENTE |
-| H-40 PR-01…08 | Privacidad y retención institucional | PENDIENTE, GATE PRODUCTIVO |
+| H-40 — perfil responsable | **REPORTES** gestiona la designación y la aprobación institucional del PCD; mantiene su acceso operativo **solo lectura**. No se crea un cuarto perfil ni se presume una aprobación institucional efectiva. | APROBADA COMO ASIGNACIÓN FUNCIONAL |
+| H-40 PR-01…08 — evidencias institucionales | Formalización de la designación, aprobación institucional efectiva, finalidad, aviso, base legal, retención y tratamiento de datos/GPS/backups | PENDIENTE, GATE PRODUCTIVO |
 | Visibilidad Github/Licencia | Repositorio público observado; cambio de visibilidad y licencia dependen del propietario | PENDIENTE DECISIÓN DEL PROPIETARIO |
 **Nota:** E2-D01 (consulta general con filtros opcionales) y E2-D03 (riesgo residual de clave común) quedan cubiertas por H-12 y H-03; no se reabren. No inventar nombres de personas aprobadoras ni firmas. La aceptación institucional se adjuntará solo cuando exista autorización explícita.
 
