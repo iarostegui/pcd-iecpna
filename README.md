@@ -3,7 +3,7 @@
 >
 > **Fuente vigente para construcción:** **SDD V4.1**, [ALC-PCD-4.0](docs/01-analisis/alcance-funcional.md), [decisiones](docs/01-analisis/decisiones-pendientes.md), [aprobaciones](docs/08-ia/APROBACIONES.md), [OpenSpec](openspec/specs/README.md), [API](docs/04-integracion/openapi.yaml), [SQL de 11 tablas](database/migrations/001_initial.sql).
 >
-> **Estado:** P00 consolidó la especificación V4.1. **P01 aportó el andamiaje ejecutable** (API PHP 8.2 + React/TS/Vite). **I01 está implementado en desarrollo/CI** con login real contra MySQL, sesiones, CSRF, presbiterios/sedes, contexto ADMIN y GPS opcional de una captura por sesión; **I02–I05 siguen pendientes**. El SQL no está probado en el hosting ni existe GO productivo.
+> **Estado:** P00 consolidó la especificación V4.1. **P01 aportó el andamiaje ejecutable** (API PHP 8.2 + React/TS/Vite). **I01 está implementado en desarrollo/CI** con login real contra MySQL, sesiones, CSRF, presbiterios/sedes, contexto ADMIN y GPS opcional de una captura por sesión; **I02 está implementado y validado en CI (PR #5)**, incluidas capturas, 2114 ubicaciones geográficas del archivo suministrado en MySQL de prueba, H-14/H-24 y pruebas de regresión; **I03–I05 siguen pendientes**. El SQL no está probado en el hosting ni existe GO productivo.
 
 ## Para empezar
 1. Leer [AGENTS.md](AGENTS.md) antes de usar una IA para implementar o revisar.
@@ -32,7 +32,7 @@ Pruebas: `(cd backend && vendor/bin/phpunit)`, `php tests/api/run.php --base-url
 | [openspec/changes/](openspec/changes/README.md) | Cambios históricos y decisiones de ingeniería. No implementar versiones antiguas sin comprobación. |
 | [database/](database/README.md) | SQL/semillas; cuatro presbiterios precargados, sedes editables. |
 | [prototypes/](prototypes/README.md) | V2.3 = UI vigente; V2.2 = histórico. |
-| [frontend/](frontend/README.md) | React/TS/Vite: login, contexto de sede, alta de sede y sesión I01; captura I02–I05 pendiente. |
+| [frontend/](frontend/README.md) | React/TS/Vite: login, contexto de sede, alta de sede y sesión I01; captura I02 implementada; I03–I05 pendiente. |
 | [backend/](backend/README.md) | API PHP 8.2/PDO: autenticación, sesión, organización y contexto I01. |
 | [tests/](tests/README.md) | PHPUnit y runner HTTP con estados verificables. |
 | [scripts/](scripts/README.md) | Validadores documentales y aprovisionamiento de cuentas. |
@@ -44,3 +44,6 @@ Pruebas: `(cd backend && vendor/bin/phpunit)`, `php tests/api/run.php --base-url
 **Seguridad:** el repositorio es actualmente público; no subir PII ni contraseñas. [SECURITY.md](SECURITY.md). La decisión institucional H-40 debe cerrarse antes de datos reales.
 
 **Contrato para construir sin interpretaciones:** [CONTRATO-EJECUCION-V4.1](docs/08-ia/CONTRATO-EJECUCION-V4.1.md). Contiene pasos transaccionales de alta/vinculación E1-D01, validación de sede, auditoría por cambios y restricciones de producción.
+
+## Desarrollo I02 (implementación y verificación CI)
+La captura Persona/Ficha de I02 se implementó en `feature/i02-captura-personas`, PR #5, con MySQL 8 de CI y **solo datos sintéticos de Persona**. La fuente de ubigeos operativa procede del XLSX entregado: 25/196/1893; **sin certificación de fecha/corte oficial INEI**. Se aprobaron H-14 y H-24, se implementó CE sin fusión automática, y se ejecutaron [28 pruebas HTTP I02 y 96 PHPUnit](docs/08-ia/I02-MATRIZ-AVANCE.md). H-40 y el GO productivo continúan pendientes.

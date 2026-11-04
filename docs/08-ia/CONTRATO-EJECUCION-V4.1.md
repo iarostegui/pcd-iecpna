@@ -15,7 +15,7 @@ En el servidor; inicio de transacción PDO/InnoDB:
 4. Insertar una **ficha nueva con ID independiente** (Persona o GC según operación), contexto, `created_by` inmutable, `created_at` del servidor. Validar secciones JSON versionadas [Persona](../03-base-datos/esquemas-json/ficha-persona.schema.json) o [GC](../03-base-datos/esquemas-json/ficha-gc.schema.json), o NULL si no existen.
 5. **No insertar `auditoria_evento` durante INSERT de FICHA**. La fecha/autor de creación son las únicas marcas exigidas para altas. Guardar resultado de idempotencia y hacer COMMIT; responder `persona_reutilizada` correcto.
 6. `POST /personas/{id}/fichas` debe usar **la misma regla** y verificar que el ID apunta a identidad legítima/documento concordante, antes de anexar una ficha; no permitir falsificar identidad solo por conocer ID. No editar consolidado ni fichas existentes como efecto lateral.
-7. Si la ficha no contiene información suficiente, respetar H-24 pendiente: no inventar un nuevo bloqueo de guardado hasta aprobación.
+7. **H-24 APROBADA**: para ficha PERSONA exigir presbiterio y sede válidos desde contexto de sesión, y seis campos personales no vacíos: nombres, apellido paterno, apellido materno, tipo y número documental y teléfono. Los demás campos pueden estar incompletos. Rechazar omisiones con 422. La regla mínima de ficha GC se especifica en I03.
 
 **Ejemplo de aceptación:** DNI 00123456 ya capturado en LIM y nueva ficha del mismo DNI en TRU → 1 Persona, 2 Fichas con autor/presbiterio distintos, Persona original idéntica, **0 eventos de auditoría de alta**, respuesta indica reutilización.
 
@@ -32,6 +32,7 @@ En el servidor; inicio de transacción PDO/InnoDB:
 - Pase a producción: sustituir credenciales compartidas de prueba por credenciales **individuales**, invalidar todas las sesiones UAT y verificar el corte con CA-120. No desplegar datos reales hasta GO técnico/institucional y H-40.
 - Cookie `__Host-pcd_sid` HTTPS/HttpOnly/SameSite/Path raíz, CSRF en escrituras, expiración y revocación `auth_version`.
 - Ubicación navegador una vez por sesión es **telemetría opcional no probatoria**, hora de recepción registrada por servidor, no reenviar GPS en cada ficha.
+- **H-40 (decisión funcional):** REPORTES es el perfil responsable de gestionar la designación y aprobación institucional del PCD. Es una **responsabilidad organizativa**, no una autorización técnica de escritura ni un GO institucional emitido. Mantener REPORTES solo lectura. Antes de producción, conservar evidencia formal de la designación, del aprobador nominal y de la aprobación, además de los demás requisitos H-40.
 
 ## 5. Reportes e integridad
 - La creación de FICHA se cuenta desde `ficha.created_at/created_by`; las **ediciones reales** se cuentan desde `auditoria_evento` por actor.
@@ -41,5 +42,5 @@ En el servidor; inicio de transacción PDO/InnoDB:
 
 ## 6. No inventar
 - No CRUD de presbiterios, no permiso de consulta territorial configurable, no subtipo documental, no tabla de cónyuge/responsabilidades, no registro de integrantes GC, no conciliador del papel ni flujo supervisor, no integración automática SGSP.
-- E1-D02/H-23/H-24 siguen abiertas. Lo que no esté aprobado se registra como bloqueo de esa iteración, **no se deduce** de la interfaz de demostración.
+- E1-D02/H-23 siguen abiertas para I03. H-24 Persona ya fue aprobada; no trasladar automáticamente su mínimo a GC. Lo que no esté aprobado se registra como bloqueo de esa iteración, **no se deduce** de la interfaz de demostración.
 - El objetivo del especialista es verificar estas reglas antes de generar código productivo, no iniciar otra etapa de ampliación de alcance.

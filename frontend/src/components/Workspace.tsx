@@ -1,3 +1,4 @@
+import PersonaCapture from './PersonaCapture';
 import type { AuthMe, GeoEstado } from '../api/types';
 
 interface Props {
@@ -88,15 +89,15 @@ export default function Workspace({ auth, gpsState, notice, onOpenContext, onLog
           </p>
         ) : (
           <p>
-            El contexto de presbiterio y sede está listo. Los formularios de captura de Persona y
-            Grupo Crecer pertenecen a I02–I03 y no forman parte de esta iteración.
+            El contexto de presbiterio y sede está listo. La captura de Persona y ficha está habilitada en I02. El registro de Grupo Crecer corresponde a I03.
           </p>
         )}
         <p className="notice info">
-          Esta pantalla no simula funcionalidades fuera de I01. La sesión expira por inactividad o
+          La sesión expira por inactividad o
           por duración absoluta; cualquier respuesta 401 devuelve al login.
         </p>
       </section>
+      {auth.perfil !== 'REPORTES' && auth.sede_id !== null && <PersonaCapture auth={auth} />}
     </main>
   );
 }

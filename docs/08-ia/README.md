@@ -25,3 +25,5 @@ Organiza el **contrato de trabajo** para una IA que implemente PCD respetando SD
 - [Aprobaciones](APROBACIONES.md) — decisiones funcionales vigentes, sin equivaler a firma institucional.
 
 - [I00 — Autorización condicionada para desarrollo I01 con datos sintéticos](i00/AUTORIZACION-DESARROLLO-CONDICIONADA.md) (no es GO productivo).
+
+- [I02 — Matriz de avance, riesgos y dependencias](I02-MATRIZ-AVANCE.md) (PR #5 Draft, no GO productivo).

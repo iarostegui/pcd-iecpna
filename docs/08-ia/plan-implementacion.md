@@ -28,14 +28,14 @@
 - **E1-D01 APROBADO:** reutilizar Persona y agregar ficha fuente entre presbiterios vía endpoint existente.
 - **E1-D02:** GC «ya existe» declarado en papel.
 - **H-23:** ficha GC por digitador distinto del creador Persona.
-- **H-24:** umbral mínimo de ficha no totalmente vacía.
+- **H-24 aprobada:** presbiterio y sede de sesión más nombres, apellidos paterno y materno, tipo/número documento y teléfono.
 - **H-40:** responsable, finalidad, base jurídica, aviso, retención y cierre.
 - Fuente oficial INEI y corte para I02; catálogo de sedes incompleto pero hay alta de sedes; versión real hosting y carga por probar.
 
-**Estado real:** SQL, OpenAPI, anotaciones y anexos están en GitHub. **I01 está implementado en desarrollo/CI** con autenticación, sesión, organización/sedes, contexto y GPS opcional, pruebas PHPUnit/HTTP/UX y build React; I02–I05 siguen pendientes. **NO hay frontend/backend productivos** ni pruebas de restore/carga ejecutadas; E-07/H-14/H-40 y revisión del especialista siguen abiertos.
+**Estado real:** SQL, OpenAPI, anotaciones y anexos están en GitHub. **I01 está implementado en desarrollo/CI** con autenticación, sesión, organización/sedes, contexto y GPS opcional, pruebas PHPUnit/HTTP/UX y build React; I02 implementada en PR #5, pendiente de cierre técnico; I03–I05 siguen pendientes. **NO hay frontend/backend productivos** ni pruebas de restore/carga ejecutadas; E-07/H-14/H-40 y revisión del especialista siguen abiertos.
 
 ## Gate V2.3 (UX aprobada como referencia, no implementación)
-**Referencia interactiva vigente:** [PCD_v2.3.html](../../prototypes/PCD_v2.3.html). [Cambios por pantalla](../02-diseno/pcd-v2.3-alineacion.md). I01 login por usuario escrito, claves separadas en producción, GPS único; I02 Persona tipo+número, fecha imposible rechazada, calidad externa; I03 GC sin selector adicional; I04 consulta nacional con filtros, lectura independiente de edición; I05 reportes generales. Probar **CA-101…111**. **E1-D01 está aprobada**; E1-D02/H-23/H-24 siguen pendientes y no quedan resueltos por la maqueta.
+**Referencia interactiva vigente:** [PCD_v2.3.html](../../prototypes/PCD_v2.3.html). [Cambios por pantalla](../02-diseno/pcd-v2.3-alineacion.md). I01 login por usuario escrito, claves separadas en producción, GPS único; I02 Persona tipo+número, fecha imposible rechazada, calidad externa; I03 GC sin selector adicional; I04 consulta nacional con filtros, lectura independiente de edición; I05 reportes generales. Probar **CA-101…111**. **E1-D01 está aprobada**; E1-D02/H-23 siguen pendientes y no quedan resueltos por la maqueta.
 
 **H-46 integrado en I01/I06:** controlar frecuencia de actualización de sesión, validación de hashing PHP, limpieza acotada de idempotencia y métricas p95 sin servicio adicional ni tablas. [Etapa 4](../07-auditorias/etapa-4-produccion-y-privacidad.md) · [CA-112…114](../05-pruebas/casos-prueba.md).
 

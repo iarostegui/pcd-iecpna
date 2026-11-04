@@ -271,18 +271,19 @@ components:
         ubicacion_referencia: { type: string, nullable: true }
     PersonaInput:
       type: object
-      description: "El número de ficha y los campos críticos son opcionales al guardar; solo contexto autenticado es obligatorio."
+      description: "H-24: presbiterio y sede se obtienen del contexto de sesión, y son obligatorios. Para crear ficha Persona se requieren nombres, ambos apellidos, tipo/número documento y teléfono. Los demás campos son opcionales."
+      required: [nombres, apellido_paterno, apellido_materno, tipo_documento, numero_documento, telefono]
       properties:
         numero_ficha: { type: string, nullable: true }
-        tipo_documento: { type: string, nullable: true, enum: [DNI, CE, OTRO] }
-        numero_documento: { type: string, nullable: true }
-        nombres: { type: string, nullable: true }
-        apellido_paterno: { type: string, nullable: true }
-        apellido_materno: { type: string, nullable: true }
+        tipo_documento: { type: string, enum: [DNI, CE, OTRO] }
+        numero_documento: { type: string, minLength: 1 }
+        nombres: { type: string, minLength: 1 }
+        apellido_paterno: { type: string, minLength: 1 }
+        apellido_materno: { type: string, minLength: 1 }
         fecha_nacimiento: { type: string, format: date, nullable: true }
         sexo_codigo: { type: string, nullable: true }
         estado_civil_codigo: { type: string, nullable: true }
-        telefono: { type: string, nullable: true }
+        telefono: { type: string, minLength: 1 }
         correo: { type: string, format: email, nullable: true }
         facebook_usuario: { type: string, nullable: true }
         direccion: { type: string, nullable: true }
@@ -295,6 +296,7 @@ components:
         fecha_papel: { type: string, format: date, nullable: true }
         responsable_papel: { type: string, nullable: true }
         observaciones: { type: string, nullable: true }
+        control_papel: { type: string, nullable: true, maxLength: 200, description: 'JSON textual de marcas del impreso (ficha_completa/falta_informacion/persona_validada booleanos); NO certificación institucional' }
         conyuge: { $ref: '#/components/schemas/ConyugeFuente' }
         responsabilidades: { $ref: '#/components/schemas/ResponsabilidadesFuente' }
     GCInput:

@@ -103,11 +103,51 @@ jobs:
           done
           curl -fsS http://127.0.0.1:8081/api/v1/health
 
+      - name: Verificar importador INEI en dry-run con fixture SINTETICA
+        run: |
+          php -l scripts/i02/importar-ubigeo.php
+          printf '%s\n' 'codigo,tipo,padre_codigo,nombre' '99,DEPARTAMENTO,,DEPARTAMENTO SINTETICO' '9901,PROVINCIA,99,PROVINCIA SINTETICA' '990101,DISTRITO,9901,DISTRITO SINTETICO' > /tmp/i02-ubigeo-sintetico.csv
+          sha=$(sha256sum /tmp/i02-ubigeo-sintetico.csv | cut -d' ' -f1)
+          php scripts/i02/importar-ubigeo.php \
+            --file=/tmp/i02-ubigeo-sintetico.csv \
+            --sha256="$sha" \
+            --fuente-url=https://example.invalid/fixture-sintetica \
+            --corte=2026-11-03
+          # La ruta 'usuario' solo acepta SHA256 del CSV de referencia real:
+          # la fixture sintética DEBE ser rechazada y no debe producir escrituras.
+          if php scripts/i02/importar-ubigeo.php \
+            --file=/tmp/i02-ubigeo-sintetico.csv \
+            --sha256="$sha" \
+            --fuente-tipo=usuario \
+            --referencia=H-UBIGEO-2026-11-04; then
+            echo 'ERROR: se admitió fixture sintética como archivo fuente usuario' >&2
+            exit 1
+          fi
+        # Dry-run NO importa ni certifica fuente oficial INEI.
+
+      - name: Integrar catálogo recibido H-UBIGEO en MySQL 8 de pruebas
+        run: |
+          set -euo pipefail
+          cat database/referencias/ubigeo-20261104/parte-{01,02,03}.b64 | base64 -d | xz -dc > /tmp/i02-ubigeo-usuario.csv
+          echo '8a3abc99898d2927d926536e4f31120b324e08e571111414846c6d2508cb650b  /tmp/i02-ubigeo-usuario.csv' | sha256sum -c -
+          php scripts/i02/importar-ubigeo.php --file=/tmp/i02-ubigeo-usuario.csv --sha256=8a3abc99898d2927d926536e4f31120b324e08e571111414846c6d2508cb650b --fuente-tipo=usuario --referencia=H-UBIGEO-2026-11-04 --apply
+          # Segunda ejecución para demostrar idempotencia y no sobrescritura.
+          php scripts/i02/importar-ubigeo.php --file=/tmp/i02-ubigeo-usuario.csv --sha256=8a3abc99898d2927d926536e4f31120b324e08e571111414846c6d2508cb650b --fuente-tipo=usuario --referencia=H-UBIGEO-2026-11-04 --apply
+          mysql -h127.0.0.1 -uroot -proot pcd_test -N -e "SELECT tipo,COUNT(*) FROM ubigeo GROUP BY tipo ORDER BY tipo" | tee /tmp/i02-ubigeo-conteos.txt
+          test "$(mysql -h127.0.0.1 -uroot -proot pcd_test -N -e "SELECT COUNT(*) FROM ubigeo")" = "2114"
+          test "$(mysql -h127.0.0.1 -uroot -proot pcd_test -N -e "SELECT COUNT(*) FROM ubigeo WHERE tipo='DEPARTAMENTO'")" = "25"
+          test "$(mysql -h127.0.0.1 -uroot -proot pcd_test -N -e "SELECT COUNT(*) FROM ubigeo WHERE tipo='PROVINCIA'")" = "196"
+          test "$(mysql -h127.0.0.1 -uroot -proot pcd_test -N -e "SELECT COUNT(*) FROM ubigeo WHERE tipo='DISTRITO'")" = "1893"
+          test "$(mysql -h127.0.0.1 -uroot -proot pcd_test -N -e "SELECT COUNT(*) FROM ubigeo d LEFT JOIN ubigeo p ON d.padre_codigo = p.codigo WHERE d.padre_codigo IS NOT NULL AND p.codigo IS NULL")" = "0"
+
       - name: Runner HTTP P01 (23 verificaciones)
         run: php tests/api/run.php --base-url=http://127.0.0.1:8081/api/v1
 
       - name: Runner HTTP I01 (MySQL real, CA obligatorios)
         run: php tests/api/i01.php --base-url=http://127.0.0.1:8081/api/v1 --json=i01-evidencia.json
+
+      - name: Runner HTTP I02 (captura Persona/Ficha, MySQL 8)
+        run: php tests/api/i02.php --base-url=http://127.0.0.1:8081/api/v1
 
       - name: Publicar evidencia I01
         if: always()

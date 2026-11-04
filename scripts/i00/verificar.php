@@ -401,7 +401,7 @@ db_check($results, $pdo, $dbError, 'D-14', 'Aprovisionamiento UAT (26 cuentas)',
     }
 
     $digitadores = (int) db_value($pdo, "SELECT COUNT(*) FROM usuario WHERE perfil = 'DIGITADOR'");
-    $argon = (int) db_value($pdo, "SELECT COUNT(*) FROM usuario WHERE password_hash LIKE '\\$argon2id\\$%'");
+    $argon = (int) db_value($pdo, "SELECT COUNT(*) FROM usuario WHERE password_hash LIKE '\$argon2id\$%'");
 
     return $total === 26 && $digitadores === 24 && $argon === 26
         ? ['PASS', '26 cuentas, 24 DIGITADORES, 26 Argon2id']

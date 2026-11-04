@@ -6,9 +6,11 @@ namespace Pcd;
 
 use Pcd\Config\Env;
 use Pcd\Controller\AuthController;
+use Pcd\Controller\CatalogoController;
 use Pcd\Controller\ContextoController;
 use Pcd\Controller\HealthController;
 use Pcd\Controller\OrganizacionController;
+use Pcd\Controller\PersonaController;
 use Pcd\Controller\PlaceholderController;
 use Pcd\Http\ErrorHandler;
 use Pcd\Http\HttpException;
@@ -120,9 +122,16 @@ final class App
         $router->add('PUT', '/contexto/presbiterio', [ContextoController::class, 'presbiterio']);
         $router->add('PUT', '/contexto/sede', [ContextoController::class, 'sede']);
 
-        // I02–I06 permanecen fuera de alcance y responden 501.
-        $router->add('GET', '/catalogos', [PlaceholderController::class, 'notImplemented']);
-        $router->add('GET', '/ubigeos', [PlaceholderController::class, 'notImplemented']);
+        // I02 — captura Persona/Ficha y lectura mínima para anexar, sin PATCH de I04.
+        $router->add('POST', '/personas', [PersonaController::class, 'create']);
+        $router->add('GET', '/personas', [PersonaController::class, 'list']);
+        $router->add('GET', '/personas/{id}', [PersonaController::class, 'detail']);
+        $router->add('POST', '/personas/{id}/fichas', [PersonaController::class, 'append']);
+        $router->add('GET', '/fichas/{id}', [PersonaController::class, 'ficha']);
+
+        // I03–I06 permanecen fuera de alcance; I04 implementará los PATCH.
+        $router->add('GET', '/catalogos', [CatalogoController::class, 'catalogos']);
+        $router->add('GET', '/ubigeos', [CatalogoController::class, 'ubigeos']);
 
         return $router;
     }

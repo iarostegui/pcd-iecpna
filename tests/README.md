@@ -50,3 +50,7 @@ Run [41456246321](https://github.com/iarostegui/pcd-iecpna/actions/runs/41456246
 Cada ejecución registra comando, commit, entorno y resultado. **No marcar PASS sin ejecución** y
 nunca usar datos personales reales. El CI con MySQL 8 es la evidencia de motor; el entorno local sin
 MySQL reporta `BLOCKED`.
+
+## I02 (PR #5, Draft)
+- `api/i02.php`: runner HTTP sobre PHP 8.2/MySQL 8 con datos sintéticos, idempotencia y pruebas paralelas (carreras), integrado en GitHub Actions.
+- Las pruebas I02 no sustituyen H-24, H-14, H-40 ni revisión institucional.

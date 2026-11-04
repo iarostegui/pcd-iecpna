@@ -521,3 +521,18 @@ select {
     width: 100%;
   }
 }
+
+/* I02 — captura responsive, sin replicar prototipo HTML como persistencia */
+.capture-form { display: grid; gap: 1.1rem; margin-top: 1rem; }
+.capture-form label { display: flex; flex-direction: column; gap: .3rem; font-weight: 600; font-size: .9rem; min-width: 0; }
+.capture-form input, .capture-form select { box-sizing: border-box; width: 100%; padding: .65rem .7rem; border: 1px solid #a5adb7; border-radius: .45rem; color: #172333; background: #fff; font: inherit; }
+.capture-form input:focus, .capture-form select:focus { outline: 2px solid #3978c5; outline-offset: 1px; }
+.capture-group { border: 1px solid #d5dde6; border-radius: .7rem; padding: 1rem; min-width: 0; }
+.capture-group legend { font-weight: 700; padding: 0 .3rem; }
+.capture-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: .85rem; }
+.capture-form .capture-check { display: flex; flex-direction: row; align-items: center; gap: .55rem; }
+.capture-check input { width: auto; }
+.capture-recent { margin-top: 1.2rem; border-top: 1px solid #dde4ed; padding-top: .8rem; }
+.capture-recent ul { margin: .5rem 0 0; padding-left: 1.4rem; }
+.capture-recent li { padding: .2rem 0; overflow-wrap: anywhere; }
+@media (max-width: 390px) { .capture-group { padding: .7rem; } .capture-grid { grid-template-columns: minmax(0, 1fr); } }
