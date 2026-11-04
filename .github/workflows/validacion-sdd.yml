@@ -113,6 +113,16 @@ jobs:
             --sha256="$sha" \
             --fuente-url=https://example.invalid/fixture-sintetica \
             --corte=2026-11-03
+          # La ruta 'usuario' solo acepta SHA256 del CSV de referencia real:
+          # la fixture sintética DEBE ser rechazada y no debe producir escrituras.
+          if php scripts/i02/importar-ubigeo.php \
+            --file=/tmp/i02-ubigeo-sintetico.csv \
+            --sha256="$sha" \
+            --fuente-tipo=usuario \
+            --referencia=H-UBIGEO-2026-11-04; then
+            echo 'ERROR: se admitió fixture sintética como archivo fuente usuario' >&2
+            exit 1
+          fi
         # Dry-run NO importa ni certifica fuente oficial INEI.
 
       - name: Runner HTTP P01 (23 verificaciones)
