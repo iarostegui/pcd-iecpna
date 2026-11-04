@@ -26,8 +26,11 @@ Given Persona documentalmente confiable, When se invoca POST /personas/{id}/fich
 ## I02-S08: sede contextual
 Given sesión sin sede o sede de otro presbiterio, When solicita alta, Then no crea Persona ni Ficha.
 
-## I02-S09: umbral mínimo H-24
-Given ficha absolutamente vacía, When se quiera definir si se admite o bloquea, Then **BLOCKED** hasta aprobación explícita H-24; no implementar criterio arbitrario.
+## I02-S09: obligatoriedad H-24 (APROBADA)
+Given una sesión con presbiterio y sede válida, When se guarda una ficha Persona con nombres, apellido paterno, apellido materno, tipo y número documental y teléfono no vacíos, Then se admite sin exigir los demás campos opcionales.
+Given falta cualquiera de esos seis datos personales, When se intenta registrar, Then la API responde 422 y no crea la ficha.
+Given falta sede de contexto o pertenece a otro presbiterio, When se intenta registrar, Then el backend rechaza la operación sin escrituras.
+La obligación de campos de Grupo Crecer se documentará en I03; no extrapolar automáticamente la regla Persona.
 
 ## I02-S10: fuente ubigeo y CE
 Given fuente oficial sin corte/verificación, When se solicita importación INEI o regla CE confiable, Then **BLOCKED** hasta verificar versión y fuente; mantener lectura vacía sin inventar registros.
