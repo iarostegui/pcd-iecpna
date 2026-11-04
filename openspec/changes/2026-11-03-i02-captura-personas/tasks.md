@@ -13,3 +13,4 @@
 - [ ] GO producción — **NO AUTORIZADO** (H-40, cPanel, especialista).
 
 Una casilla pendiente no significa PASS; el PR permanece Draft hasta cumplimiento.
+- [x] Utilitario de validación/importación controlada INEI con SHA256 y dry-run; sin importación oficial.
