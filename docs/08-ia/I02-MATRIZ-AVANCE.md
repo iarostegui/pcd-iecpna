@@ -6,19 +6,22 @@
 ## Implementación en rama I02
 | Componente | Evidencia en código | Estado |
 |---|---|---|
-| Documento DNI 8 dígitos con ceros | PersonaInputValidator | IMPLEMENTADO; probar en CI |
+| Documento DNI 8 dígitos con ceros | PersonaInputValidator | IMPLEMENTADO; PASS en CI |
 | CE / OTRO | PersonaInputValidator: clave_identidad=NULL | IMPLEMENTADO SIN FUSIÓN; CE confiable BLOQUEADO |
-| Persona y fichas independientes | PersonaService::create | IMPLEMENTADO; probar en CI |
-| Reutilización E1-D01 | PersonaService::findByIdentity | IMPLEMENTADO; probar en CI |
-| Anexo con documento concordante | PersonaService::resolveAttach | IMPLEMENTADO; probar en CI |
-| Idempotencia | tabla idempotencia + hash payload y transacción | IMPLEMENTADO; probar en CI |
-| Sede del contexto | validación PHP + FK compuesta | IMPLEMENTADO; probar en CI |
-| Fechas/JSON fuente estrictos | PersonaInputValidator | IMPLEMENTADO; probar en CI |
-| Autoría y ausencia auditoría INSERT | ficha.created_by, sin insertar auditoria_evento | IMPLEMENTADO; probar en CI |
-| Formulario React | PersonaCapture + Workspace | IMPLEMENTADO; probar Vitest/build |
+| Persona y fichas independientes | PersonaService::create | IMPLEMENTADO; PASS en CI |
+| Reutilización E1-D01 | PersonaService::findByIdentity | IMPLEMENTADO; PASS en CI |
+| Anexo con documento concordante | PersonaService::resolveAttach | IMPLEMENTADO; PASS en CI |
+| Idempotencia | tabla idempotencia + hash payload y transacción | IMPLEMENTADO; PASS en CI |
+| Sede del contexto | validación PHP + FK compuesta | IMPLEMENTADO; PASS en CI |
+| Fechas/JSON fuente estrictos | PersonaInputValidator | IMPLEMENTADO; PASS en CI |
+| Autoría y ausencia auditoría INSERT | ficha.created_by, sin insertar auditoria_evento | IMPLEMENTADO; PASS en CI |
+| Formulario React | PersonaCapture + Workspace | IMPLEMENTADO; PASS en Vitest/build |
 | Catálogos/ubigeos | consultas solo de filas existentes | IMPLEMENTADO; la importación INEI NO está hecha |
-| Concurrencia identidad/Idempotency-Key | UNIQUE y recuperación tras carrera | **RIESGO RESIDUAL**: prueba paralela explícita requerida |
+| Concurrencia identidad/Idempotency-Key | UNIQUE + reintento de deadlock + curl_multi contra MySQL 8 | **PASS** I02-HTTP-17…19 en CI; mantener pruebas de carga I06 |
 | Edición PATCH Persona/Ficha | prevista para I04 | NO_IMPLEMENTADO en I02 |
+
+## Evidencia ejecutada en MySQL 8 (CI)
+Ejecución [41756308611](https://github.com/iarostegui/pcd-iecpna/actions/runs/41756308611): backend, frontend, documentos e i00 **SUCCESS**. PHPunit **91 tests / 210 assertions**; HTTP I02 **19 PASS / 0 FAIL**, incluidos dos escenarios de concurrencia real con sesiones paralelas, doble clic y fuentes diferentes; suites previas I01 sin regresión.
 
 ## Pruebas trazables (no declarar PASS por diseño)
 - PHPUnit: `backend/tests/Unit/PersonaInputValidatorTest.php`, `backend/tests/Integration/PersonaCaptureTest.php`.
@@ -33,6 +36,6 @@
 4. **H-14:** XLSX original aún no incorporado.
 5. **H-40/cPanel/especialista:** NO-GO para datos reales y producción.
 6. **Consulta de duplicados por GET:** OpenAPI vigente utiliza `numero_documento` en query. No se habilita aún ese endpoint porque incorporaría PII a URL/logs; debe definirse contrato seguro antes de implementar consulta previa. El alta transaccional reutiliza identidad DNI sin consulta GET previa.
-7. **Pruebas de concurrencia:** el índice UNIQUE y retry mitigan, pero no sustituyen una ejecución paralela documentada; mantener la casilla abierta hasta evidencia.
+7. **Pruebas de carga/estrés:** las pruebas paralelas de I02 (19 controles HTTP en CI) pasan; carga concurrente de 10/20/30 y línea base p95 siguen reservadas a I06.
 
 **Dictamen:** la entrega puede revisarse como implementación parcial de I02; NO declararla completada formalmente mientras existan controles críticos bloqueados o pruebas no ejecutadas. PR #5 debe permanecer Draft, sin integración automática.
