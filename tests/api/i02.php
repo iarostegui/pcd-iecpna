@@ -152,6 +152,10 @@ try {
                 $pdo->prepare('DELETE FROM persona WHERE id = ?')->execute([$id]);
             }
             foreach (array_unique($clean['sedes']) as $id) {
+                // Las sesiones UAT hacen referencia a la sede seleccionada.
+                // Desvincularla antes de eliminar la sede sintética; no tocar
+                // información de fichas auténticas (CI usa BD aislada).
+                $pdo->prepare('UPDATE sesion SET sede_id = NULL WHERE sede_id = ?')->execute([$id]);
                 $pdo->prepare('DELETE FROM organizacion WHERE id = ?')->execute([$id]);
             }
         } catch (Throwable $e) {
