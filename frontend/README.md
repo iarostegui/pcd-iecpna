@@ -48,3 +48,8 @@ residente** en el hosting. No desplegar con datos reales antes de H-40/E-07 y el
 ## Prohibiciones
 No usar `localStorage` para fichas, credenciales, sesión ni coordenadas; no decidir permisos solo en
 React; no implementar funcionalidades fuera de ALC-PCD ni I02–I06.
+
+## I02 (PR #5, Draft)
+- `src/components/PersonaCapture.tsx`: captura sintética Persona/Ficha integrada en Workspace al tener sede y perfil de escritura.
+- `src/__tests__/PersonaCapture.test.tsx`: pruebas UI/cliente de idempotencia y ausencia de localStorage con PII.
+- La UI muestra bloqueos H-24, CE y catálogo INEI sin fingir autorización productiva.
