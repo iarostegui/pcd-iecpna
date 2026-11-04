@@ -21,13 +21,16 @@ use Pcd\Database\Db;
 
 $options = getopt('', ['file:', 'sha256:', 'fuente-tipo:', 'referencia:', 'fuente-url:', 'corte:', 'apply', 'help']);
 if (isset($options['help'])) {
-    echo "Uso: php scripts/i02/importar-ubigeo.php --file=... --sha256=... --fuente-tipo=usuario --referencia=H-UBIGEO-2026-11-04 [--apply]\n";\n    echo "O bien: --fuente-tipo=inei --fuente-url=https://... --corte=YYYY-MM-DD [--apply]\n";
+    echo "Uso: php scripts/i02/importar-ubigeo.php --file=... --sha256=... --fuente-tipo=usuario --referencia=H-UBIGEO-2026-11-04 [--apply]\n";
+    echo "O bien: --fuente-tipo=inei --fuente-url=https://... --corte=YYYY-MM-DD [--apply]\n";
     exit(0);
 }
 try {
     $file = (string) ($options['file'] ?? '');
     $sha = strtolower((string) ($options['sha256'] ?? ''));
-    $fuenteTipo = (string) ($options['fuente-tipo'] ?? 'inei');\n    $referencia = (string) ($options['referencia'] ?? '');\n    $url = (string) ($options['fuente-url'] ?? '');
+    $fuenteTipo = (string) ($options['fuente-tipo'] ?? 'inei');
+    $referencia = (string) ($options['referencia'] ?? '');
+    $url = (string) ($options['fuente-url'] ?? '');
     $corte = (string) ($options['corte'] ?? '');
     $apply = array_key_exists('apply', $options);
     if (!is_file($file) || !is_readable($file)) throw new RuntimeException('No existe CSV legible.');
