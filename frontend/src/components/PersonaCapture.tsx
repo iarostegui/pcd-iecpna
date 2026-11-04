@@ -27,6 +27,7 @@ const EMPTY: RecordForm = {
   fecha_desde: '', otra_descripcion: '', otra_fecha_desde: '',
 };
 type Ubigeo = { codigo: string; nombre: string; padre_codigo: string | null; tipo: string };
+type Catalogo = { categoria: string; codigo: string; etiqueta: string; orden: number };
 type SaveResult = { ficha_id: number; persona_id: number; persona_reutilizada: boolean; advertencias?: string[] };
 type PersonaPage = { pagina: number; tamano: number; total: number; items: Array<{
   id: number; ficha_id: number; nombres: string | null; apellido_paterno: string | null;
@@ -84,6 +85,7 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
   const [saved, setSaved] = useState<SaveResult | null>(null);
   const [personaAnexar, setPersonaAnexar] = useState('');
   const [ubigeos, setUbigeos] = useState<Ubigeo[]>([]);
+  const [catalogos, setCatalogos] = useState<Catalogo[]>([]);
   const [provincias, setProvincias] = useState<Ubigeo[]>([]);
   const [distritos, setDistritos] = useState<Ubigeo[]>([]);
   const [recent, setRecent] = useState<PersonaPage | null>(null);
@@ -96,6 +98,7 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
 
   useEffect(() => {
     void api.get<Ubigeo[]>('/ubigeos?tipo=DEPARTAMENTO').then(setUbigeos).catch(() => setUbigeos([]));
+    void api.get<Catalogo[]>('/catalogos').then(setCatalogos).catch(() => setCatalogos([]));
     void loadRecent();
   }, [loadRecent]);
 
@@ -182,7 +185,8 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
     <section className="card" aria-labelledby="i02-capture-title">
       <h2 id="i02-capture-title">I02 · Captura de Persona y ficha</h2>
       <p className="muted">Datos exclusivamente sintéticos. Se conserva una ficha por fuente y la identidad documental confiable se reutiliza sin sobrescribirla.</p>
-      <p className="notice info">H-24: presbiterio y sede seleccionados, nombres, ambos apellidos, tipo y número de documento, y teléfono son obligatorios. Fuente INEI y regla de C.E. aún pendientes. Solo datos sintéticos.</p>
+      <p className="notice info">H-24: presbiterio, sede, nombres, ambos apellidos, tipo y número de documento y teléfono obligatorios. Los ubigeos se toman del archivo geográfico suministrado para digitación, sin acreditar corte INEI. C.E. se captura sin fusión automática. Solo datos sintéticos durante UAT.</p>
+      <p className="muted">Contexto de la ficha: <strong>{auth.presbiterio_nombre ?? `Presbiterio #${auth.presbiterio_id}`}</strong> · <strong>{auth.sede_nombre ?? 'Sede no seleccionada'}</strong>. Estos datos se registran desde la sesión.</p>
 
       <form onSubmit={e => void save(e)} className="capture-form">
         <label>
@@ -200,6 +204,16 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
                     <select required={field.key === 'tipo_documento'} value={form[field.key]} onChange={e => change(field.key, e.target.value)}>
                       <option value="">Sin documento</option>
                       <option value="DNI">DNI</option><option value="CE">C.E.</option><option value="OTRO">OTRO</option>
+                    </select>
+                  ) : (['sexo_codigo', 'estado_civil_codigo', 'condicion_codigo'] as Field[]).includes(field.key) ? (
+                    <select value={form[field.key]} onChange={e => change(field.key, e.target.value)}>
+                      <option value="">Sin especificar</option>
+                      {catalogos.filter(item => item.categoria === ({
+                        sexo_codigo: 'SEXO', estado_civil_codigo: 'ESTADO_CIVIL',
+                        condicion_codigo: 'CONDICION',
+                      } as Record<string, string>)[field.key]).map(item => (
+                        <option key={item.codigo} value={item.codigo}>{item.etiqueta}</option>
+                      ))}
                     </select>
                   ) : (
                     <input required={(['numero_documento', 'nombres', 'apellido_paterno', 'apellido_materno', 'telefono'] as Field[]).includes(field.key)} type={field.type ?? 'text'} value={form[field.key]}
@@ -255,7 +269,7 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
           {saved.advertencias?.length ? ` ${saved.advertencias.join(' ')}` : ''}
         </p>}
         <div className="row">
-          <button className="btn primary" type="submit" disabled={busy || Boolean(saved) || auth.perfil === 'REPORTES'}>{busy ? 'Guardando…' : saved ? 'Ficha registrada' : 'Registrar ficha'}</button>
+          <button className="btn primary" type="submit" disabled={busy || Boolean(saved) || auth.sede_id === null || auth.perfil === 'REPORTES'}>{busy ? 'Guardando…' : saved ? 'Ficha registrada' : 'Registrar ficha'}</button>
           <button className="btn soft" type="button" onClick={reset} disabled={busy}>Nueva captura</button>
         </div>
       </form>
