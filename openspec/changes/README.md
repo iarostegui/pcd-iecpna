@@ -30,3 +30,5 @@ Cuando una modificación se apruebe, crear una carpeta `YYYY-MM-DD-descripcion/`
 - [2026-10-31-levantamiento-etapa-3/](2026-10-31-levantamiento-etapa-3/README.md) — DTO y filtros API, trazabilidad integral y casos de prueba; sin implementación productiva.
 
 **Cambios históricos:** `2026-10-31-levantamiento-etapa-1`, `etapa-2`, `etapa-3` documentan la evolución de decisiones V3. Cualquier referencia a 17 tablas, subtype o `alcance_consulta` queda reemplazada por [V4](../../docs/01-analisis/decisiones-pendientes.md). **Cambio vigente de preparación**: [Etapa 4](2026-11-01-etapa-4-produccion/README.md).
+
+- `2026-11-03-i02-captura-personas/`: especificación I02, actualmente en PR #5 Draft; H-24, CE/INEI pendientes.
