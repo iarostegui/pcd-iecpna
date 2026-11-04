@@ -146,7 +146,7 @@ final class PersonaService
     public function ficha(SessionContext $context, int $fichaId): array
     {
         $stmt = $this->pdo->prepare("SELECT id AS ficha_id, tipo_ficha, presbiterio_id, sede_id,
-            created_by, version, fecha_papel, observaciones, datos_fuente_json
+            created_by, version, fecha_papel, observaciones, control_papel, datos_fuente_json
             FROM ficha WHERE id = ? AND tipo_ficha = 'PERSONA'");
         $stmt->execute([$fichaId]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
