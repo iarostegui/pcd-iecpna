@@ -32,6 +32,7 @@ En el servidor; inicio de transacción PDO/InnoDB:
 - Pase a producción: sustituir credenciales compartidas de prueba por credenciales **individuales**, invalidar todas las sesiones UAT y verificar el corte con CA-120. No desplegar datos reales hasta GO técnico/institucional y H-40.
 - Cookie `__Host-pcd_sid` HTTPS/HttpOnly/SameSite/Path raíz, CSRF en escrituras, expiración y revocación `auth_version`.
 - Ubicación navegador una vez por sesión es **telemetría opcional no probatoria**, hora de recepción registrada por servidor, no reenviar GPS en cada ficha.
+- **H-40 (decisión funcional):** REPORTES es el perfil responsable de gestionar la designación y aprobación institucional del PCD. Es una **responsabilidad organizativa**, no una autorización técnica de escritura ni un GO institucional emitido. Mantener REPORTES solo lectura. Antes de producción, conservar evidencia formal de la designación, del aprobador nominal y de la aprobación, además de los demás requisitos H-40.
 
 ## 5. Reportes e integridad
 - La creación de FICHA se cuenta desde `ficha.created_at/created_by`; las **ediciones reales** se cuentan desde `auditoria_evento` por actor.
