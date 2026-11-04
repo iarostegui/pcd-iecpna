@@ -9,7 +9,7 @@ use Pcd\Support\Validation;
 
 /**
  * Lista cerrada según PersonaInput (OpenAPI) + ficha-persona.schema.json.
- * Rechazo de fechas imposibles y claves ajenas; ninguna regla H-24 inventada.
+ * Rechazo de fechas imposibles y claves ajenas; validación H-24 aprobada.
  */
 final class PersonaInputValidator
 {
@@ -24,7 +24,7 @@ final class PersonaInputValidator
     ];
     public const FICHA = [
         'numero_ficha' => 50, 'responsable_papel' => 180,
-        'observaciones' => 65535,
+        'observaciones' => 65535, 'control_papel' => 200,
     ];
     private const DATES = ['fecha_nacimiento', 'fecha_condicion', 'fecha_papel'];
     private const BOOLEAN = ['es_lider_gc_intencion'];
@@ -62,6 +62,23 @@ final class PersonaInputValidator
                 $ficha[$key] = Validation::optionalString($payload, $key, $max);
             }
         }
+        if (($ficha['control_papel'] ?? null) !== null) {
+            $flags = json_decode((string) $ficha['control_papel'], true);
+            if (!is_array($flags) || array_is_list($flags)
+                || array_diff(array_keys($flags), ['ficha_completa', 'falta_informacion', 'persona_validada']) !== []
+                || count($flags) === 0) {
+                throw Validation::invalid('control_papel', 'Marcas del control impreso inválidas.');
+            }
+            foreach ($flags as $flag) {
+                if (!is_bool($flag)) {
+                    throw Validation::invalid('control_papel', 'Las marcas del formulario deben ser booleanas.');
+                }
+            }
+            if (($flags['ficha_completa'] ?? false) && ($flags['falta_informacion'] ?? false)) {
+                throw Validation::invalid('control_papel', 'Las marcas Ficha completa y Falta información son excluyentes.');
+            }
+            $ficha['control_papel'] = json_encode($flags, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        }
         foreach (self::DATES as $key) {
             if (array_key_exists($key, $payload)) {
                 $date = self::date($payload[$key], $key);
@@ -97,8 +114,12 @@ final class PersonaInputValidator
             }
             $clave = 'DNI:' . $norm;
         } elseif ($tipo === 'CE') {
-            // No dar por confiable hasta constatar la regla oficial del formato.
-            $warnings[] = 'C.E. pendiente de regla oficial verificable; sin fusión automática.';
+            // Formato conservador de captura, no verificación de identidad en Migraciones.
+            // Migraciones admite series históricas alfanuméricas; no asumir 9 dígitos fijos.
+            if (preg_match('/^[A-Z0-9]{1,11}$/D', (string) $norm) !== 1) {
+                throw Validation::invalid('numero_documento', 'C.E. debe contener de 1 a 11 caracteres alfanuméricos.');
+            }
+            $warnings[] = 'C.E. capturado sin consulta de identidad en Migraciones; no se fusionan Personas automáticamente.';
         } elseif ($tipo === 'OTRO') {
             $warnings[] = 'Documento OTRO: coincidencias solo orientativas, sin fusión automática.';
         }
