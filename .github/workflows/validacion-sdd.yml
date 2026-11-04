@@ -106,7 +106,7 @@ jobs:
       - name: Verificar importador INEI en dry-run con fixture SINTETICA
         run: |
           php -l scripts/i02/importar-ubigeo.php
-          printf 'codigo,tipo,padre_codigo,nombre\\n99,DEPARTAMENTO,,DEPARTAMENTO SINTETICO\\n9901,PROVINCIA,99,PROVINCIA SINTETICA\\n990101,DISTRITO,9901,DISTRITO SINTETICO\\n' > /tmp/i02-ubigeo-sintetico.csv
+          printf '%s\n' 'codigo,tipo,padre_codigo,nombre' '99,DEPARTAMENTO,,DEPARTAMENTO SINTETICO' '9901,PROVINCIA,99,PROVINCIA SINTETICA' '990101,DISTRITO,9901,DISTRITO SINTETICO' > /tmp/i02-ubigeo-sintetico.csv
           sha=$(sha256sum /tmp/i02-ubigeo-sintetico.csv | cut -d' ' -f1)
           php scripts/i02/importar-ubigeo.php \
             --file=/tmp/i02-ubigeo-sintetico.csv \
