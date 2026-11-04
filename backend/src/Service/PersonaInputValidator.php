@@ -24,7 +24,7 @@ final class PersonaInputValidator
     ];
     public const FICHA = [
         'numero_ficha' => 50, 'responsable_papel' => 180,
-        'observaciones' => 65535, 'control_papel' => 65535,
+        'observaciones' => 65535,
     ];
     private const DATES = ['fecha_nacimiento', 'fecha_condicion', 'fecha_papel'];
     private const BOOLEAN = ['es_lider_gc_intencion'];
