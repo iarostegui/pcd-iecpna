@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 /**
- * I02 — importador seguro de CSV DERIVADO DE FUENTE OFICIAL INEI.
+ * I02 — importador seguro de CSV de procedencia documentada (INEI o fuente usuario).
  * Preparación técnica; no incorpora datos ficticios al catálogo nacional.
  * Invocación: php scripts/i02/importar-ubigeo.php
- *  --file=/ruta/inei.csv --sha256=<64 hex> --fuente-url=https://... --corte=YYYY-MM-DD [--apply]
+ *  --file=/ruta/datos.csv --sha256=<64 hex> --fuente-tipo=usuario --referencia=H-UBIGEO-2026-11-04 [--apply]\n *  --file=/ruta/inei.csv --sha256=<64 hex> --fuente-tipo=inei --fuente-url=https://... --corte=YYYY-MM-DD [--apply]
  *
  * CSV UTF-8 con encabezado exacto: codigo,tipo,padre_codigo,nombre
  * Código de 2/4/6 dígitos, jerarquía referencial y nombre preservado.
@@ -19,28 +19,45 @@ require $autoload;
 
 use Pcd\Database\Db;
 
-$options = getopt('', ['file:', 'sha256:', 'fuente-url:', 'corte:', 'apply', 'help']);
+$options = getopt('', ['file:', 'sha256:', 'fuente-tipo:', 'referencia:', 'fuente-url:', 'corte:', 'apply', 'help']);
 if (isset($options['help'])) {
-    echo "Uso: php scripts/i02/importar-ubigeo.php --file=... --sha256=... --fuente-url=... --corte=YYYY-MM-DD [--apply]\n";
+    echo "Uso: php scripts/i02/importar-ubigeo.php --file=... --sha256=... --fuente-tipo=usuario --referencia=H-UBIGEO-2026-11-04 [--apply]\n";\n    echo "O bien: --fuente-tipo=inei --fuente-url=https://... --corte=YYYY-MM-DD [--apply]\n";
     exit(0);
 }
 try {
     $file = (string) ($options['file'] ?? '');
     $sha = strtolower((string) ($options['sha256'] ?? ''));
-    $url = (string) ($options['fuente-url'] ?? '');
+    $fuenteTipo = (string) ($options['fuente-tipo'] ?? 'inei');\n    $referencia = (string) ($options['referencia'] ?? '');\n    $url = (string) ($options['fuente-url'] ?? '');
     $corte = (string) ($options['corte'] ?? '');
     $apply = array_key_exists('apply', $options);
     if (!is_file($file) || !is_readable($file)) throw new RuntimeException('No existe CSV legible.');
     if (!preg_match('/^[a-f0-9]{64}$/D', $sha) || !hash_equals($sha, hash_file('sha256', $file))) {
         throw new RuntimeException('SHA256 faltante o distinto del archivo. Sin importación.');
     }
-    if (!filter_var($url, FILTER_VALIDATE_URL) || !str_starts_with($url, 'https://')) {
-        throw new RuntimeException('Registre URL HTTPS real de la fuente oficial INEI.');
+    if (!in_array($fuenteTipo, ['inei', 'usuario'], true)) {
+        throw new RuntimeException('fuente-tipo debe ser inei o usuario.');
     }
-    if (preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/D', $corte) !== 1
-        || !DateTimeImmutable::createFromFormat('!Y-m-d', $corte)
-        || DateTimeImmutable::createFromFormat('!Y-m-d', $corte)->format('Y-m-d') !== $corte) {
-        throw new RuntimeException('Indique corte YYYY-MM-DD verificable.');
+    if ($fuenteTipo === 'inei') {
+        if (!filter_var($url, FILTER_VALIDATE_URL) || !str_starts_with($url, 'https://')) {
+            throw new RuntimeException('Registre URL HTTPS real de la fuente INEI.');
+        }
+        if (preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/D', $corte) !== 1
+            || !DateTimeImmutable::createFromFormat('!Y-m-d', $corte)
+            || DateTimeImmutable::createFromFormat('!Y-m-d', $corte)->format('Y-m-d') !== $corte) {
+            throw new RuntimeException('Indique corte YYYY-MM-DD verificable.');
+        }
+    } else {
+        // Un archivo recibido y aprobado para digitación no es por ello fuente oficial INEI.
+        // Referencia fija a la ficha de procedencia: no aceptar metadatos sin respaldo.
+        if ($referencia !== 'H-UBIGEO-2026-11-04') {
+            throw new RuntimeException('Referencia de usuario no registrada en documentación.');
+        }
+        if ($sha !== '8a3abc99898d2927d926536e4f31120b324e08e571111414846c6d2508cb650b') {
+            throw new RuntimeException('El archivo no coincide con CSV normalizado recibido H-UBIGEO.');
+        }
+        if ($url !== '' || $corte !== '') {
+            throw new RuntimeException('No atribuir URL o corte INEI a un CSV recibido del usuario.');
+        }
     }
     if ($apply && strtolower((string) getenv('PCD_ENV')) === 'production') {
         throw new RuntimeException('Importación productiva bloqueada sin GO institucional H-40.');
@@ -92,9 +109,9 @@ try {
         }
     }
     echo 'VALIDACION_OK: registros=' . count($rows) . ' niveles=' . json_encode($levelCount)
-        . ' corte=' . $corte . ' sha256=' . $sha . '\n';
+        . ' fuente=' . $fuenteTipo . ' corte=' . ($corte !== '' ? $corte : 'NO_ACREDITADO') . ' sha256=' . $sha . '\n';
     if (!$apply) {
-        echo "DRY_RUN — sin escritura. La procedencia oficial y el corte requieren revisión humana.\n";
+        echo "DRY_RUN — sin escritura. La fuente usuario no acredita corte INEI oficial; no se ha efectuado escritura.\n";
         exit(0);
     }
 
