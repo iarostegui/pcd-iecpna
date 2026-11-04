@@ -30,7 +30,7 @@ Ejecución [41756308611](https://github.com/iarostegui/pcd-iecpna/actions/runs/4
 - CI: `.github/workflows/validacion-sdd.yml`, ejecución en PR #5.
 
 ## Bloqueos obligatorios
-1. **H-24:** no existe criterio aprobado de «ficha totalmente vacía» frente a «ficha incompleta». La aplicación de pruebas debe usar registros con algún dato; no aceptar como cerrada esa regla sin decisión.
+1. **H-24 (APROBADA):** campos mínimos Persona: presbiterio y sede de sesión; nombres, apellidos paterno y materno, tipo y número de documento y teléfono de contacto. Implementación backend/frontend y pruebas en revisión. La regla para GC se evaluará en I03 sobre su especificación.
 2. **INEI:** se ha localizado el portal oficial https://www.gob.pe/15028-consultar-codigos-estandarizados-del-inei, con descarga de datos estandarizados. Falta descargar el conjunto, fijar corte/fecha, verificar SHA y correspondencia jerárquica antes de importarlo; tabla permanece sin datos sintéticos presentados como oficiales.
 3. **C.E.:** falta validar formato de identidad confiable con fuente normativa; no se crea clave para fusionar automáticamente.
 4. **H-14:** XLSX original aún no incorporado.
@@ -54,3 +54,4 @@ Se incorporó `scripts/i02/importar-ubigeo.php` con verificación SHA256 de CSV,
 
 ## H-40 — Asignación funcional aclarada
 El perfil **REPORTES** queda designado para **gestionar la designación y aprobación institucional** del PCD. Conserva los permisos de lectura previstos; esta asignación no permite crear, editar ni aprobar cambios operativos en Persona/Ficha. Las evidencias del acto institucional, responsable nominal, finalidad, aviso, base legal y retención permanecen pendientes para producción. No confundir designación del perfil con aprobación institucional ya emitida.
+\n## H-14 — referencia documental recibida\nSe recibió como insumo de referencia el libro `SGSP_Fichas_Imprimibles_A4 (2).xlsx`, con cuatro hojas: `Ficha_Persona`, `Ejemplo_Ficha_Persona`, `Ficha_Lider_GC` y `Ejemplo_Lider_GC`. La ficha impresa original señala obligatorios distintos (por ejemplo, nacimiento, sexo, dirección/ubigeo y condición), y el apellido materno/teléfono no figura marcado igual. Para captura PCD prevalece la decisión H-24 vigente, sin alterar la plantilla impresa. En ficha original lista LIM/TRU/IQU y no CHI, pero catálogo inicial PCD sigue cuatro presbiterios. No se sube XLSX al repositorio sin revisión de privacidad/licencia; se documenta referencia funcional. La conciliación fina de campos de Líder GC pertenece a I03.\n
