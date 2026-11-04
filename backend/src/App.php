@@ -6,6 +6,7 @@ namespace Pcd;
 
 use Pcd\Config\Env;
 use Pcd\Controller\AuthController;
+use Pcd\Controller\CatalogoController;
 use Pcd\Controller\ContextoController;
 use Pcd\Controller\HealthController;
 use Pcd\Controller\OrganizacionController;
@@ -129,8 +130,8 @@ final class App
         $router->add('GET', '/fichas/{id}', [PersonaController::class, 'ficha']);
 
         // I03–I06 permanecen fuera de alcance; I04 implementará los PATCH.
-        $router->add('GET', '/catalogos', [PlaceholderController::class, 'notImplemented']);
-        $router->add('GET', '/ubigeos', [PlaceholderController::class, 'notImplemented']);
+        $router->add('GET', '/catalogos', [CatalogoController::class, 'catalogos']);
+        $router->add('GET', '/ubigeos', [CatalogoController::class, 'ubigeos']);
 
         return $router;
     }
