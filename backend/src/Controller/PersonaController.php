@@ -33,7 +33,10 @@ final class PersonaController
         $result = (new PersonaService(Db::fromEnv()->pdo()))->create(
             $context, $request->json(), $request->header('idempotency-key'), $id
         );
-        Response::json($request, $result['status'], $result['body']);
+        // OpenAPI anexo devuelve FichaDetalle; los IDs de la operación son
+        // metadatos adicionales para conservar trazabilidad del reintento.
+        $ficha = $service->ficha($context, (int) $result['body']['ficha_id']);
+        Response::json($request, $result['status'], array_merge($ficha, $result['body']));
     }
 
     /** @param array<string,string> $params */
