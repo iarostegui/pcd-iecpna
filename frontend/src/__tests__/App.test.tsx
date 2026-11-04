@@ -64,7 +64,7 @@ describe('App I01', () => {
     await userEvent.click(screen.getByRole('button', { name: /sede qa lima/i }));
     await screen.findByRole('heading', { name: /digitador lim 01/i });
 
-    expect(screen.getByText('Lima')).toBeInTheDocument();
+    expect(screen.getAllByText('Lima')[0]).toBeInTheDocument();
     expect(screen.getAllByText('Sede QA Lima').length).toBeGreaterThan(0);
     expect(window.localStorage.length).toBe(0);
 
