@@ -39,3 +39,6 @@ Ejecución [41756308611](https://github.com/iarostegui/pcd-iecpna/actions/runs/4
 7. **Pruebas de carga/estrés:** las pruebas paralelas de I02 (19 controles HTTP en CI) pasan; carga concurrente de 10/20/30 y línea base p95 siguen reservadas a I06.
 
 **Dictamen:** la entrega puede revisarse como implementación parcial de I02; NO declararla completada formalmente mientras existan controles críticos bloqueados o pruebas no ejecutadas. PR #5 debe permanecer Draft, sin integración automática.
+
+## Importador INEI preparado, fuente real pendiente
+Se incorporó `scripts/i02/importar-ubigeo.php` con verificación SHA256 de CSV, fuente/corte declarados, estructura jerárquica, rechazo de diferencias existentes y modo dry-run. La CI comprueba sintaxis y dry-run con un CSV **explícitamente sintético** sin escribir en BD. **No se ha descargado ni importado aún el conjunto oficial del INEI.**
