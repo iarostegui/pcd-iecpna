@@ -109,6 +109,9 @@ jobs:
       - name: Runner HTTP I01 (MySQL real, CA obligatorios)
         run: php tests/api/i01.php --base-url=http://127.0.0.1:8081/api/v1 --json=i01-evidencia.json
 
+      - name: Runner HTTP I02 (captura Persona/Ficha, MySQL 8)
+        run: php tests/api/i02.php --base-url=http://127.0.0.1:8081/api/v1
+
       - name: Publicar evidencia I01
         if: always()
         uses: actions/upload-artifact@v4
