@@ -7,7 +7,7 @@ type Field =
   | 'apellido_materno' | 'fecha_nacimiento' | 'sexo_codigo' | 'estado_civil_codigo'
   | 'telefono' | 'correo' | 'facebook_usuario' | 'direccion'
   | 'condicion_codigo' | 'fecha_condicion' | 'numero_ficha' | 'fecha_papel'
-  | 'responsable_papel' | 'observaciones' | 'control_papel'
+  | 'responsable_papel' | 'observaciones'
   | 'ubigeo_dpto_codigo' | 'ubigeo_prov_codigo' | 'ubigeo_dist_codigo'
   | 'conyuge_tipo_documento' | 'conyuge_numero_documento' | 'conyuge_nombres_apellidos'
   | 'nombre_sede_pastoreada' | 'region_presbitero' | 'descripcion'
@@ -20,7 +20,7 @@ const EMPTY: RecordForm = {
   apellido_materno: '', fecha_nacimiento: '', sexo_codigo: '', estado_civil_codigo: '',
   telefono: '', correo: '', facebook_usuario: '', direccion: '',
   condicion_codigo: '', fecha_condicion: '', numero_ficha: '', fecha_papel: '',
-  responsable_papel: '', observaciones: '', control_papel: '',
+  responsable_papel: '', observaciones: '',
   ubigeo_dpto_codigo: '', ubigeo_prov_codigo: '', ubigeo_dist_codigo: '',
   conyuge_tipo_documento: '', conyuge_numero_documento: '', conyuge_nombres_apellidos: '',
   nombre_sede_pastoreada: '', region_presbitero: '', descripcion: '',
@@ -55,7 +55,6 @@ const groups: { title: string; fields: { key: Field; label: string; type?: strin
     { key: 'fecha_papel', label: 'Fecha de papel', type: 'date' },
     { key: 'responsable_papel', label: 'Responsable en papel' },
     { key: 'observaciones', label: 'Observaciones' },
-    { key: 'control_papel', label: 'Control del papel' },
   ] },
   { title: 'Cónyuge — sección opcional', fields: [
     { key: 'conyuge_tipo_documento', label: 'Tipo documento del cónyuge' },
