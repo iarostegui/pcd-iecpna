@@ -182,7 +182,7 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
     <section className="card" aria-labelledby="i02-capture-title">
       <h2 id="i02-capture-title">I02 · Captura de Persona y ficha</h2>
       <p className="muted">Datos exclusivamente sintéticos. Se conserva una ficha por fuente y la identidad documental confiable se reutiliza sin sobrescribirla.</p>
-      <p className="notice info">H-24 (mínimo de datos), fuente INEI y regla oficial de C.E. aún pendientes. No utilizar documentos reales.</p>
+      <p className="notice info">H-24: presbiterio y sede seleccionados, nombres, ambos apellidos, tipo y número de documento, y teléfono son obligatorios. Fuente INEI y regla de C.E. aún pendientes. Solo datos sintéticos.</p>
 
       <form onSubmit={e => void save(e)} className="capture-form">
         <label>
@@ -197,12 +197,12 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
                 <label key={field.key}>
                   {field.label}
                   {field.key === 'tipo_documento' || field.key === 'conyuge_tipo_documento' ? (
-                    <select value={form[field.key]} onChange={e => change(field.key, e.target.value)}>
+                    <select required={field.key === 'tipo_documento'} value={form[field.key]} onChange={e => change(field.key, e.target.value)}>
                       <option value="">Sin documento</option>
                       <option value="DNI">DNI</option><option value="CE">C.E.</option><option value="OTRO">OTRO</option>
                     </select>
                   ) : (
-                    <input type={field.type ?? 'text'} value={form[field.key]}
+                    <input required={(['numero_documento', 'nombres', 'apellido_paterno', 'apellido_materno', 'telefono'] as Field[]).includes(field.key)} type={field.type ?? 'text'} value={form[field.key]}
                       onChange={e => change(field.key, e.target.value)} />
                   )}
                 </label>
