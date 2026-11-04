@@ -33,7 +33,7 @@ Ejecución [41756308611](https://github.com/iarostegui/pcd-iecpna/actions/runs/4
 1. **H-24 (APROBADA):** campos mínimos Persona: presbiterio y sede de sesión; nombres, apellidos paterno y materno, tipo y número de documento y teléfono de contacto. Implementación backend/frontend y pruebas en revisión. La regla para GC se evaluará en I03 sobre su especificación.
 2. **INEI:** se ha localizado el portal oficial https://www.gob.pe/15028-consultar-codigos-estandarizados-del-inei, con descarga de datos estandarizados. Falta descargar el conjunto, fijar corte/fecha, verificar SHA y correspondencia jerárquica antes de importarlo; tabla permanece sin datos sintéticos presentados como oficiales.
 3. **C.E.:** falta validar formato de identidad confiable con fuente normativa; no se crea clave para fusionar automáticamente.
-4. **H-14:** XLSX original aún no incorporado.
+4. **H-14 (REFERENCIA CONFIRMADA):** el archivo `SGSP_Fichas_Imprimibles_A4 (2).xlsx` fue utilizado para recopilar los datos y debe guiar la digitación. No se incorpora el binario al repositorio público; la revisión exhaustiva de mapeo de campos de Persona debe completarse antes del cierre de I02, y la de Líder GC antes del cierre de I03.
 5. **H-40/cPanel/especialista:** NO-GO para datos reales y producción.
 6. **Consulta de duplicados por GET:** OpenAPI vigente utiliza `numero_documento` en query. No se habilita aún ese endpoint porque incorporaría PII a URL/logs; debe definirse contrato seguro antes de implementar consulta previa. El alta transaccional reutiliza identidad DNI sin consulta GET previa.
 7. **Pruebas de carga/estrés:** las pruebas paralelas de I02 (19 controles HTTP en CI) pasan; carga concurrente de 10/20/30 y línea base p95 siguen reservadas a I06.
