@@ -81,6 +81,7 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
   const [form, setForm] = useState<RecordForm>({ ...EMPTY });
   const [bools, setBools] = useState({ es_lider_gc_intencion: false, es_pastor_sede: false, es_presbitero: false, tiene_responsabilidad: false });
   const [busy, setBusy] = useState(false);
+  const [control, setControl] = useState({ ficha_completa: false, falta_informacion: false, persona_validada: false });
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<SaveResult | null>(null);
   const [personaAnexar, setPersonaAnexar] = useState('');
@@ -134,6 +135,7 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
       payload[name] = value;
     }
     payload.es_lider_gc_intencion = bools.es_lider_gc_intencion;
+    if (Object.values(control).some(Boolean)) payload.control_papel = JSON.stringify(control);
     const conyuge = {
       tipo_documento: form.conyuge_tipo_documento || undefined,
       numero_documento: form.conyuge_numero_documento || undefined,
@@ -178,6 +180,7 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
 
   function reset(): void {
     setForm({ ...EMPTY }); setBools({ es_lider_gc_intencion: false, es_pastor_sede: false, es_presbitero: false, tiene_responsabilidad: false });
+    setControl({ ficha_completa: false, falta_informacion: false, persona_validada: false });
     setPersonaAnexar(''); setError(null); setSaved(null); idem.current = null;
   }
 
@@ -226,8 +229,8 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
         ))}
 
         <fieldset className="capture-group">
-          <legend>Ubicación INEI — solo catálogo oficial verificado</legend>
-          {ubigeos.length === 0 && <p className="muted">Catálogo INEI aún no importado. Deja la ubicación sin seleccionar.</p>}
+          <legend>Ubicación geográfica — referencia entregada para digitación</legend>
+          {ubigeos.length === 0 && <p className="muted">Catálogo geográfico aún no cargado. Deja la ubicación sin seleccionar.</p>}
           <div className="capture-grid">
             {([
               ['ubigeo_dpto_codigo', 'Departamento', ubigeos],
@@ -256,6 +259,30 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
               <label key={field} className="capture-check">
                 <input type="checkbox" checked={bools[field]}
                   onChange={e => { setBools(old => ({ ...old, [field]: e.target.checked })); idem.current = null; }} />
+                {label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset className="capture-group">
+          <legend>Control de digitalización (marcas del formulario físico)</legend>
+          <p className="muted">Transcribir únicamente lo que esté marcado en el papel. No constituye una validación institucional del PCD.</p>
+          <div className="capture-grid">
+            {([
+              ['ficha_completa', 'Ficha completa'],
+              ['falta_informacion', 'Falta información'],
+              ['persona_validada', 'Persona validada en papel'],
+            ] as const).map(([field, label]) => (
+              <label key={field} className="capture-check">
+                <input type="checkbox" checked={control[field]} onChange={e => {
+                  setControl(old => ({
+                    ...old, [field]: e.target.checked,
+                    ...(e.target.checked && field === 'ficha_completa' ? { falta_informacion: false } : {}),
+                    ...(e.target.checked && field === 'falta_informacion' ? { ficha_completa: false } : {}),
+                  }));
+                  idem.current = null;
+                }} />
                 {label}
               </label>
             ))}
