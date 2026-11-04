@@ -132,7 +132,7 @@ final class PersonaService
             throw new HttpException(404, 'not_found', 'Persona no encontrada.');
         }
         $stmt = $this->pdo->prepare("SELECT id AS ficha_id, tipo_ficha, presbiterio_id, sede_id,
-            created_by, version, fecha_papel, observaciones, datos_fuente_json
+            created_by, version, fecha_papel, observaciones, control_papel, datos_fuente_json
             FROM ficha WHERE persona_id = ? AND tipo_ficha = 'PERSONA' ORDER BY id DESC");
         $stmt->execute([$personaId]);
         $fichas = [];
@@ -307,6 +307,7 @@ final class PersonaService
             'version' => (int) $row['version'],
             'fecha_papel' => $row['fecha_papel'],
             'observaciones' => $row['observaciones'],
+            'control_papel' => $row['control_papel'],
             'datos_fuente' => Json::decodeObject($row['datos_fuente_json'] === null ? null : (string) $row['datos_fuente_json']),
             'puede_editar' => $ctx->perfil === 'ADMIN' || ($ctx->perfil === 'DIGITADOR' && $ctx->usuarioId === (int) $row['created_by']),
         ];
