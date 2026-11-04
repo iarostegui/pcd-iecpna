@@ -84,3 +84,9 @@ DocumentRoot del subdominio → `backend/public`. Sin Node ni procesos residente
 variables de entorno en el panel, mantener `.env` fuera del repositorio y usar HTTPS con
 `PCD_SESSION_NAME=__Host-pcd_sid` y `PCD_COOKIE_SECURE=true`. **No desplegar con datos reales
 antes de H-40/E-07 y el GO institucional.**
+
+## I02 (PR #5, Draft)
+- `src/Controller/PersonaController.php`: altas Persona/Ficha y lecturas mínimas.
+- `src/Service/PersonaService.php` y `PersonaInputValidator.php`: DNI con ceros, fichas independientes, identidad confiable, idempotencia y validación JSON cerrada.
+- `src/Controller/CatalogoController.php`: catálogos/ubigeos existentes; **no** importa datos INEI sintéticos.
+- H-24 y C.E. confiable pendientes; **no apto para datos reales/producción**. PATCH sigue en I04.
