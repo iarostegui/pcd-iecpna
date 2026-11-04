@@ -152,7 +152,16 @@ final class PersonaInputValidator
             JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
         );
 
-        // H-24: no establecer umbral de campos mínimos sin autorización funcional.
+        // H-24 aprobada: presbiterio y sede se verifican desde la sesión en
+        // PersonaService; estos seis datos personales son obligatorios.
+        // Se validan incluso cuando se anexa una ficha a Persona existente.
+        foreach (['nombres', 'apellido_paterno', 'apellido_materno',
+                   'tipo_documento', 'numero_documento', 'telefono'] as $required) {
+            if (($persona[$required] ?? null) === null) {
+                throw Validation::invalid($required, 'Este campo es obligatorio para registrar la ficha.');
+            }
+        }
+        // Resto de campos no condiciona el alta de una ficha incompleta.
         return [
             'persona' => $persona,
             'ficha' => $ficha,
