@@ -93,7 +93,7 @@ final class PersonaCaptureTest extends TestCase
 
     public function testIdempotencyReturnsSameFichaWithoutNewInsert(): void
     {
-        $payload = ['tipo_documento' => 'OTRO', 'numero_documento' => 'FAKE-001', 'nombres' => 'SINTETICO'];
+        $payload = $this->valid(['tipo_documento' => 'OTRO', 'numero_documento' => 'FAKE-001', 'nombres' => 'SINTETICO']);
         $key = $this->newKey();
         $first = $this->service->create($this->ctx, $payload, $key)['body'];
         $this->fichas[] = $first['ficha_id'];
@@ -108,11 +108,11 @@ final class PersonaCaptureTest extends TestCase
     public function testSameKeyWithDifferentPayloadReturns409(): void
     {
         $key = $this->newKey();
-        $first = $this->service->create($this->ctx, ['nombres' => 'SINTETICO'], $key)['body'];
+        $first = $this->service->create($this->ctx, $this->valid(['nombres' => 'SINTETICO']), $key)['body'];
         $this->fichas[] = $first['ficha_id'];
         $this->personas[] = $first['persona_id'];
         $this->expectException(HttpException::class);
-        $this->service->create($this->ctx, ['nombres' => 'DIFERENTE'], $key);
+        $this->service->create($this->ctx, $this->valid(['nombres' => 'DIFERENTE']), $key);
     }
 
     public function testAppendRequiresConcordantIdentity(): void
@@ -121,9 +121,9 @@ final class PersonaCaptureTest extends TestCase
             'tipo_documento' => 'DNI', 'numero_documento' => $this->dni(),
         ]);
         try {
-            $this->service->create($this->other, [
+            $this->service->create($this->other, $this->valid([
                 'tipo_documento' => 'DNI', 'numero_documento' => $this->dni(),
-            ], $this->newKey(), $first['persona_id']);
+            ]), $this->newKey(), $first['persona_id']);
             self::fail('La vinculación divergente debe rechazarse.');
         } catch (HttpException $e) {
             self::assertSame(409, $e->status);
@@ -157,10 +157,19 @@ final class PersonaCaptureTest extends TestCase
         $this->service->create($noSede, ['nombres' => 'PRUEBA'], $this->newKey());
     }
 
+    private function valid(array $overrides = []): array
+    {
+        return array_merge([
+            'nombres' => 'PERSONA SINTETICA', 'apellido_paterno' => 'PRUEBA',
+            'apellido_materno' => 'TEST', 'tipo_documento' => 'DNI',
+            'numero_documento' => '00123456', 'telefono' => '999888777',
+        ], $overrides);
+    }
+
     /** @return array<string,mixed> */
     private function save(SessionContext $ctx, array $data): array
     {
-        $result = $this->service->create($ctx, $data, $this->newKey())['body'];
+        $result = $this->service->create($ctx, $this->valid($data), $this->newKey())['body'];
         $this->fichas[] = (int) $result['ficha_id'];
         $this->personas[] = (int) $result['persona_id'];
         return $result;
