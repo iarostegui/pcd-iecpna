@@ -15,7 +15,8 @@
 | RN-33 | Quitar tildes/case/espacios al comparar nombre de sede; conservar etiqueta visible | APROBADA |
 | Índices reportes | Optimizar solo con consultas/EXPLAIN reales | APROBADA |
 | E1-D02 | Identificación GC preexistente | PENDIENTE |
-| H-23 | Permiso de registro GC de otra Persona | PENDIENTE |\n| H-24 | Contexto presbiterio/sede y nombres, ambos apellidos, tipo/número documento y teléfono obligatorios para ficha Persona | APROBADA FUNCIONALMENTE; VERIFICACIÓN CI PENDIENTE |
+| H-23 | Permiso de registro GC de otra Persona | PENDIENTE |\n| H-14 | `SGSP_Fichas_Imprimibles_A4 (2).xlsx` es el formulario entregado para levantamiento de datos y **fuente funcional para su digitación**. I02 usa Ficha Persona; I03 utilizará Ficha Líder GC. No se sustituye con un formulario inventado. | CONFIRMADA POR RESPONSABLE FUNCIONAL |
+| H-24 | Contexto presbiterio/sede y nombres, ambos apellidos, tipo/número documento y teléfono obligatorios para ficha Persona | APROBADA FUNCIONALMENTE; VERIFICACIÓN CI PENDIENTE |
 | H-40 — perfil responsable | **REPORTES** gestiona la designación y la aprobación institucional del PCD; mantiene su acceso operativo **solo lectura**. No se crea un cuarto perfil ni se presume una aprobación institucional efectiva. | APROBADA COMO ASIGNACIÓN FUNCIONAL |
 | H-40 PR-01…08 — evidencias institucionales | Formalización de la designación, aprobación institucional efectiva, finalidad, aviso, base legal, retención y tratamiento de datos/GPS/backups | PENDIENTE, GATE PRODUCTIVO |
 | Visibilidad Github/Licencia | Repositorio público observado; cambio de visibilidad y licencia dependen del propietario | PENDIENTE DECISIÓN DEL PROPIETARIO |
