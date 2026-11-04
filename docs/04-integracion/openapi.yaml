@@ -296,6 +296,7 @@ components:
         fecha_papel: { type: string, format: date, nullable: true }
         responsable_papel: { type: string, nullable: true }
         observaciones: { type: string, nullable: true }
+        control_papel: { type: string, nullable: true, maxLength: 200, description: 'JSON textual de marcas del impreso (ficha_completa/falta_informacion/persona_validada booleanos); NO certificación institucional' }
         conyuge: { $ref: '#/components/schemas/ConyugeFuente' }
         responsabilidades: { $ref: '#/components/schemas/ResponsabilidadesFuente' }
     GCInput:
