@@ -18,6 +18,7 @@
 | H-05/H-09 | Fecha calendario imposible se rechaza o deja en blanco; la fidelidad al papel se revisa manualmente **fuera de PCD** por presbiterios. No conciliación interna. |
 | H-08 | Solo líderes GC y resumen del grupo; sin miembros nominales. |
 | H-28/H-32/H-35 | Perfiles nacionales, control de sesiones y líder GC único derivado de ficha, sin redundancias. |
+| H-14 — formulario de origen | **CONFIRMADO:** `SGSP_Fichas_Imprimibles_A4 (2).xlsx` es el formato efectivamente entregado para la toma de datos en papel y debe servir como referencia de digitación del PCD (Persona y Líder GC). La regla H-24 de obligatoriedad del sistema prevalece frente a las marcas del impreso; conservar todos los datos de origen correspondientes sin inventar campos. No subir el Excel a un repositorio público. |
 | H-24 — mínimo de captura Persona | **APROBADO:** presbiterio y sede del contexto, nombres, apellido paterno, apellido materno, tipo y número de documento y teléfono de contacto obligatorios. Los demás datos de Persona pueden estar incompletos, según contratos vigentes. La validación corresponde a API y formulario. |\n| H-40 — asignación de responsabilidad | **APROBADO FUNCIONALMENTE:** el perfil nacional REPORTES es responsable de gestionar la designación institucional y la aprobación institucional vinculadas al uso de PCD y tratamiento de datos. Esto **no concede permisos de escritura operativa**, ni constituye por sí solo un acto de aprobación institucional o GO de producción. |
 
 ## Pendientes reales de aprobación funcional
@@ -31,7 +32,7 @@
 ## Insumos técnicos pendientes, no ampliaciones funcionales
 - **I02:** fuente/corte oficial INEI e importación en `ubigeo`; verificar formato de C.E. con reglas aplicables.
 - **I00:** versión PHP/MySQL/MariaDB real de hosting; ejecutar SQL de 11 tablas y seed en entorno de pruebas; FK y CHECK.
-- **H-14:** Excel binario de formularios aún no versionado en GitHub; inventario textual ya publicado.
+- **H-14:** confirmada la versión de referencia del Excel físico entregado para toma de datos/digitación. Su contenido está disponible como adjunto del proyecto; **no se versionará el binario en repositorio público** sin revisión de privacidad/licencia. La trazabilidad de campos debe comprobarse en I02 e I03.
 - **DP-01/02:** no inventar las sedes faltantes; permitir alta autorizada durante captura.
 - **DP-04:** volumen concurrente real desconocido, probar 10/20/30.
 - **DP-08:** migración SGSP futura y **fuera de alcance**.
