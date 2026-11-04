@@ -18,14 +18,14 @@
 | H-05/H-09 | Fecha calendario imposible se rechaza o deja en blanco; la fidelidad al papel se revisa manualmente **fuera de PCD** por presbiterios. No conciliación interna. |
 | H-08 | Solo líderes GC y resumen del grupo; sin miembros nominales. |
 | H-28/H-32/H-35 | Perfiles nacionales, control de sesiones y líder GC único derivado de ficha, sin redundancias. |
-| H-40 — asignación de responsabilidad | **APROBADO FUNCIONALMENTE:** el perfil nacional REPORTES es responsable de gestionar la designación institucional y la aprobación institucional vinculadas al uso de PCD y tratamiento de datos. Esto **no concede permisos de escritura operativa**, ni constituye por sí solo un acto de aprobación institucional o GO de producción. |
+| H-24 — mínimo de captura Persona | **APROBADO:** presbiterio y sede del contexto, nombres, apellido paterno, apellido materno, tipo y número de documento y teléfono de contacto obligatorios. Los demás datos de Persona pueden estar incompletos, según contratos vigentes. La validación corresponde a API y formulario. |\n| H-40 — asignación de responsabilidad | **APROBADO FUNCIONALMENTE:** el perfil nacional REPORTES es responsable de gestionar la designación institucional y la aprobación institucional vinculadas al uso de PCD y tratamiento de datos. Esto **no concede permisos de escritura operativa**, ni constituye por sí solo un acto de aprobación institucional o GO de producción. |
 
 ## Pendientes reales de aprobación funcional
 | ID | Pendiente | Impacto |
 |---|---|---|
 | **E1-D02** | Interpretar `grupo_ya_existe` en relación con GC previamente capturados sin crear maestro permanente. | I03 |
 | **H-23** | Registro de una ficha GC por un digitador distinto al autor de la Persona líder, sin permiso de alterar dicha Persona. | I03 |
-| **H-24** | Mínimo de entrada para impedir alta totalmente vacía y permitir fichas incompletas. | I02 |
+
 | **H-40 (restante)** | El perfil responsable de la gestión de designación y aprobación es **REPORTES** (decisión funcional aprobada). Queda pendiente identificar al titular/persona institucional, documentar el acto de designación y la aprobación efectiva, finalidad, aviso, base legal aplicable y retención de datos/GPS/backups. **Sin GO productivo.** | I06/puesta en producción |
 
 ## Insumos técnicos pendientes, no ampliaciones funcionales
