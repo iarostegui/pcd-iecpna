@@ -48,5 +48,5 @@ Reglas:
 - Códigos de salida: `0` correcto, `2` configuración, `3` BD, `4` Argon2id ausente, `5` conflictos detectados sin corregir.
 
 ## I02 — importación oficial INEI
-- `i02/importar-ubigeo.php` valida un CSV UTF-8 derivado de descarga oficial, requiere SHA256 y fecha/corte, comprueba jerarquía y opera por defecto en **dry-run**. La opción `--apply` solo funciona fuera de producción. Los datos del fixture `i02/fixtures/ubigeo-sintetico.csv` son **ficticios y nunca se importan en CI**.
+- `i02/importar-ubigeo.php` valida un CSV UTF-8 derivado de descarga oficial, requiere SHA256 y fecha/corte, comprueba jerarquía y opera por defecto en **dry-run**. La opción `--apply` solo funciona fuera de producción. La CI genera un CSV sintético **temporal en /tmp**, sin versionarlo y sin importarlo.
 - Una descarga verificada del INEI y su corte siguen pendientes. No atribuir al archivo de pruebas carácter oficial.
