@@ -30,7 +30,8 @@ final class PersonaController
     {
         $context = AuthMiddleware::requireSessionAndCsrf($request);
         $id = Validation::requiredInt($params, 'id');
-        $result = (new PersonaService(Db::fromEnv()->pdo()))->create(
+        $service = new PersonaService(Db::fromEnv()->pdo());
+        $result = $service->create(
             $context, $request->json(), $request->header('idempotency-key'), $id
         );
         // OpenAPI anexo devuelve FichaDetalle; los IDs de la operación son
