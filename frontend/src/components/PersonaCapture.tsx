@@ -121,8 +121,9 @@ export default function PersonaCapture({ auth }: { auth: AuthMe }) {
       ...(field === 'ubigeo_dpto_codigo' ? { ubigeo_prov_codigo: '', ubigeo_dist_codigo: '' } : {}),
       ...(field === 'ubigeo_prov_codigo' ? { ubigeo_dist_codigo: '' } : {}),
     }));
+    // Tras alta exitosa, solo «Nueva captura» habilita otro registro.
+    // Cambiar un campo no debe crear una segunda ficha accidental.
     idem.current = null;
-    setSaved(null);
   }
 
   function buildPayload(): Record<string, unknown> {
