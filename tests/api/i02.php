@@ -62,6 +62,45 @@ function pcdKey(): string {
     $clean['keys'][] = $key;
     return $key;
 }
+/**
+ * Dispara dos POST simultáneos sobre conexiones/sesiones HTTP separadas,
+ * preservando cookies en cada CurlHandle. CI usa PHP_CLI_SERVER_WORKERS=4.
+ * @param list<array{client:I02Client,body:array<string,mixed>,key:string}> $jobs
+ * @return list<array{code:int,body:array<string,mixed>}>
+ */
+function concurrentPostsI02(string $base, array $jobs): array {
+    $multi = curl_multi_init();
+    foreach ($jobs as $job) {
+        $client = $job['client'];
+        $headers = ['Accept: application/json', 'Content-Type: application/json',
+            'X-CSRF-Token: ' . $client->csrf, 'Idempotency-Key: ' . $job['key']];
+        curl_setopt_array($client->curl, [
+            CURLOPT_URL => $base . '/personas',
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($job['body'], JSON_THROW_ON_ERROR),
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 30,
+        ]);
+        curl_multi_add_handle($multi, $client->curl);
+    }
+    do {
+        $status = curl_multi_exec($multi, $running);
+        if ($running) curl_multi_select($multi, 0.1);
+    } while ($running && $status === CURLM_OK);
+    $results = [];
+    foreach ($jobs as $job) {
+        $h = $job['client']->curl;
+        $body = json_decode((string) curl_multi_getcontent($h), true);
+        $results[] = [
+            'code' => (int) curl_getinfo($h, CURLINFO_HTTP_CODE),
+            'body' => is_array($body) ? $body : [],
+        ];
+        curl_multi_remove_handle($multi, $h);
+    }
+    curl_multi_close($multi);
+    return $results;
+}
 try {
     require dirname(__DIR__, 2) . '/backend/vendor/autoload.php';
     $pdo = \Pcd\Database\Db::fromEnv()->pdo();
@@ -137,6 +176,43 @@ try {
     $line = $pdo->prepare("SELECT COUNT(*) FROM persona WHERE clave_identidad = ?");
     $line->execute(['DNI:' . $dni]);
     checkI02('I02-HTTP-16', (int) $line->fetchColumn() === 1, 'UNIQUE de identidad preservado');
+
+    // Concurrencia real: dos sesiones del mismo usuario, misma clave/payload.
+    $limOther = new I02Client($base); $auths[] = $limOther;
+    $limOtherLogin = $limOther->login((int) $ids['LIM'], 'LIM-DIG-01', $password);
+    if ($limOtherLogin['code'] !== 200) throw new RuntimeException('Segunda sesión de carrera falló.');
+    $limOther->selectSede((int) $sedeA['body']['id']);
+    $raceDni = str_pad((string) random_int(1000000, 8999999), 8, '0', STR_PAD_LEFT);
+    $racePayload = ['tipo_documento' => 'DNI', 'numero_documento' => $raceDni, 'nombres' => 'PRUEBA PARALELA'];
+    $raceKey = pcdKey();
+    $races = concurrentPostsI02($base, [
+        ['client' => $lim, 'body' => $racePayload, 'key' => $raceKey],
+        ['client' => $limOther, 'body' => $racePayload, 'key' => $raceKey],
+    ]);
+    foreach ($races as $race) {
+        if (isset($race['body']['ficha_id'])) $clean['fichas'][] = (int) $race['body']['ficha_id'];
+        if (isset($race['body']['persona_id'])) $clean['personas'][] = (int) $race['body']['persona_id'];
+    }
+    checkI02('I02-HTTP-17', $races[0]['code'] === 201 && $races[1]['code'] === 201
+        && $races[0]['body']['ficha_id'] === $races[1]['body']['ficha_id'],
+        'doble clic simultáneo una sola ficha');
+    $p = $pdo->prepare('SELECT COUNT(*) FROM persona WHERE clave_identidad = ?');
+    $p->execute(['DNI:' . $raceDni]);
+    checkI02('I02-HTTP-18', (int) $p->fetchColumn() === 1, 'identidad confiable única bajo carrera');
+    // Mismo DNI, claves distintas: una Persona, dos fichas legítimas.
+    $nextKeyA = pcdKey(); $nextKeyB = pcdKey();
+    $parallel = concurrentPostsI02($base, [
+        ['client' => $lim, 'body' => $racePayload, 'key' => $nextKeyA],
+        ['client' => $limOther, 'body' => $racePayload, 'key' => $nextKeyB],
+    ]);
+    foreach ($parallel as $race) {
+        if (isset($race['body']['ficha_id'])) $clean['fichas'][] = (int) $race['body']['ficha_id'];
+        if (isset($race['body']['persona_id'])) $clean['personas'][] = (int) $race['body']['persona_id'];
+    }
+    checkI02('I02-HTTP-19', $parallel[0]['code'] === 201 && $parallel[1]['code'] === 201
+        && ($parallel[0]['body']['persona_id'] ?? 0) === ($parallel[1]['body']['persona_id'] ?? -1)
+        && ($parallel[0]['body']['ficha_id'] ?? 0) !== ($parallel[1]['body']['ficha_id'] ?? 0),
+        'dos fuentes paralelas independientes sobre misma Persona');
 } catch (Throwable $e) {
     checkI02('I02-SETUP', false, get_class($e) . ': ' . $e->getMessage());
 } finally {
