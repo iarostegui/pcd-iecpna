@@ -72,6 +72,7 @@ describe('Captura I02 (solo información sintética)', () => {
     render(<PersonaCapture auth={authMe({ sede_id: 1, sede_nombre: 'Sede Lima Centro' })} />);
     const user = userEvent.setup();
     expect(screen.getByText(/Sede Lima Centro/)).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByLabelText('Departamento').querySelector('option[value="15"]')).not.toBeNull());
     await user.selectOptions(screen.getByLabelText('Departamento'), '15');
     await waitFor(() => expect(screen.getByLabelText('Provincia').querySelector('option[value="1501"]')).not.toBeNull());
     await user.selectOptions(screen.getByLabelText('Provincia'), '1501');
