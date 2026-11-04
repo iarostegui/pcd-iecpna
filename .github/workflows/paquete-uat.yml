@@ -1,0 +1,69 @@
+name: Paquete UAT PCD (sin despliegue)
+
+# Solo ejecución manual. No publica en cPanel ni usa secretos.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paquete-uat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Construir frontend React
+        working-directory: frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npm test -- --run
+          npm run build
+
+      - name: PHP 8.2 con Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql, mbstring, curl, intl
+          tools: composer:v2
+          coverage: none
+
+      - name: Dependencias PHP para despliegue
+        working-directory: backend
+        run: composer install --no-dev --no-interaction --prefer-dist --no-progress --optimize-autoloader
+
+      - name: Empaquetar exclusivamente UAT sintético
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/pcd-uat/public-frontend
+          mkdir -p build/pcd-uat/backend
+          mkdir -p build/pcd-uat/database
+          cp -a frontend/dist/. build/pcd-uat/public-frontend/
+          cp -a backend/public backend/src backend/vendor build/pcd-uat/backend/
+          cp database/migrations/001_initial.sql database/seeds/002_catalogos_calidad.sql build/pcd-uat/database/
+          cp docs/06-despliegue/DICTAMEN-READINESS-2026-11-04.md build/pcd-uat/LEER-ANTES-DE-DESPLEGAR.md
+          printf '%s\n' 'USO: SOLO UAT CON DATOS SINTETICOS. NO APROBADO PARA PRODUCCION.' > build/pcd-uat/NO-GO-PRODUCCION.txt
+          if find build/pcd-uat -type f \( -name .env -o -name '*.pem' -o -name '*.key' -o -name '*.sql.gz' \) | grep .; then
+            echo 'ERROR: archivo secreto o dump no permitido en paquete' >&2
+            exit 1
+          fi
+          (cd build/pcd-uat && find . -type f -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt)
+          (cd build && zip -qr pcd-uat.zip pcd-uat)
+          sha256sum build/pcd-uat.zip
+
+      - name: Entregar paquete para inspección, sin publicación remota
+        uses: actions/upload-artifact@v4
+        with:
+          name: pcd-uat-no-go-produccion
+          path: build/pcd-uat.zip
+          if-no-files-found: error
+          retention-days: 7
