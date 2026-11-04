@@ -54,3 +54,8 @@
 - Prototipo V2.3 como referencia UI; V2.2 histórico.
 ## 2026-10-31 — SDD V3.1 y auditorías E1–E3 (supersedidas cuando contradicen V4.1)
 - Registro de hallazgos, propuestas y decisiones previas; materiales conservados para trazabilidad, **no** como órdenes de implementación.
+
+## 2026-11-03 — I02 continuación técnica directa (PR #5 Draft)
+- Tras agotamiento de cuota de DeepSeek Harness, se retomó implementación sobre rama I02 mediante GitHub; no se alteró el modelo 11/146/23.
+- Introducidos OpenSpec, backend Persona/Ficha, UI React y controles PHPUnit, HTTP y Vitest sobre datos sintéticos.
+- Pendientes obligatorios H-24, CE/INEI, H-14, H-40/cPanel y revisión especialista; ninguna habilitación de producción.
