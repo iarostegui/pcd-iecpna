@@ -44,3 +44,6 @@ Pruebas: `(cd backend && vendor/bin/phpunit)`, `php tests/api/run.php --base-url
 **Seguridad:** el repositorio es actualmente público; no subir PII ni contraseñas. [SECURITY.md](SECURITY.md). La decisión institucional H-40 debe cerrarse antes de datos reales.
 
 **Contrato para construir sin interpretaciones:** [CONTRATO-EJECUCION-V4.1](docs/08-ia/CONTRATO-EJECUCION-V4.1.md). Contiene pasos transaccionales de alta/vinculación E1-D01, validación de sede, auditoría por cambios y restricciones de producción.
+
+## Desarrollo I02 (borrador)
+La captura Persona/Ficha se desarrolla en `feature/i02-captura-personas`, PR #5, con tests automatizados en CI y **solo datos sintéticos**. Ver [matriz I02](docs/08-ia/I02-MATRIZ-AVANCE.md). No se autoriza producción ni se resuelven H-24, H-40, H-14 o el corte de INEI.
