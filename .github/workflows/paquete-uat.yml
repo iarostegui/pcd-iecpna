@@ -51,6 +51,12 @@ jobs:
           cp -a frontend/dist/. build/pcd-uat/public-frontend/
           cp -a backend/public backend/src backend/vendor build/pcd-uat/backend/
           cp database/migrations/001_initial.sql database/seeds/002_catalogos_calidad.sql build/pcd-uat/database/
+          mkdir -p build/pcd-uat/database/referencias/ubigeo-20261104
+          cp database/referencias/ubigeo-20261104/parte-{01,02,03}.b64 build/pcd-uat/database/referencias/ubigeo-20261104/
+          # Catalogo geográfico reproducible y sin PII; restaurar y comprobar SHA antes de importar en MySQL de UAT.
+          cat database/referencias/ubigeo-20261104/parte-{01,02,03}.b64 | base64 -d | xz -dc > build/pcd-uat/database/ubigeo-referencia-usuario.csv
+          echo '8a3abc99898d2927d926536e4f31120b324e08e571111414846c6d2508cb650b  build/pcd-uat/database/ubigeo-referencia-usuario.csv' | sha256sum -c -
+          cp scripts/i02/importar-ubigeo.php build/pcd-uat/database/importar-ubigeo.php
           cp docs/06-despliegue/DICTAMEN-READINESS-2026-11-04.md build/pcd-uat/LEER-ANTES-DE-DESPLEGAR.md
           printf '%s\n' 'USO: SOLO UAT CON DATOS SINTETICOS. NO APROBADO PARA PRODUCCION.' > build/pcd-uat/NO-GO-PRODUCCION.txt
           if find build/pcd-uat -type f \( -name .env -o -name '*.pem' -o -name '*.key' -o -name '*.sql.gz' \) | grep .; then
